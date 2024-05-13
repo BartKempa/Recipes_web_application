@@ -8,7 +8,6 @@ body {
     font-family: "Source Sans 3", sans-serif;
 }
 
-
 .menu-nav-item > a {
     color: black;
     font-size: 16px;
@@ -20,8 +19,6 @@ a {
     color: #006400;
     font-weight: 500;
 }
-
-
 
 .container {
     display: flex;
@@ -43,8 +40,6 @@ a {
     color: #006400;
 }
 
-
-
 .menu-top {
     display: flex;
     justify-content: space-between;
@@ -55,7 +50,6 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-
 }
 
 .menu-nav-item {
@@ -75,13 +69,13 @@ a {
 .menu-logo-container,
 .menu-toggle {
     display: block;
-    padding: 16px 32px;
+    padding: 16px 10px;
     font-size: 20px;
 }
 
 .menu-search-form{
     display: block;
-    padding: 16px 32px;
+    padding: 16px 10px;
     font-size: 20px;
 }
 
@@ -91,8 +85,9 @@ a {
 }
 
 .menu-utility-item {
-   display: block;
-    padding: 16px 32px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 12px;
     font-size: 20px;
 }
 
@@ -117,7 +112,6 @@ a {
         width: 960px;
     }
 
-
     .menu-logo-container {
              flex: 1;
          }
@@ -130,6 +124,30 @@ a {
     padding: 40px;
     text-align: center;
 }
+
+.list-heading {
+    text-align: center;
+    margin: 18px;
+}
+
+.recipe-list {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.recipe-list-item {
+    padding: 16px 18px;
+}
+
+.recipe-list-item-photo {
+    display: block;
+    max-width: 280px;
+}
+
+
+
+
 
 
 
