@@ -133,6 +133,7 @@ a {
 .recipe-list {
     list-style-type: none;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -143,6 +144,18 @@ a {
 .recipe-list-item-photo {
     display: block;
     max-width: 280px;
+}
+
+.recipe-list-item-name {
+    text-align: center;
+    padding: 5px;
+}
+
+.recipe-list-item-footer {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 3px;
+
 }
 
 
