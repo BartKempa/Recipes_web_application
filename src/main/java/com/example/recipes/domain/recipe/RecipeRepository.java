@@ -1,5 +1,11 @@
 package com.example.recipes.domain.recipe;
 
-public interface RecipeRepository {
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface RecipeRepository extends CrudRepository<Recipe, Long> {
+
+
 
 }
