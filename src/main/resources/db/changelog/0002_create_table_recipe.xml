@@ -5,7 +5,17 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="0002-1" author="admin">
-
-
+        <createTable tableName="recipe">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="type_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_recipe_type"
+                             referencedTableName="type"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
