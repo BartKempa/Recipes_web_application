@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pl"  xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuchnia Bartka</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/998953df9f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <script defer src="../static/scripts/common.js" th:src="@{/scripts/common.js}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <ul class="menu-top">
+            <li class="menu-toggle">
+                <a href="#">
+                    <i id="toggle-icon" class="fa-solid fa-bars"></i>
+                </a>
+            </li>
+            <li class="menu-logo-container">
+                <a href="#" th:href="@{/}">
+                    <i id="logo-icon" class="fa-solid fa-utensils"></i> Kuchnia Bartosza
+                </a>
+            </li>
+            <li class="menu-search-form">
+                <p class="menu-search-form-desc">Okno szukania <i id="search-icon" class="fa-solid fa-magnifying-glass"></i></p>
+            </li>
+            <li class="menu-utility-item">
+                <a href="#">Moje konto</a>
+            </li>
+            <li class="menu-utility-item">
+                <a href="#">Zaloguj się</a>
+            </li>
+        </ul>
+        <ul class="menu-nav-list">
+            <li class="menu-nav-item">
+                <a href="#">POPULARNE</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">SŁODKOŚCI</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">OBIADY</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">ZYPY</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">ŚNIADANIA</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">SAŁATKI</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">NAPOJE</a>
+            </li>
+            <li class="menu-nav-item">
+                <a href="#">PRZEKĄSKI</a>
+            </li>
+        </ul>
+    </div>
+    <header class="jumbotron">
+        <h1 class="jumbotron-header">Kuchnia Bartosza</h1>
+        <p class="jumbotron-description">Tylko najlepsze przepisy</p>
+    </header>
+    <main class="main-content">
+        <section class="recipe">
+
+        </section>
+
+        
+        <h2 class="list-heading" th:text="${heading}">Nazwa grupy przepisów</h2>
+        <ul class="recipe-list" th:remove="all-but-first">
+            <li class="recipe-list-item" th:each="recipe: ${recipes}">
+                <a href="#" th:href="@{|/przepis/${recipe.id}|}">
+                    <div class="recipe-list-name-container>">
+                        <h3 class="recipe-list-item-name" th:text="${recipe.name}">Burger i frytkami</h3>
+                        <a href="#" th:href="@{|/przepis/${recipe.id}|}">
+                            <img class="recipe-list-item-photo"
+                                 src="../static/img/photo-dish.jpg"
+                                 th:src="@{/img/photo-dish.jpg}"
+                                 alt="Nazwa dania">
+                        </a>
+                        <div class="recipe-list-item-footer">
+                            <a href="#" class="recipe-list-item-footer-comment">
+                                <i class="fa-regular fa-comment"></i> 15
+                            </a>
+                            <a href="#" class="recipe-list-item-footer-rating">
+                                <i class="fa-regular fa-star"></i> 5,48
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+        </ul>
+    </main>
+    <footer class="footer">
+        <p>KuchniaBartosza 2024 <i class="fas fa-copyright"></i> BartoszK </p>
+    </footer>
+</div>
+</body>
+</html>
