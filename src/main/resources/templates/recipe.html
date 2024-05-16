@@ -68,35 +68,36 @@
     </header>
     <main class="main-content">
         <section class="recipe">
+            <h2 class="recipe-title">Burger z frytkami</h2>
+            <div class="recipe-base-details-container">
+                <div class="recipe-rating-container">
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <span class="recipe-rating-value">4.50</span>
+                    <span class="recipe-rating-votes-number">(55)</span>
+                </div>
+                <div class="recipe-container-comments-number">
+                    <i class="fa-regular fa-comment"></i> 15
+                </div>
+                <div class="recipe-container-favourites-number">
+                    <i class="fa-regular fa-heart"></i> 18
+                </div>
+            </div>
+            <div class="recipe-photo">
+                <a href="#" >
+                    <img class="recipe-list-item-photo"
+                         src="../static/img/photo-dish.jpg"
+                         alt="Nazwa dania">
+                </a>
+            </div>
 
         </section>
 
-        
-        <h2 class="list-heading" th:text="${heading}">Nazwa grupy przepisów</h2>
-        <ul class="recipe-list" th:remove="all-but-first">
-            <li class="recipe-list-item" th:each="recipe: ${recipes}">
-                <a href="#" th:href="@{|/przepis/${recipe.id}|}">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name" th:text="${recipe.name}">Burger i frytkami</h3>
-                        <a href="#" th:href="@{|/przepis/${recipe.id}|}">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 th:src="@{/img/photo-dish.jpg}"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 5,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
 
-        </ul>
+
     </main>
     <footer class="footer">
         <p>KuchniaBartosza 2024 <i class="fas fa-copyright"></i> BartoszK </p>
