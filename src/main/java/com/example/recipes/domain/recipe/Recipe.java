@@ -1,5 +1,6 @@
 package com.example.recipes.domain.recipe;
 
+import com.example.recipes.domain.recipe.DifficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.type.Type;
 import jakarta.persistence.*;
 
@@ -14,6 +15,14 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
+    private String description;
+    private Integer preparationTime;
+    private Integer cookingTime;
+    private Integer serving;
+    @ManyToOne
+    @JoinColumn(name = "difficultyLevel_id", referencedColumnName = "id")
+    private DifficultyLevel difficultyLevel;
+
 
     public Long getId() {
         return id;
