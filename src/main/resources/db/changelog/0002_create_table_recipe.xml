@@ -16,6 +16,19 @@
                              referencedTableName="type"
                              referencedColumnNames="id"/>
             </column>
+            <column name="description" type="VARCHAR(10000)"/>
+            <column name="preparation_time" type="INT"/>
+            <column name="cooking_time" type="INT"/>
+            <column name="serving" type="INT"/>
+            <column name="difficulty_level_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_recipe_difficulty_level"
+                             referencedTableName="difficulty_level"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="ingredients" type="VARCHAR(10000)"/>
+            <column name="directions" type="VARCHAR(10000)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

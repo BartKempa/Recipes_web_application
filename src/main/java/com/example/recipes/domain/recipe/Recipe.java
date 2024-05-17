@@ -22,7 +22,8 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "difficultyLevel_id", referencedColumnName = "id")
     private DifficultyLevel difficultyLevel;
-
+    private String ingredients;
+    private String directions;
 
     public Long getId() {
         return id;
@@ -46,5 +47,61 @@ public class Recipe {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getPreparationTime() {
+        return preparationTime;
+    }
+
+    public void setPreparationTime(Integer preparationTime) {
+        this.preparationTime = preparationTime;
+    }
+
+    public Integer getCookingTime() {
+        return cookingTime;
+    }
+
+    public void setCookingTime(Integer cookingTime) {
+        this.cookingTime = cookingTime;
+    }
+
+    public Integer getServing() {
+        return serving;
+    }
+
+    public void setServing(Integer serving) {
+        this.serving = serving;
+    }
+
+    public DifficultyLevel getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getDirections() {
+        return directions;
+    }
+
+    public void setDirections(String directions) {
+        this.directions = directions;
     }
 }
