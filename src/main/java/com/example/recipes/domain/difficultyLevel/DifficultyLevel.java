@@ -1,4 +1,4 @@
-package com.example.recipes.domain.recipe.DifficultyLevel;
+package com.example.recipes.domain.difficultyLevel;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

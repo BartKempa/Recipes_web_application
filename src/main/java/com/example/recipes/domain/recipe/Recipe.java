@@ -1,10 +1,8 @@
 package com.example.recipes.domain.recipe;
 
-import com.example.recipes.domain.recipe.DifficultyLevel.DifficultyLevel;
+import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.type.Type;
 import jakarta.persistence.*;
-
-import java.time.Instant;
 
 @Entity
 public class Recipe {
