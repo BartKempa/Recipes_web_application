@@ -1,8 +1,6 @@
 package com.example.recipes.domain.recipe.dto;
 
-import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
-import com.example.recipes.domain.type.Type;
-import jakarta.persistence.*;
+import java.util.List;
 
 public class RecipeDto {
     private Long id;
@@ -14,9 +12,11 @@ public class RecipeDto {
     private Integer serving;
     private String difficultyLevel;
     private String ingredients;
-    private String directions;
+    private List<String> directionsSteps;
+    //private String directions;
 
-    public RecipeDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, String directions) {
+
+    public RecipeDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, List<String> directions) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -26,7 +26,7 @@ public class RecipeDto {
         this.serving = serving;
         this.difficultyLevel = difficultyLevel;
         this.ingredients = ingredients;
-        this.directions = directions;
+        this.directionsSteps = directions;
     }
 
     public Long getId() {
@@ -101,11 +101,11 @@ public class RecipeDto {
         this.ingredients = ingredients;
     }
 
-    public String getDirections() {
-        return directions;
+    public List<String> getDirectionsSteps() {
+        return directionsSteps;
     }
 
-    public void setDirections(String directions) {
-        this.directions = directions;
+    public void setDirectionsSteps(List<String> directionsSteps) {
+        this.directionsSteps = directionsSteps;
     }
 }

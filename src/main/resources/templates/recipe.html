@@ -4,13 +4,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>Przepis - Kuchnia Bartka</title>
+    <title th:title="|${recipe.name} - Kuchnia Bartka|">Przepis - Kuchnia Bartka</title>
 </head>
 <body>
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <section class="recipe">
-            <h2 class="recipe-title">Burger z frytkami</h2>
+            <h2 class="recipe-title" th:text="${recipe.name}">Burger z frytkami</h2>
             <div class="recipe-base-statistics-container">
                 <div class="recipe-rating-container">
                     <i class="fa-solid fa-star"></i>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="recipe-base-description-container">
-                <p class="recipe-base-description">Burger drwala to jesienno-zimowy przebój największej sieci fast foodów w Polsce.
+                <p class="recipe-base-description" th:text="${recipe.description}">Burger drwala to jesienno-zimowy przebój największej sieci fast foodów w Polsce.
                     Sama z ciekawości spróbowałam w zeszłym roku i stwierdziłam, że można to zrobić lepiej ;).
                     Wypróbujcie mojej wersji z soczystą wołowiną, panierowanym serem, boczkiem i warzywami. To świetna kompozycja smaków i tekstur.
                     Bardzo konkretna propozycja na obiad w zimny dzień.
@@ -39,14 +39,16 @@
                 <a href="#" >
                     <img class="recipe-main-photo"
                          src="../static/img/photo-dish.jpg"
-                         alt="Nazwa dania">
+                         th:src="@{/img/photo-dish.jpg}"
+                         alt="Nazwa dania"
+                         th:alt="${recipe.name}">
                 </a>
             </div>
             <div class="recipe-base-details-container">
-                <p class="recipe-base-details-item"><span class="recipe-base-details-item-bold">Czas przygotowania:</span> 20 minut</p>
-                <p class="recipe-base-details-item"><span class="recipe-base-details-item-bold">Czas obróbki termicznej:</span> 20 minut </p>
-                <p class="recipe-base-details-item"><span class="recipe-base-details-item-bold">Liczba porcji:</span> 4 </p>
-                <p class="recipe-base-details-item"><span class="recipe-base-details-item-bold">Poziom truności:</span> łatwe</p>
+                <p class="recipe-base-details-item-bold">Czas przygotowania: <span class="recipe-base-details-item" th:text="${recipe.preparationTime}">20 minut</span> </p>
+                <p class="recipe-base-details-item-bold">Czas obróbki termicznej: <span class="recipe-base-details-item" th:text="${recipe.cookingTime}">15 minut</span> </p>
+                <p class="recipe-base-details-item-bold">Liczba porcji: <span class="recipe-base-details-item" th:text="${recipe.serving}">4</span> </p>
+                <p class="recipe-base-details-item-bold">Poziom truności: <span class="recipe-base-details-item" th:text="${recipe.difficultyLevel}">łatwe</span> </p>
             </div>
             <h3 class="header-ingredients">Składniki</h3>
             <div class="recipe-ingredients-list-container">
@@ -59,7 +61,9 @@
                 </ul>
             </div>
             <h3 class="header-directions">Przygotowanie</h3>
-            <ul class="recipe-directions-list">
+            <ul class="recipe-directions-list" th:remove="all-but-first">
+                <li class="recipe-directions-item" th:each="step: ${recipe.getDirectionsSteps()}" th:text="${step}">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
+
                 <li class="recipe-directions-item">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
                 <li class="recipe-directions-item">Mięso razem z Ppzyprawami wyrób ręką i uformuj okrągłe hamburgery o masie około 120 g. Hamburgery powinny mieć średnicę co najmniej 10 cm i być grube na około 2 cm.</li>
                 <li class="recipe-directions-item">Burgery z naszego przepisu wrzuć bezpośrednio na dobrze rozgrzany ruszt grillowy. Grilluj około 15 minut, w zależności od stopnia wysmażenia.</li>
@@ -67,6 +71,15 @@
                 <li class="recipe-directions-item">W międzyczasie przygotuj bułki: przekrój je na pół, opiecz na grillu i posmaruj z obu stron sosem Hellmann's. Na górną część bułki ułóż liść sałaty lodowej, plaster cebuli i gruby plaster pomidora.</li>
                 <li class="recipe-directions-item">Na dolną część bułki połóż zgrillowanego burgera z przepisu z serem i przykryj go dwoma plastrami chrupiącego boczku. Kanapkę przykryj górną częścią bułki z sałatą, cebulą i pomidorem. Żeby kanapka się nie rozpadła, przekłuj ją wykałaczką z korniszonem i oliwką.</li>
             </ul>
+
+<!--            <ul class="recipe-directions-list">
+                <li class="recipe-directions-item">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
+                <li class="recipe-directions-item">Mięso razem z Ppzyprawami wyrób ręką i uformuj okrągłe hamburgery o masie około 120 g. Hamburgery powinny mieć średnicę co najmniej 10 cm i być grube na około 2 cm.</li>
+                <li class="recipe-directions-item">Burgery z naszego przepisu wrzuć bezpośrednio na dobrze rozgrzany ruszt grillowy. Grilluj około 15 minut, w zależności od stopnia wysmażenia.</li>
+                <li class="recipe-directions-item">Po 15 minutach hamburger powinien być już dobrze wysmażony. W końcowej fazie grillowania na hamburgera połóż plaster sera, aby nieco się roztopił. Równocześnie razem z mięsem grilluj plastry boczku, najlepiej na aluminiowej tacce. Boczek grilluj, aż będzie chrupiący.</li>
+                <li class="recipe-directions-item">W międzyczasie przygotuj bułki: przekrój je na pół, opiecz na grillu i posmaruj z obu stron sosem Hellmann's. Na górną część bułki ułóż liść sałaty lodowej, plaster cebuli i gruby plaster pomidora.</li>
+                <li class="recipe-directions-item">Na dolną część bułki połóż zgrillowanego burgera z przepisu z serem i przykryj go dwoma plastrami chrupiącego boczku. Kanapkę przykryj górną częścią bułki z sałatą, cebulą i pomidorem. Żeby kanapka się nie rozpadła, przekłuj ją wykałaczką z korniszonem i oliwką.</li>
+            </ul>-->
         </section>
     </main>
 </div>

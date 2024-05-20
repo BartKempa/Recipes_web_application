@@ -17,7 +17,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/recipe/{id}")
+    @GetMapping("/przepis/{id}")
     public String getRecipe(@PathVariable long id, Model model){
         Optional<RecipeDto> optionalRecipeDto = recipeService.findRecipeById(id);
         optionalRecipeDto.ifPresent(recipe -> model.addAttribute("recipe", recipe));
