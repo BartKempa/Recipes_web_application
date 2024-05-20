@@ -4,6 +4,7 @@ import com.example.recipes.domain.recipe.dto.RecipeDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -18,5 +19,10 @@ public class RecipeService {
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
                 .map(RecipeDtoMapper::map)
                 .toList();
+    }
+
+    public Optional<RecipeDto> findRecipeById(long id){
+        return recipeRepository.findById(id)
+                .map(RecipeDtoMapper::map);
     }
 }
