@@ -8,7 +8,14 @@ class RecipeDtoMapper {
         return new RecipeDto(
                 recipe.getId(),
                 recipe.getName(),
-                recipe.getType().getName()
+                recipe.getType().getName(),
+                recipe.getDescription(),
+                recipe.getPreparationTime(),
+                recipe.getCookingTime(),
+                recipe.getServing(),
+                recipe.getDifficultyLevel().getName(),
+                recipe.getIngredients(),
+                recipe.getDirections()
         );
     }
 
