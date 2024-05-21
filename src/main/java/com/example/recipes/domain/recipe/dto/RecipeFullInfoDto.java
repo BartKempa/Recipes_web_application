@@ -2,7 +2,7 @@ package com.example.recipes.domain.recipe.dto;
 
 import java.util.List;
 
-public class RecipeDto {
+public class RecipeFullInfoDto {
     private Long id;
     private String name;
     private String type;
@@ -13,10 +13,10 @@ public class RecipeDto {
     private String difficultyLevel;
     private String ingredients;
     private List<String> directionsSteps;
-    //private String directions;
 
 
-    public RecipeDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, List<String> directions) {
+
+    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, List<String> directions) {
         this.id = id;
         this.name = name;
         this.type = type;

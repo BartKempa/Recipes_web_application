@@ -1,6 +1,7 @@
 package com.example.recipes.domain.recipe;
 
-import com.example.recipes.domain.recipe.dto.RecipeDto;
+import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +16,14 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
-    public List<RecipeDto> findAllRecipes() {
+    public List<RecipeMainInfoDto> findAllRecipes() {
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
-                .map(RecipeDtoMapper::map)
+                .map(RecipeDtoMapper::mapMainInfo)
                 .toList();
     }
 
-    public Optional<RecipeDto> findRecipeById(long id){
+    public Optional<RecipeFullInfoDto> findRecipeById(long id){
         return recipeRepository.findById(id)
-                .map(RecipeDtoMapper::map);
+                .map(RecipeDtoMapper::mapFullInfo);
     }
 }

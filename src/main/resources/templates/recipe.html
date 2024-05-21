@@ -63,7 +63,6 @@
             <h3 class="header-directions">Przygotowanie</h3>
             <ul class="recipe-directions-list" th:remove="all-but-first">
                 <li class="recipe-directions-item" th:each="step: ${recipe.getDirectionsSteps()}" th:text="${step}">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
-
                 <li class="recipe-directions-item">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
                 <li class="recipe-directions-item">Mięso razem z Ppzyprawami wyrób ręką i uformuj okrągłe hamburgery o masie około 120 g. Hamburgery powinny mieć średnicę co najmniej 10 cm i być grube na około 2 cm.</li>
                 <li class="recipe-directions-item">Burgery z naszego przepisu wrzuć bezpośrednio na dobrze rozgrzany ruszt grillowy. Grilluj około 15 minut, w zależności od stopnia wysmażenia.</li>
@@ -71,15 +70,6 @@
                 <li class="recipe-directions-item">W międzyczasie przygotuj bułki: przekrój je na pół, opiecz na grillu i posmaruj z obu stron sosem Hellmann's. Na górną część bułki ułóż liść sałaty lodowej, plaster cebuli i gruby plaster pomidora.</li>
                 <li class="recipe-directions-item">Na dolną część bułki połóż zgrillowanego burgera z przepisu z serem i przykryj go dwoma plastrami chrupiącego boczku. Kanapkę przykryj górną częścią bułki z sałatą, cebulą i pomidorem. Żeby kanapka się nie rozpadła, przekłuj ją wykałaczką z korniszonem i oliwką.</li>
             </ul>
-
-<!--            <ul class="recipe-directions-list">
-                <li class="recipe-directions-item">Wołowinę razem z łojem zmielić na grubych oczkach maszyny do mielenia mięsa.</li>
-                <li class="recipe-directions-item">Mięso razem z Ppzyprawami wyrób ręką i uformuj okrągłe hamburgery o masie około 120 g. Hamburgery powinny mieć średnicę co najmniej 10 cm i być grube na około 2 cm.</li>
-                <li class="recipe-directions-item">Burgery z naszego przepisu wrzuć bezpośrednio na dobrze rozgrzany ruszt grillowy. Grilluj około 15 minut, w zależności od stopnia wysmażenia.</li>
-                <li class="recipe-directions-item">Po 15 minutach hamburger powinien być już dobrze wysmażony. W końcowej fazie grillowania na hamburgera połóż plaster sera, aby nieco się roztopił. Równocześnie razem z mięsem grilluj plastry boczku, najlepiej na aluminiowej tacce. Boczek grilluj, aż będzie chrupiący.</li>
-                <li class="recipe-directions-item">W międzyczasie przygotuj bułki: przekrój je na pół, opiecz na grillu i posmaruj z obu stron sosem Hellmann's. Na górną część bułki ułóż liść sałaty lodowej, plaster cebuli i gruby plaster pomidora.</li>
-                <li class="recipe-directions-item">Na dolną część bułki połóż zgrillowanego burgera z przepisu z serem i przykryj go dwoma plastrami chrupiącego boczku. Kanapkę przykryj górną częścią bułki z sałatą, cebulą i pomidorem. Żeby kanapka się nie rozpadła, przekłuj ją wykałaczką z korniszonem i oliwką.</li>
-            </ul>-->
         </section>
     </main>
 </div>
