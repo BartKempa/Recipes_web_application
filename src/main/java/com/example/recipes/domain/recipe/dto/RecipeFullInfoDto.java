@@ -11,12 +11,10 @@ public class RecipeFullInfoDto {
     private Integer cookingTime;
     private Integer serving;
     private String difficultyLevel;
-    private String ingredients;
+    private List<String> ingredients;
     private List<String> directionsSteps;
 
-
-
-    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, List<String> directions) {
+    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, List<String> ingredients, List<String> directionsSteps) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -26,7 +24,7 @@ public class RecipeFullInfoDto {
         this.serving = serving;
         this.difficultyLevel = difficultyLevel;
         this.ingredients = ingredients;
-        this.directionsSteps = directions;
+        this.directionsSteps = directionsSteps;
     }
 
     public Long getId() {
@@ -93,11 +91,11 @@ public class RecipeFullInfoDto {
         this.difficultyLevel = difficultyLevel;
     }
 
-    public String getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 

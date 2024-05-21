@@ -52,8 +52,8 @@
             </div>
             <h3 class="header-ingredients">Składniki</h3>
             <div class="recipe-ingredients-list-container">
-                <ul class="recipe-ingredients-list">
-                    <li class="recipe-ingredients-item">Wołowina mielona - 200 gram</li>
+                <ul class="recipe-ingredients-list" th:remove="all-but-first">
+                    <li class="recipe-ingredients-item" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}">Wołowina mielona - 200 gram</li>
                     <li class="recipe-ingredients-item">Ser cheddar w plastrach - 2 szt</li>
                     <li class="recipe-ingredients-item">Boczek wędzony w plastrach - 2 szt</li>
                     <li class="recipe-ingredients-item">Sól</li>
