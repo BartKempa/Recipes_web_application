@@ -247,6 +247,25 @@ li::marker {
     color: #006400;
 }
 
+.error-container {
+    margin: 34px auto;
+}
+
+.error-container > * {
+    text-align: center;
+    display: block;
+}
+
+.error-container-text {
+    font-weight: 500;
+}
+
+.error-container-header,
+.error-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
 
 
 
