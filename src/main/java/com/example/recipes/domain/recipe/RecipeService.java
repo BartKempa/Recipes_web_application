@@ -26,4 +26,14 @@ public class RecipeService {
         return recipeRepository.findById(id)
                 .map(RecipeDtoMapper::mapFullInfo);
     }
+
+    public List<RecipeMainInfoDto> findRecipesByType(String type){
+       return recipeRepository.findAllByType_NameIgnoreCase(type).stream()
+               .map(RecipeDtoMapper::mapMainInfo)
+               .toList();
+    }
+
+
+
+
 }
