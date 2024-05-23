@@ -1,20 +1,29 @@
 package com.example.recipes.web;
 
 import com.example.recipes.domain.recipe.RecipeService;
-import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
+import com.example.recipes.domain.type.TypeService;
+import com.example.recipes.domain.type.dto.TypeDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 
 @Controller
 public class HomeController {
     private final RecipeService recipeService;
+    private final TypeService typeService;
 
-    public HomeController(RecipeService recipeService) {
+    public HomeController(RecipeService recipeService, TypeService typeService) {
         this.recipeService = recipeService;
+        this.typeService = typeService;
+    }
+
+    @ModelAttribute("types")
+    public List<TypeDto> getTypeList(){
+        return typeService.findAllTypes();
     }
 
     @GetMapping("/")
