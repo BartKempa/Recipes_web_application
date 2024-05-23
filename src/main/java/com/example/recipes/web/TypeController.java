@@ -23,7 +23,7 @@ public class TypeController {
         this.typeService = typeService;
     }
 
-    @GetMapping("/przepisy/{name}")
+    @GetMapping("/typ/{name}")
     public String getType(@PathVariable String name, Model model){
         TypeDto typeDto = typeService.findTypeByName(name)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

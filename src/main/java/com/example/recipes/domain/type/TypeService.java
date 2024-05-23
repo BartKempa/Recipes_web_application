@@ -3,7 +3,9 @@ package com.example.recipes.domain.type;
 import com.example.recipes.domain.type.dto.TypeDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TypeService {
@@ -16,5 +18,11 @@ public class TypeService {
     public Optional<TypeDto> findTypeByName(String name){
         return typeRepository.findByNameIgnoreCase(name)
                 .map(TypeDtoMapper::map);
+    }
+
+    public List<TypeDto> findAllTypes(){
+        return StreamSupport.stream(typeRepository.findAll().spliterator(), false)
+                .map(TypeDtoMapper::map)
+                .toList();
     }
 }
