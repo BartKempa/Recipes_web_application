@@ -36,13 +36,16 @@ a {
     text-align: center;
 }
 
+
 #logo-icon,
-#toggle-icon {
+#toggle-icon,
+#toggle-user-icon {
     color: #006400;
 }
 
 .menu-top {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     color: #006400;
 }
@@ -51,24 +54,48 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    text-transform: uppercase;
+    font-weight: 500;
 }
 
 .menu-nav-item {
     width: 100%;
-    padding: 18px;
+    padding: 16px;
     border-bottom: 2px #006400 solid;
     text-align: center;
     font-size: 16px;
     font-weight: 600;
     display: none;
 }
+.menu-utility-item {
+    width: 100%;
+    padding: 16px;
+    border-bottom: 1px #6d6d6d solid;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 600;
+    display: none;
+}
+
+.expanded > .menu-utility-item {
+    display: block;
+}
 
 .expanded > .menu-nav-item {
     display: block;
 }
 
+/*.menu-utility-item {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 12px;
+    font-size: 20px;
+}*/
+
+
 .menu-logo-container,
-.menu-toggle {
+.menu-toggle-container,
+.user-toggle-container {
     display: block;
     padding: 16px 10px;
     font-size: 20px;
@@ -85,24 +112,19 @@ a {
     color: #006400;
 }
 
-.menu-utility-item {
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px 12px;
-    font-size: 20px;
-}
-
 .menu-logo-container > a {
     font-size: 22px;
     font-weight: 700;
 }
 
 @media only screen and (min-width: 992px) {
-    .menu-toggle {
+    .menu-toggle-container,
+    .user-toggle-container {
         display: none;
     }
 
-    .menu-nav-item {
+    .menu-nav-item,
+    .menu-utility-item {
         display: block;
         width: auto;
         border-bottom: 0;
@@ -117,6 +139,11 @@ a {
              flex: 1;
          }
 }
+
+
+
+
+
 
 .jumbotron {
     background-image: url("../img/food.jpg");

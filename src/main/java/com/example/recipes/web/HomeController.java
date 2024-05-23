@@ -14,16 +14,9 @@ import java.util.List;
 @Controller
 public class HomeController {
     private final RecipeService recipeService;
-    private final TypeService typeService;
 
-    public HomeController(RecipeService recipeService, TypeService typeService) {
+    public HomeController(RecipeService recipeService) {
         this.recipeService = recipeService;
-        this.typeService = typeService;
-    }
-
-    @ModelAttribute("types")
-    public List<TypeDto> getTypeList(){
-        return typeService.findAllTypes();
     }
 
     @GetMapping("/")
