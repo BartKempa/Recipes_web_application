@@ -67,14 +67,19 @@ a {
     font-weight: 600;
     display: none;
 }
+
 .menu-utility-item {
     width: 100%;
     padding: 16px;
-    border-bottom: 1px #6d6d6d solid;
+    border-bottom: 2px #006400 solid;
     text-align: right;
     font-size: 16px;
     font-weight: 600;
     display: none;
+}
+
+.menu-utility-item > a {
+    color: black;
 }
 
 .expanded > .menu-utility-item {
@@ -84,14 +89,6 @@ a {
 .expanded > .menu-nav-item {
     display: block;
 }
-
-/*.menu-utility-item {
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px 12px;
-    font-size: 20px;
-}*/
-
 
 .menu-logo-container,
 .menu-toggle-container,
@@ -138,12 +135,10 @@ a {
     .menu-logo-container {
              flex: 1;
          }
+    .menu-utility-item > a {
+        color: #006400;
+    }
 }
-
-
-
-
-
 
 .jumbotron {
     background-image: url("../img/food.jpg");
