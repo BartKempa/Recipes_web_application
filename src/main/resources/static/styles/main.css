@@ -148,6 +148,7 @@ a {
     text-align: center;
 }
 
+
 .list-heading {
     text-align: center;
     margin: 18px;
@@ -288,6 +289,21 @@ li::marker {
     margin-bottom: 15px;
 }
 
+.list-admin-features {
+    margin: auto;
+    list-style: none;
+}
+
+.list-admin-features-item {
+    border: 1px #006400 solid;
+    padding: 16px;
+    text-align: center;
+}
+.list-admin-features-item > a {
+    color: black;
+    font-size: 20px;
+    font-weight: 600;
+}
 
 
 
