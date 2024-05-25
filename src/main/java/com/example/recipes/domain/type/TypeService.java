@@ -28,9 +28,9 @@ public class TypeService {
     }
 
     @Transactional
-    public void addType(TypeDto typeDto){
-        Type type = new Type();
-        type.setName(typeDto.getName());
-        typeRepository.save(type);
+    public void addType(TypeDto type){
+        Type typeToSave = new Type();
+        typeToSave.setName(type.getName());
+        typeRepository.save(typeToSave);
     }
 }

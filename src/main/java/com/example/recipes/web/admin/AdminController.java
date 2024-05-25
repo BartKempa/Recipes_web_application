@@ -9,6 +9,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdminPanel(){
+
         return "admin/admin";
     }
 }

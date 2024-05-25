@@ -28,7 +28,7 @@ public class TypeManagementController {
         typeService.addType(type);
         redirectAttributes.addFlashAttribute(
                 AdminController.NOTIFICATION_ATTRIBUTE,
-                ("Typ %s został zapisany").formatted(type.getName()));
+                ("Typ posiłku %s został zapisany").formatted(type.getName()));
         return "redirect:/admin";
     }
 }

@@ -10,9 +10,9 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Dodaj nowy typ posiłku </h2>
-        <form action="/admin/dodaj-typ" method="post" class="type-add-form" th:object="${type}">
+        <form action="" method="post" class="type-add-form" th:object="${type}">
             <label for="typeName">Nazwa</label>
-            <input id="typeName" type="texta" placeholder="np. Zupa" th:field="*{name}">
+            <input id="typeName" type="text" placeholder="np. Zupa" th:field="*{name}">
             <button type="submit">Dodaj</button>
         </form>
     </main>

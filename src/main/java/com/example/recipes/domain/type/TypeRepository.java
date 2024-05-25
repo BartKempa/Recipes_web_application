@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-interface TypeRepository extends CrudRepository<Type, Long> {
+public interface TypeRepository extends CrudRepository<Type, Long> {
     Optional<Type> findByNameIgnoreCase(String name);
 }
