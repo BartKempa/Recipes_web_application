@@ -4,6 +4,9 @@ public class TypeDto {
     private Long id;
     private String name;
 
+    public TypeDto() {
+    }
+
     public TypeDto(Long id, String name) {
         this.id = id;
         this.name = name;

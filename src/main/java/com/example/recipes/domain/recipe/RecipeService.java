@@ -2,6 +2,8 @@ package com.example.recipes.domain.recipe;
 
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
+import com.example.recipes.domain.type.Type;
+import com.example.recipes.domain.type.dto.TypeDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,8 @@ public class RecipeService {
                .map(RecipeDtoMapper::mapMainInfo)
                .toList();
     }
+
+
 
 
 
