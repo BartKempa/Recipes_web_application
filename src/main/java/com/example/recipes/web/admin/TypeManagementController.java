@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TypeManagementController {
@@ -22,5 +23,12 @@ public class TypeManagementController {
         return "admin/type-form";
     }
 
-
+    @PostMapping("/admin/dodaj-typ")
+    public String addType(TypeDto type, RedirectAttributes redirectAttributes){
+        typeService.addType(type);
+        redirectAttributes.addFlashAttribute(
+                AdminController.NOTIFICATION_ATTRIBUTE,
+                ("Typ %s został zapisany").formatted(type.getName()));
+        return "redirect:/admin";
+    }
 }
