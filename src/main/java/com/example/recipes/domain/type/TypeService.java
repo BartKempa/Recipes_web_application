@@ -2,6 +2,7 @@ package com.example.recipes.domain.type;
 
 import com.example.recipes.domain.type.dto.TypeDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class TypeService {
                 .toList();
     }
 
+    @Transactional
     public void addType(TypeDto typeDto){
         Type type = new Type();
         type.setId(typeDto.getId());
