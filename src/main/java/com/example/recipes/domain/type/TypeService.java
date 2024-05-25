@@ -30,7 +30,6 @@ public class TypeService {
     @Transactional
     public void addType(TypeDto typeDto){
         Type type = new Type();
-        type.setId(typeDto.getId());
         type.setName(typeDto.getName());
         typeRepository.save(type);
     }

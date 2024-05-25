@@ -305,6 +305,13 @@ li::marker {
     font-weight: 600;
 }
 
+.notification-bar {
+    text-align: center;
+    padding: 10px 0;
+    background-color: rgb(128, 128, 128);
+    color: #006400;
+}
+
 
 
 
