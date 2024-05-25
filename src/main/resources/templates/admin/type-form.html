@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Panel administracyjny - dodaj typ posiłku</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Dodaj nowy typ posiłku </h2>
+        <form action="/admin/dodaj-typ" method="post" class="type-add-form" th:object="${type}">
+            <label for="typeName">Nazwa</label>
+            <input id="typeName" type="texta" placeholder="np. Zupa" th:field="*{name}">
+            <button type="submit">Dodaj</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
