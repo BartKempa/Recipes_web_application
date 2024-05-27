@@ -22,6 +22,7 @@ public class Recipe {
     private DifficultyLevel difficultyLevel;
     private String ingredients;
     private String directions;
+    private String photo;
 
     public Long getId() {
         return id;
@@ -101,5 +102,13 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
