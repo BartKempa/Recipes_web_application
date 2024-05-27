@@ -6,11 +6,13 @@ public class RecipeMainInfoDto {
     private Long id;
     private String name;
     private String type;
+    private String photo;
 
-    public RecipeMainInfoDto(Long id, String name, String type) {
+    public RecipeMainInfoDto(Long id, String name, String type, String photo) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.photo = photo;
     }
 
     public Long getId() {
@@ -35,5 +37,13 @@ public class RecipeMainInfoDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
