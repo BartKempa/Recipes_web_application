@@ -1,6 +1,6 @@
 package com.example.recipes.domain.recipe.dto;
 
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public class RecipeSaveDto {
     private Long id;
@@ -13,7 +13,7 @@ public class RecipeSaveDto {
     private String difficultyLevel;
     private String ingredients;
     private String directionsSteps;
-    private String photo;
+    private MultipartFile image;
 
     public Long getId() {
         return id;
@@ -95,11 +95,11 @@ public class RecipeSaveDto {
         this.directionsSteps = directionsSteps;
     }
 
-    public String getPhoto() {
-        return photo;
+    public MultipartFile getImage() {
+        return image;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

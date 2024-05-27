@@ -1,10 +1,13 @@
 package com.example.recipes.domain.recipe;
 
+import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeRepository;
+import com.example.recipes.storage.FileStorageService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +17,14 @@ import java.util.stream.StreamSupport;
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final TypeRepository typeRepository;
+    private final DifficultyLevelRepository difficultyLevelRepository;
+    private final FileStorageService fileStorageService;
 
-    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository) {
+    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService) {
         this.recipeRepository = recipeRepository;
         this.typeRepository = typeRepository;
+        this.difficultyLevelRepository = difficultyLevelRepository;
+        this.fileStorageService = fileStorageService;
     }
 
 
@@ -38,6 +45,7 @@ public class RecipeService {
                .toList();
     }
 
+    @Transactional
     public void addRecipe(RecipeSaveDto recipeToSave){
         Recipe recipe = new Recipe();
         recipe.setId(recipeToSave.getId());
@@ -47,10 +55,14 @@ public class RecipeService {
         recipe.setPreparationTime(recipeToSave.getPreparationTime());
         recipe.setCookingTime(recipeToSave.getCookingTime());
         recipe.setServing(recipeToSave.getServing());
-        recipe.setDifficultyLevel(recipeToSave.getDifficultyLevel());
+        recipe.setDifficultyLevel(difficultyLevelRepository.findByName(recipeToSave.getDifficultyLevel()).orElseThrow());
         recipe.setIngredients(recipeToSave.getIngredients());
         recipe.setDescription(recipeToSave.getDescription());
-
+        if (!recipeToSave.getImage().isEmpty() && recipeToSave.getImage() != null) {
+            String savedImage = fileStorageService.saveImage(recipeToSave.getImage());
+            recipe.setImage(savedImage);
+        }
+        recipeRepository.save(recipe);
     }
 
 
