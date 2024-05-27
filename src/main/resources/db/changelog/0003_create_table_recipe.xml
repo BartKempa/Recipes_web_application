@@ -20,6 +20,7 @@
             <column name="preparation_time" type="INT"/>
             <column name="cooking_time" type="INT"/>
             <column name="serving" type="INT"/>
+            <column name="photo" type="VARCHAR(100)"/>
             <column name="difficulty_level_id" type="BIGINT">
                 <constraints nullable="false"
                              foreignKeyName="fk_recipe_difficulty_level"
