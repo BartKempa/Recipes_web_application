@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +19,7 @@ public class FileStorageService {
     private final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
     private final String imageStorageLocation;
 
-    public FileStorageService(@Value("${app.storage.location") String storageLocation) {
+    public FileStorageService(@Value("${app.storage.location}") String storageLocation) {
         this.imageStorageLocation = storageLocation + "/img/";
         Path imageStoragePath = Path.of(this.imageStorageLocation);
         prepareStorageDirectories(imageStoragePath);
@@ -62,6 +60,4 @@ public class FileStorageService {
         } while (Files.exists(filePath));
         return filePath;
     }
-
-
 }

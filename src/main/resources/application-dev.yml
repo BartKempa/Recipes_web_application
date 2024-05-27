@@ -6,5 +6,9 @@ spring:
     change-log: classpath:db/changelog/master.xml
   jpa:
     show-sql: true
-
-
+  web:
+    resources:
+      static-locations: classpath:/static/,file:uploads/
+app:
+  storage:
+    location: uploads
