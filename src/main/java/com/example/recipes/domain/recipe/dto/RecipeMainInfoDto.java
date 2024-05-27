@@ -1,18 +1,16 @@
 package com.example.recipes.domain.recipe.dto;
 
-import java.util.List;
-
 public class RecipeMainInfoDto {
     private Long id;
     private String name;
     private String type;
-    private String photo;
+    private String image;
 
     public RecipeMainInfoDto(Long id, String name, String type, String photo) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.photo = photo;
+        this.image = photo;
     }
 
     public Long getId() {
@@ -39,11 +37,11 @@ public class RecipeMainInfoDto {
         this.type = type;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getImage() {
+        return image;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

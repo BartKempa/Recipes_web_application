@@ -6,3 +6,5 @@ spring:
     change-log: classpath:db/changelog/master.xml
   jpa:
     show-sql: true
+
+

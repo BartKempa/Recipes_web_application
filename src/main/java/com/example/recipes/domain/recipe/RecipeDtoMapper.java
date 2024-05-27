@@ -20,8 +20,7 @@ class RecipeDtoMapper {
                 Arrays.stream(recipe.getIngredients().split("\\\\n")).map(String::trim).collect(Collectors.toList()),
                 // Zmiana dosłowne \n na rzeczywiste nowe liniespli replace.("\\n", "\n").split("\\n?\\r")
                 Arrays.stream(recipe.getDirections().split("\\\\n")).map(String::trim).collect(Collectors.toList()),
-                recipe.getPhoto()
-
+                recipe.getImage()
         );
     }
 
@@ -30,7 +29,7 @@ class RecipeDtoMapper {
                 recipe.getId(),
                 recipe.getName(),
                 recipe.getType().getName(),
-                recipe.getPhoto()
+                recipe.getImage()
         );
     }
 

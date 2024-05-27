@@ -1,28 +1,19 @@
-package com.example.recipes.domain.recipe;
+package com.example.recipes.domain.recipe.dto;
 
-import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
-import com.example.recipes.domain.type.Type;
-import jakarta.persistence.*;
+import java.util.List;
 
-@Entity
-public class Recipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecipeSaveDto {
     private Long id;
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
-    private Type type;
+    private String type;
     private String description;
     private Integer preparationTime;
     private Integer cookingTime;
     private Integer serving;
-    @ManyToOne
-    @JoinColumn(name = "difficultyLevel_id", referencedColumnName = "id")
-    private DifficultyLevel difficultyLevel;
+    private String difficultyLevel;
     private String ingredients;
-    private String directions;
-    private String image;
+    private String directionsSteps;
+    private String photo;
 
     public Long getId() {
         return id;
@@ -40,11 +31,11 @@ public class Recipe {
         this.name = name;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -80,11 +71,11 @@ public class Recipe {
         this.serving = serving;
     }
 
-    public DifficultyLevel getDifficultyLevel() {
+    public String getDifficultyLevel() {
         return difficultyLevel;
     }
 
-    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
+    public void setDifficultyLevel(String difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
     }
 
@@ -96,19 +87,19 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public String getDirections() {
-        return directions;
+    public String getDirectionsSteps() {
+        return directionsSteps;
     }
 
-    public void setDirections(String directions) {
-        this.directions = directions;
+    public void setDirectionsSteps(String directionsSteps) {
+        this.directionsSteps = directionsSteps;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String photo) {
-        this.image = photo;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
