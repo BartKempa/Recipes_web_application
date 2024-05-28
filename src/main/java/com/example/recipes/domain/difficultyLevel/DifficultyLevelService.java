@@ -25,5 +25,6 @@ public class DifficultyLevelService {
         return StreamSupport.stream(difficultyLevelRepository.findAll().spliterator(),false)
                 .map(DifficultyLevelMapper::map)
                 .toList();
+
     }
 }

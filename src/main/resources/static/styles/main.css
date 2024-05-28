@@ -314,32 +314,40 @@ li::marker {
     background-color: #eaeaec;
 }
 
-.type-add-form {
+.add-form {
     display: flex;
     flex-direction: column;
     margin: 0 30px;
 }
 
-.type-add-form > * {
+.add-form > * {
     margin-top: 8px;
 }
 
-.type-add-form > input,
-.type-add-form > button {
+.add-form > input,
+.add-form > button,
+.add-form > select,
+.add-form > textarea {
     font-size: 18px;
     color: black;
     padding: 8px;
 }
 
-.type-add-form > label {
+.add-form > label {
     font-size: 18px;
     font-weight: 500;
 }
 
-.type-add-form > button {
+.add-form > button {
     margin-top: 10px;
     background-color: #eaeaec
 }
+/*
+.add-form > input[type=file] {
+    color: white;
+}*/
+
+
 
 
 

@@ -33,6 +33,7 @@ public class RecipeManagementController {
         List<TypeDto> types = typeService.findAllTypes();
         model.addAttribute("types", types);
         List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+        System.out.println("wydruk pozimów");
         model.addAttribute("allDifficultyLevelDto", allDifficultyLevelDto);
         return "admin/recipe-form";
     }

@@ -10,12 +10,13 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Dodaj nowy przepis </h2>
-        <form action="" method="post" class="recipe-add-form" th:object="${recipe}">
+        <form action="" method="post" class="add-form" th:object="${recipe}">
+
             <label for="recipeName">Nazwa przepisu</label>
             <input id="recipeName" type="text" placeholder="np. Żurek" th:field="*{name}">
 
             <label for="typeName">Typ posiłku:</label>
-            <select id="typeName" name="type" required>
+            <select id="typeName" th:field="*{type}" required>
                 <option value="" hidden>Wybierz gatunek</option>
                 <option th:each="type: ${types}" th:value="${type.name}" th:text="${type.name}"></option>
             </select>
@@ -33,9 +34,9 @@
             <input id="serving" type="number" th:field="*{serving}" placeholder="5">
 
             <label for="difficultyLevel">Poziom trudności</label>
-            <select id="difficultyLevel" name="difficultyLevel" required>
-                <option value="" hidden="">Wybierz poziom trundości</option>
-                <option th:each="difficultyLevel: ${allDifficultyLevelDto}" th:value="${difficultyLevel.name}" th:type="${difficultyLevel.name}"></option>
+            <select id="difficultyLevel" th:field="*{difficultyLevel}" required>
+                <option value="" hidden>Wybierz poziom trundości</option>
+                <option th:each="level: ${allDifficultyLevelDto}" th:value="${level.name}" th:text="${level.name}"></option>
             </select>
 
             <label for="ingredients">Lista składników</label>
@@ -45,7 +46,7 @@
             <textarea id="directionsSteps" rows="25" th:field="*{directionsSteps}" placeholder="Podaj kolejne kroki przygotowania potrawy, każdy kolejny krok zacznij od nowej linii"></textarea>
 
             <label for="image">Zdjęcie potrawy</label>
-            <input id="image" type="file" th:field="*{image}" accept="image/jpeg, image/png">
+            <input id="image" type="file" th:field="*{image}" accept="image/vnd.sealedmedia.softseal.jpg, image/jpeg, image/png">
 
 
 
