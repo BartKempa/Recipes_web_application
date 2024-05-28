@@ -1,9 +1,11 @@
 package com.example.recipes.web.admin;
 
+import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +13,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Controller
 public class RecipeManagementController {
     private final RecipeService recipeService;
     private final TypeService typeService;
+    private final DifficultyLevelService difficultyLevelService;
 
-    public RecipeManagementController(RecipeService recipeService, TypeService typeService) {
+    public RecipeManagementController(RecipeService recipeService, TypeService typeService, DifficultyLevelService difficultyLevelService) {
         this.recipeService = recipeService;
         this.typeService = typeService;
+        this.difficultyLevelService = difficultyLevelService;
     }
 
     @GetMapping("/admin/dodaj-przepis")
@@ -26,6 +31,7 @@ public class RecipeManagementController {
         model.addAttribute("recipe", recipe);
         List<TypeDto> types = typeService.findAllTypes();
         model.addAttribute("types", types);
+        //ifficultyLevelService.finda
         return "admin/recipe-form";
     }
 

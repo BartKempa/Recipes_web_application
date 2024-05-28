@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Panel administracyjny - dodaj przepis</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Dodaj nowy przepis </h2>
+        <form action="" method="post" class="recipe-add-form" th:object="${recipe}">
+            <label for="recipeName">Nazwa przepisu</label>
+            <input id="recipeName" type="text" placeholder="np. Żurek" th:field="*{name}">
+
+            <label for="typeName">Typ posiłku:</label>
+            <select id="typeName" name="type" required>
+                <option value="" hidden>Wybierz gatunek</option>
+                <option th:each="type: ${types}" th:value="${type.name}" th:text="${type.name}"></option>
+            </select>
+
+            <label for="description">Krótki opis potrawy</label>
+            <textarea id="description" rows="8" th:field="*{description}" placeholder="Krótki opis przepisu"></textarea>
+
+            <label for="preparationTime">Czas przygotwania posiłku w minutach</label>
+            <input id="preparationTime" type="number" th:field="*{preparationTime}" placeholder="14">
+
+            <label for="cookingTime">Czas obróbki cieplnej</label>
+            <input id="cookingTime" type="number" th:field="*{cookingTime}" placeholder="12">
+
+            <label for="serving">Liczba porcji - w sztukach</label>
+            <input id="serving" type="number" th:field="*{serving}" placeholder="5">
+
+
+
+
+            <button type="submit">Dodaj</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
