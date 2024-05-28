@@ -1,6 +1,7 @@
 package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
+import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
@@ -31,7 +32,8 @@ public class RecipeManagementController {
         model.addAttribute("recipe", recipe);
         List<TypeDto> types = typeService.findAllTypes();
         model.addAttribute("types", types);
-        //ifficultyLevelService.finda
+        List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+        model.addAttribute("allDifficultyLevelDto", allDifficultyLevelDto);
         return "admin/recipe-form";
     }
 
