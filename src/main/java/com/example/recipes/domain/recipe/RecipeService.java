@@ -27,7 +27,6 @@ public class RecipeService {
         this.fileStorageService = fileStorageService;
     }
 
-
     public List<RecipeMainInfoDto> findAllRecipes() {
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
                 .map(RecipeDtoMapper::mapMainInfo)
@@ -50,15 +49,15 @@ public class RecipeService {
         Recipe recipe = new Recipe();
         recipe.setId(recipeToSave.getId());
         recipe.setName(recipeToSave.getName());
-        recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getName()).orElseThrow());
+                recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getType()).orElseThrow());
         recipe.setDescription(recipeToSave.getDescription());
         recipe.setPreparationTime(recipeToSave.getPreparationTime());
         recipe.setCookingTime(recipeToSave.getCookingTime());
         recipe.setServing(recipeToSave.getServing());
         recipe.setDifficultyLevel(difficultyLevelRepository.findByName(recipeToSave.getDifficultyLevel()).orElseThrow());
         recipe.setIngredients(recipeToSave.getIngredients());
-        recipe.setDescription(recipeToSave.getDescription());
-        if (!recipeToSave.getImage().isEmpty() && recipeToSave.getImage() != null) {
+        recipe.setDirections(recipeToSave.getDirectionsSteps());
+        if (recipeToSave.getImage() != null && !recipeToSave.getImage().isEmpty()) {
             String savedImage = fileStorageService.saveImage(recipeToSave.getImage());
             recipe.setImage(savedImage);
         }

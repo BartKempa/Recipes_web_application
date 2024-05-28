@@ -15,7 +15,7 @@
                             <a href="#" th:href="@{|/przepis/${recipe.id}|}">
                                 <img class="recipe-list-item-photo"
                                      src="../static/img/photo-dish.jpg"
-                                     th:src="@{/img/photo-dish.jpg}"
+                                     th:src="${recipe.image ne null} ? @{|/img/${recipe.image}|} : @{/img/photo-dish.jpg}"
                                      alt="Nazwa dania">
                             </a>
                             <div class="recipe-list-item-footer">

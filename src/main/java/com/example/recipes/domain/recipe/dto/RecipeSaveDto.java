@@ -15,6 +15,9 @@ public class RecipeSaveDto {
     private String directionsSteps;
     private MultipartFile image;
 
+    public RecipeSaveDto() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -18,7 +18,9 @@ class RecipeDtoMapper {
                 recipe.getServing(),
                 recipe.getDifficultyLevel().getName(),
                 Arrays.stream(recipe.getIngredients().split("\\\\n")).map(String::trim).collect(Collectors.toList()),
+                //Arrays.stream(recipe.getIngredients().replace("\\n", "\n").split("\\n?\\r")).map(String::trim).collect(Collectors.toList()),
                 // Zmiana dosłowne \n na rzeczywiste nowe liniespli replace.("\\n", "\n").split("\\n?\\r")
+                //Arrays.stream(recipe.getDirections().replace("\\n", "\n").split("\\n?\\r")).map(String::trim).collect(Collectors.toList()),
                 Arrays.stream(recipe.getDirections().split("\\\\n")).map(String::trim).collect(Collectors.toList()),
                 recipe.getImage()
         );

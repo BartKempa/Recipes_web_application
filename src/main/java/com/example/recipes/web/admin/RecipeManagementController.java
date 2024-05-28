@@ -33,7 +33,6 @@ public class RecipeManagementController {
         List<TypeDto> types = typeService.findAllTypes();
         model.addAttribute("types", types);
         List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
-        System.out.println("wydruk pozimów");
         model.addAttribute("allDifficultyLevelDto", allDifficultyLevelDto);
         return "admin/recipe-form";
     }
@@ -43,10 +42,7 @@ public class RecipeManagementController {
         recipeService.addRecipe(recipe);
         redirectAttributes.addFlashAttribute(
                 AdminController.NOTIFICATION_ATTRIBUTE,
-                "Przepis %s został zapisany".formatted(recipe.getName())
-                );
+                "Przepis %s został zapisany".formatted(recipe.getName()));
         return "redirect:/admin";
     }
-
-
 }

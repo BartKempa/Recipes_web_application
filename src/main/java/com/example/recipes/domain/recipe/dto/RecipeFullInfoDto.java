@@ -15,7 +15,7 @@ public class RecipeFullInfoDto {
     private List<String> directionsSteps;
     private String image;
 
-    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, List<String> ingredients, List<String> directionsSteps, String poster) {
+    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, List<String> ingredients, List<String> directionsSteps, String image) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -26,7 +26,7 @@ public class RecipeFullInfoDto {
         this.difficultyLevel = difficultyLevel;
         this.ingredients = ingredients;
         this.directionsSteps = directionsSteps;
-        this.image = poster;
+        this.image = image;
     }
 
     public Long getId() {

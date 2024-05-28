@@ -6,11 +6,11 @@ public class RecipeMainInfoDto {
     private String type;
     private String image;
 
-    public RecipeMainInfoDto(Long id, String name, String type, String photo) {
+    public RecipeMainInfoDto(Long id, String name, String type, String image) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.image = photo;
+        this.image = image;
     }
 
     public Long getId() {

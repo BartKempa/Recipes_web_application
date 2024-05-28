@@ -40,8 +40,8 @@ public class FileStorageService {
         return saveFile(imageFile, imageStorageLocation);
     }
 
-    public String saveFile(MultipartFile imageFile, String imageStorageLocation){
-        Path filePath = createFilePath(imageFile, imageStorageLocation);
+    private String saveFile(MultipartFile imageFile, String storageLocation){
+        Path filePath = createFilePath(imageFile, storageLocation);
         try {
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             return filePath.getFileName().toString();
@@ -50,7 +50,7 @@ public class FileStorageService {
         }
     }
 
-    private Path createFilePath(MultipartFile imageFile, String imageStorageLocation) {
+    private Path createFilePath(MultipartFile imageFile, String storageLocation) {
         String originalFileName = imageFile.getOriginalFilename();
         String fileBaseName = FilenameUtils.getBaseName(originalFileName);
         String fileExtension = FilenameUtils.getExtension(originalFileName);
@@ -58,8 +58,8 @@ public class FileStorageService {
         Path filePath;
         int fileIndex = 0;
         do {
-            completeFilename = fileBaseName + fileIndex+ "." + fileExtension;
-            filePath = Paths.get(imageStorageLocation, completeFilename);
+            completeFilename = fileBaseName + fileIndex + "." + fileExtension;
+            filePath = Paths.get(storageLocation, completeFilename);
             fileIndex++;
         } while (Files.exists(filePath));
         return filePath;
