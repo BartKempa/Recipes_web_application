@@ -11,5 +11,6 @@
     <include file="../testdata/0001_types.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0002_difficulty_level.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0003_recipes.sql" relativeToChangelogFile="true" context="dev"/>
-    
+    <include file="../testdata/0004_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
+
 </databaseChangeLog>
