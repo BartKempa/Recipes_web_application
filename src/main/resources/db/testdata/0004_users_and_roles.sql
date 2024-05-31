@@ -8,7 +8,7 @@ values
 insert into
     user_role(name, description)
 values
-    (  ('ADMIN', 'pełne uprawnienia'),
+    ('ADMIN', 'pełne uprawnienia'),
     ('USER', 'podstawowe uprawnienia, możliwość oddawania głosów i komentarzy'),
     ('EDITOR', 'podstawowe uprawnienia + możliwość zarządzania treściami');
 

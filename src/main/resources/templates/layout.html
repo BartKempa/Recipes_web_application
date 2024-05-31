@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pl"
       xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Kuchnia Bartka</title>
@@ -45,7 +46,8 @@
             <a href="#" th:href="@{/admin}">Administracja</a>
             </li>
             <li class="menu-utility-item">
-                <a href="#">Zaloguj się</a>
+                <a href="#" th:href="@{/login}" sec:authorize="!isAuthenticated()">Zaloguj się</a>
+                <a href="#" th:href="@{/logout}" sec:authorize="isAuthenticated()">Wyloguj się</a>
             </li>
         </ul>
         <ul class="menu-nav-list" th:remove="all-but-first">
