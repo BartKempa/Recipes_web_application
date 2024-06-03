@@ -314,7 +314,8 @@ li::marker {
     background-color: #eaeaec;
 }
 
-.add-form {
+.add-form,
+.login-form {
     display: flex;
     flex-direction: column;
     margin: 0 30px;
@@ -342,6 +343,11 @@ li::marker {
     margin-top: 10px;
     background-color: #eaeaec
 }
+
+.login-form-message {
+    text-align: center;
+}
+
 /*
 .add-form > input[type=file] {
     color: white;
