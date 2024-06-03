@@ -10,7 +10,7 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Dodaj nowy przepis </h2>
-        <form action="#" th:action="@{/admin/dodaj-przepis}" method="post" enctype="multipart/form-data" class="add-form" th:object="${recipe}">
+        <form action="#" th:action="@{/admin/dodaj-przepis}" method="post" enctype="multipart/form-data" class="kb-form" th:object="${recipe}">
 
             <label for="name">Nazwa przepisu</label>
             <input id="name" type="text" placeholder="np. Żurek" th:field="*{name}">

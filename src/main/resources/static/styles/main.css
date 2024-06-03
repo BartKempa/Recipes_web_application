@@ -314,37 +314,36 @@ li::marker {
     background-color: #eaeaec;
 }
 
-.add-form,
-.login-form {
+.kb-form{
     display: flex;
     flex-direction: column;
     margin: 0 30px;
 }
 
-.add-form > * {
+.kb-form > * {
     margin-top: 8px;
 }
 
-.add-form > input,
-.add-form > button,
-.add-form > select,
-.add-form > textarea {
+.kb-form > input,
+.kb-form > button,
+.kb-form > select,
+.kb-form > textarea {
     font-size: 18px;
     color: black;
     padding: 8px;
 }
 
-.add-form > label {
+.kb-form > label {
     font-size: 18px;
     font-weight: 500;
 }
 
-.add-form > button {
+.kb-form > button {
     margin-top: 10px;
     background-color: #eaeaec
 }
 
-.login-form-message {
+.kb-form-message {
     text-align: center;
 }
 
