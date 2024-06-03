@@ -19,7 +19,10 @@ public class CustomSecurityConfig {
                 .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)
                 .anyRequest().permitAll()
         )
-                .formLogin(Customizer.withDefaults())
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .permitAll()
+                )
                 .build();
     }
 
