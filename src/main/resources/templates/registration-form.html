@@ -12,9 +12,9 @@
         <h2 class="list-heading">Zarejestruj się </h2>
         <form action="#" th:action="@{/rejestracja}" method="post" class="kb-form" th:object="${user}">
             <label for="email">Adres email</label>
-            <input id="email" name="email" placeholder="nazwa użytkownika" th:object="*{email}">
+            <input id="email" name="email" placeholder="nazwa użytkownika" th:field="*{email}">
             <label for="password">Hasło</label>
-            <input id="password" name="password" type="password" placeholder="hasło" th:object="*{password}">
+            <input id="password" name="password" type="password" placeholder="hasło" th:field="*{password}">
             <button type="submit">Zarejestruj się</button>
         </form>
     </main>
