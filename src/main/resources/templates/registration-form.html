@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Zarejestruj się - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Zarejestruj się </h2>
+        <form action="#" th:action="@{/rejestracja}" method="post" class="kb-form" th:object="${user}">
+            <label for="email">Adres email</label>
+            <input id="email" name="email" placeholder="nazwa użytkownika" th:object="*{email}">
+            <label for="password">Hasło</label>
+            <input id="password" name="password" type="password" placeholder="hasło" th:object="*{password}">
+            <button type="submit">Zarejestruj się</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
