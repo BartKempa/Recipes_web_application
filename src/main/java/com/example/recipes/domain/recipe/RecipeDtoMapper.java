@@ -45,5 +45,4 @@ class RecipeDtoMapper {
                 getAverageRating(recipe)
         );
     }
-
 }
