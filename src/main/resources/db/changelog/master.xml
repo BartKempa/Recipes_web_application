@@ -13,6 +13,6 @@
     <include file="../testdata/0002_difficulty_level.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0003_recipes.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0004_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
-    <include file="../testdata/0005_movie_rating.sql" relativeToChangelogFile="true" context="dev"/>
+    <include file="../testdata/0005_recipe_rating.sql" relativeToChangelogFile="true" context="dev"/>
 
 </databaseChangeLog>

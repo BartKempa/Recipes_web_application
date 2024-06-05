@@ -1,8 +1,12 @@
 package com.example.recipes.domain.recipe;
 
 import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
+import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.type.Type;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -13,6 +17,10 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
+
+    @OneToMany(mappedBy = "rating")
+    private Set<Rating> ratings = new HashSet<>();
+
     private String description;
     private Integer preparationTime;
     private Integer cookingTime;
@@ -110,5 +118,13 @@ public class Recipe {
 
     public void setImage(String photo) {
         this.image = photo;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 }
