@@ -18,7 +18,7 @@ public class Recipe {
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
 
-    @OneToMany(mappedBy = "rating")
+    @OneToMany(mappedBy = "recipe")
     private Set<Rating> ratings = new HashSet<>();
 
     private String description;
