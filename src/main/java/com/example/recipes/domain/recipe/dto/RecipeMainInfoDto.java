@@ -5,12 +5,14 @@ public class RecipeMainInfoDto {
     private String name;
     private String type;
     private String image;
+    private double averageRating;
 
-    public RecipeMainInfoDto(Long id, String name, String type, String image) {
+    public RecipeMainInfoDto(Long id, String name, String type, String image, double averageRating) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.image = image;
+        this.averageRating = averageRating;
     }
 
     public Long getId() {
@@ -43,5 +45,13 @@ public class RecipeMainInfoDto {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }
