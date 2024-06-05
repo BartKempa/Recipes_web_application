@@ -23,6 +23,9 @@
                              referencedColumnNames="id"
                 />
             </column>
+            <column name="rating" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable> 
         <addUniqueConstraint constraintName="unique_recipe_rating"
                              tableName="recipe_rating"
