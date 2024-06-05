@@ -6,6 +6,8 @@ import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RatingService {
 
@@ -27,6 +29,11 @@ public class RatingService {
         ratingToSaveOrUpdate.setRecipe(recipe);
         ratingToSaveOrUpdate.setRating(rating);
         ratingRepository.save(ratingToSaveOrUpdate);
+    }
+
+    Optional<Integer> getRatingForRecipe(String userEmail, long recipeId){
+        return ratingRepository.findByUser_EmailAndRecipe_Id(userEmail, recipeId)
+                .map(Rating::getRating);
     }
 
 }
