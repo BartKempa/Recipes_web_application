@@ -31,7 +31,7 @@ public class RatingService {
         ratingRepository.save(ratingToSaveOrUpdate);
     }
 
-    Optional<Integer> getRatingForRecipe(String userEmail, long recipeId){
+    public Optional<Integer> getRatingForRecipe(String userEmail, long recipeId){
         return ratingRepository.findByUser_EmailAndRecipe_Id(userEmail, recipeId)
                 .map(Rating::getRating);
     }

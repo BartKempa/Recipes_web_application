@@ -42,7 +42,8 @@ class RecipeDtoMapper {
                 recipe.getName(),
                 recipe.getType().getName(),
                 recipe.getImage(),
-                getAverageRating(recipe)
+                getAverageRating(recipe),
+                recipe.getRatings().size()
         );
     }
 }

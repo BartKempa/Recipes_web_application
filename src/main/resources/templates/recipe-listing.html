@@ -16,6 +16,7 @@
                                 <img class="recipe-list-item-photo"
                                      src="../static/img/photo-dish.jpg"
                                      th:src="${recipe.image ne null} ? @{|/img/${recipe.image}|} : @{/img/photo-dish.jpg}"
+
                                      alt="Nazwa dania">
                             </a>
                             <div class="recipe-list-item-footer">
@@ -24,8 +25,8 @@
                                 </a>
                                 <a href="#" class="recipe-list-item-footer-rating">
                                     <i class="fa-regular fa-star"></i>
-                                    <span th:if="${recipe.averageRating > 0}" th:text="${#numbers.formatDecimal(recipe.averageRating, 1, 1)}">4.8</span>
-                                    <span th:if="!${recipe.averageRating > 0}" >Brak ocen</span>
+                                    <span th:if="${recipe.ratingCount}" th:text="|${#numbers.formatDecimal(recipe.averageRating, 1, 1)} (${recipe.ratingCount})|">4.8 (4)</span>
+                                    <span th:if="!${recipe.ratingCount}" >0.0 (-)</span>
                                 </a>
                             </div>
                         </div>
