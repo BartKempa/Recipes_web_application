@@ -23,7 +23,9 @@
                                     <i class="fa-regular fa-comment"></i> 15
                                 </a>
                                 <a href="#" class="recipe-list-item-footer-rating">
-                                    <i class="fa-regular fa-star"></i> 4,48
+                                    <i class="fa-regular fa-star"></i>
+                                    <span th:if="${recipe.averageRating > 0}" th:text="${#numbers.formatDecimal(recipe.averageRating, 1, 1)}">4.8</span>
+                                    <span th:if="!${recipe.averageRating > 0}" >Brak ocen</span>
                                 </a>
                             </div>
                         </div>

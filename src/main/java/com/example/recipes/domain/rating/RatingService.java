@@ -35,5 +35,4 @@ public class RatingService {
         return ratingRepository.findByUser_EmailAndRecipe_Id(userEmail, recipeId)
                 .map(Rating::getRating);
     }
-
 }
