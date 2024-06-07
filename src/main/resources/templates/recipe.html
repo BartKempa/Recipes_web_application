@@ -12,15 +12,19 @@
         <section class="recipe">
             <h2 class="recipe-title" th:text="${recipe.name}">Burger z frytkami</h2>
             <div class="recipe-base-statistics-container">
+
                 <div class="recipe-rating-container">
                     <i class="fa-solid fa-star"></i>
                     <i class="fa-solid fa-star"></i>
                     <i class="fa-solid fa-star"></i>
                     <i class="fa-solid fa-star"></i>
                     <i class="fa-regular fa-star"></i>
-                    <span class="recipe-rating-value">4.00</span>
-                    <span class="recipe-rating-votes-number">(55)</span>
+                    <span class="recipe-rating-value" th:if="${recipe.ratingCount}" th:text="${#numbers.formatDecimal(recipe.averageRating, 1, 1)}">4.00</span>
+                    <span class="recipe-rating-value" th:unless="${recipe.ratingCount}">0.00</span>
+                    <span class="recipe-rating-votes-number" th:if="${recipe.ratingCount}" th:text="|(${recipe.ratingCount})|">(55)</span>
+                    <span class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">(-)</span>
                 </div>
+
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i> 15
                 </div>
