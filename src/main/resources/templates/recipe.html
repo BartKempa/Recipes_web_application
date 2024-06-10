@@ -81,15 +81,21 @@
                     <p class="recipe-rating-value" th:if="${recipe.ratingCount}" th:text="| Średnie ocena ${#numbers.formatDecimal(recipe.averageRating, 1, 1)}/5.0|">Średnia ocena 4.0/5.0</p>
                     <p class="recipe-rating-votes-number" th:if="${recipe.ratingCount}" th:text="|Liczba głosów: ${recipe.ratingCount}|">Liczba głosów: 55</p>
                     <p class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">Brak głosów</p>
-                    <form action="#" th:action=""
-
-                    <button class="recipe-rating-button"
-                            name="rating"
-                            th:each="i: ${#numbers.sequence(1, 5)}"
-                            th:value="${i}">
-                        <i class="fa-star" th:classappend="${ i <= recipe.averageRating ? 'fa-solid' : 'fa-regular'}"></i>
-                    </button>
-
+                    <form action="#" th:action="@{/ocen-przepis}" method="post"
+                          sec:authorize="isAuthenticated()"
+                          class="recipe-rating-form">
+                        <p>Twoja ocena</p>
+                        <input type="hidden" name="recipeId" th:value="${recipe.id}">
+                        <button class="recipe-rating-button"
+                                name="rating"
+                                th:each="i: ${#numbers.sequence(1, 5)}"
+                                th:value="${i}">
+                            <i class="fa-star" th:classappend="${ i <= recipe.averageRating ? 'fa-solid' : 'fa-regular'}"></i>
+                        </button>
+                    </form>
+                    <p sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" href="#">Zaloguj się, zaby dodać głos</a>
+                    </p>
                 </div>
         </section>
     </main>
