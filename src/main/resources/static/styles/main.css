@@ -212,8 +212,21 @@ a {
 }
 
 .recipe-container-comments-number,
-.recipe-rating-container {
+.recipe-rating-container
+{
     padding-right: 25px;
+}
+
+.recipe-rating-button {
+    background-color: white;
+    border: 0;
+    padding: 1px;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+.recipe-rating-button:hover {
+    opacity: 1;
 }
 
 .recipe-base-description-container {
@@ -235,7 +248,8 @@ a {
 
 .recipe-base-details-container,
 .recipe-ingredients-list-container,
-.recipe-directions-list {
+.recipe-directions-list,
+.recipe-rating {
     padding: 10px 30px;
     font-weight: 500;
     border: 1px #655858 solid;

@@ -2,6 +2,7 @@
 <html lang="pl"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <title th:title="|${recipe.name} - Kuchnia Bartka|">Przepis - Kuchnia Bartka</title>
@@ -12,19 +13,20 @@
         <section class="recipe">
             <h2 class="recipe-title" th:text="${recipe.name}">Burger z frytkami</h2>
             <div class="recipe-base-statistics-container">
-
+                <a href="#recipe-rating-section">
                 <div class="recipe-rating-container">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-regular fa-star"></i>
-                    <span class="recipe-rating-value" th:if="${recipe.ratingCount}" th:text="${#numbers.formatDecimal(recipe.averageRating, 1, 1)}">4.00</span>
-                    <span class="recipe-rating-value" th:unless="${recipe.ratingCount}">0.00</span>
-                    <span class="recipe-rating-votes-number" th:if="${recipe.ratingCount}" th:text="|(${recipe.ratingCount})|">(55)</span>
-                    <span class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">(-)</span>
-                </div>
-
+                        <button class="recipe-rating-button"
+                                name="rating"
+                                th:each="i: ${#numbers.sequence(1, 5)}"
+                                th:value="${i}">
+                            <i class="fa-star" th:classappend="${ i <= recipe.averageRating ? 'fa-solid' : 'fa-regular'}"></i>
+                        </button>
+                        <span class="recipe-rating-value" th:if="${recipe.ratingCount}" th:text="${#numbers.formatDecimal(recipe.averageRating, 1, 1)}">4.00</span>
+                        <span class="recipe-rating-value" th:unless="${recipe.ratingCount}">0.00</span>
+                        <span class="recipe-rating-votes-number" th:if="${recipe.ratingCount}" th:text="|(${recipe.ratingCount})|">(55)</span>
+                        <span class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">(-)</span>
+                    </div>
+                </a>
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i> 15
                 </div>
@@ -74,6 +76,21 @@
                 <li class="recipe-directions-item">W międzyczasie przygotuj bułki: przekrój je na pół, opiecz na grillu i posmaruj z obu stron sosem Hellmann's. Na górną część bułki ułóż liść sałaty lodowej, plaster cebuli i gruby plaster pomidora.</li>
                 <li class="recipe-directions-item">Na dolną część bułki połóż zgrillowanego burgera z przepisu z serem i przykryj go dwoma plastrami chrupiącego boczku. Kanapkę przykryj górną częścią bułki z sałatą, cebulą i pomidorem. Żeby kanapka się nie rozpadła, przekłuj ją wykałaczką z korniszonem i oliwką.</li>
             </ul>
+            <h3 class="header-rating">Oceń!</h3>
+                <div class="recipe-rating" id="recipe-rating-section">
+                    <p class="recipe-rating-value" th:if="${recipe.ratingCount}" th:text="| Średnie ocena ${#numbers.formatDecimal(recipe.averageRating, 1, 1)}/5.0|">Średnia ocena 4.0/5.0</p>
+                    <p class="recipe-rating-votes-number" th:if="${recipe.ratingCount}" th:text="|Liczba głosów: ${recipe.ratingCount}|">Liczba głosów: 55</p>
+                    <p class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">Brak głosów</p>
+                    <form action="#" th:action=""
+
+                    <button class="recipe-rating-button"
+                            name="rating"
+                            th:each="i: ${#numbers.sequence(1, 5)}"
+                            th:value="${i}">
+                        <i class="fa-star" th:classappend="${ i <= recipe.averageRating ? 'fa-solid' : 'fa-regular'}"></i>
+                    </button>
+
+                </div>
         </section>
     </main>
 </div>
