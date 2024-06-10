@@ -23,8 +23,10 @@ public class CustomSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
         return http.authorizeHttpRequests(request -> request
-                .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)
-                .anyRequest().permitAll()
+                        .requestMatchers("/ocen-przepis").authenticated()
+                        .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)
+                        .anyRequest().permitAll()
+
         )
                 .formLogin(login -> login
                         .loginPage("/login")

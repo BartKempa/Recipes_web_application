@@ -29,7 +29,7 @@ public class RecipeController {
         RecipeFullInfoDto recipeFullInfoDto = recipeService.findRecipeById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("recipe", recipeFullInfoDto);
-        if (authentication.isAuthenticated()){
+        if (authentication != null){
             String currentUserName = authentication.getName();
             Integer rating = ratingService.getRatingForRecipe(currentUserName, id).orElse(0);
             model.addAttribute("userRating", rating);
