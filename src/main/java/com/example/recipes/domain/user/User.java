@@ -61,4 +61,12 @@ public class User {
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
+
+    public Set<Recipe> getFavoriteRecipes() {
+        return favoriteRecipes;
+    }
+
+    public void setFavoriteRecipes(Set<Recipe> favoriteRecipes) {
+        this.favoriteRecipes = favoriteRecipes;
+    }
 }

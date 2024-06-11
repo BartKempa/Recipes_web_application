@@ -1,5 +1,5 @@
 insert into
-    favorite_recipes (recipe_id, user_id)
+    favorite_recipes (user_id, recipe_id)
 values
     (1, 2),
     (1, 3),
