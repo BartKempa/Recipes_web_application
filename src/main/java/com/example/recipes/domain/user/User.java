@@ -1,5 +1,6 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.recipe.Recipe;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -20,6 +21,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<UserRole> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "favorite_recipes",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id")
+    )
+    private Set<Recipe> favoriteRecipes = new HashSet<>();
 
     public Long getId() {
         return id;

@@ -32,6 +32,8 @@ public class Recipe {
     private String directions;
     private String image;
 
+
+
     public Long getId() {
         return id;
     }
