@@ -30,10 +30,19 @@
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i> 1
                 </div>
-                <div class="recipe-container-favourites-number">
+
+                <div class="recipe-container-favourites-number" sec:authorize="authenticated">
                     <i class="fa-regular fa-heart"></i>
                     <span th:text="${favourites}">19</span>
+                    <span class="tooltip-text">Dodaj do polubionych</span>
                 </div>
+
+                <div class="recipe-container-favourites-number" sec:authorize="!authenticated">
+                    <i class="fa-regular fa-heart"></i>
+                    <span th:text="${favourites}">19</span>
+                    <span class="tooltip-text">Zaloguj się żeby dodać do ulubionych!</span>
+                </div>
+
             </div>
             <div class="recipe-base-description-container">
                 <p class="recipe-base-description" th:text="${recipe.description}">Burger drwala to jesienno-zimowy przebój największej sieci fast foodów w Polsce.

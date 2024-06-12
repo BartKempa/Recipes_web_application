@@ -229,6 +229,25 @@ a {
     opacity: 1;
 }
 
+.recipe-container-favourites-number .tooltip-text {
+    visibility: hidden;
+    max-width: 240px;
+    background-color: #006400;;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 3px 3px;
+    position: absolute;
+    z-index: 1;
+}
+
+.recipe-container-favourites-number:hover .tooltip-text {
+    visibility: visible;
+}
+
+
+
 .recipe-base-description-container {
     text-align: justify;
     text-justify: inter-word;
