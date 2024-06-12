@@ -3,6 +3,7 @@ package com.example.recipes.web;
 import com.example.recipes.domain.rating.RatingService;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
+import com.example.recipes.domain.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,12 @@ import org.springframework.web.server.ResponseStatusException;
 public class RecipeController {
     private final RecipeService recipeService;
     private final RatingService ratingService;
+    private final UserService  userService;
 
-    public RecipeController(RecipeService recipeService, RatingService ratingService) {
+    public RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService) {
         this.recipeService = recipeService;
         this.ratingService = ratingService;
+        this.userService = userService;
     }
 
 
@@ -34,6 +37,8 @@ public class RecipeController {
             Integer rating = ratingService.getRatingForRecipe(currentUserName, id).orElse(0);
             model.addAttribute("userRating", rating);
         }
+        int favourites = userService.favoritesCount(id);
+        model.addAttribute("favourites", favourites);
         return "recipe";
     }
 }
