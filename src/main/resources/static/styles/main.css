@@ -217,7 +217,8 @@ a {
     padding-right: 28px;
 }
 
-.recipe-rating-button {
+.recipe-rating-button,
+.recipe-favorites-button {
     background-color: white;
     border: 0;
     padding: 1px;
@@ -225,7 +226,11 @@ a {
     opacity: 0.8;
 }
 
-.recipe-rating-button:hover {
+.recipe-rating-button {
+    opacity: 1;
+}
+
+.recipe-favorites-button:hover {
     opacity: 1;
 }
 

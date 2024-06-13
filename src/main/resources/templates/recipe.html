@@ -32,9 +32,15 @@
                 </div>
 
                 <div class="recipe-container-favourites-number" sec:authorize="authenticated">
-                    <i class="fa-regular fa-heart"></i>
-                    <span th:text="${favourites}">19</span>
-                    <span class="tooltip-text">Dodaj do polubionych</span>
+                    <form action="#" th:action="@{/dodaj-do-ulubione}" method="post"
+                          sec:authorize="isAuthenticated()">
+                        <input type="hidden" name="recipeId" th:value="${recipe.id}">
+                        <button class="recipe-favorites-button">
+                            <i class="fa-regular fa-heart"></i>
+                            <span th:text="${favourites}">19</span>
+                            <span class="tooltip-text">Dodaj lub usuń z ubionych</span>
+                        </button>
+                    </form>
                 </div>
 
                 <div class="recipe-container-favourites-number" sec:authorize="!authenticated">
