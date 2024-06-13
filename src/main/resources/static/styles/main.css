@@ -232,7 +232,8 @@ a {
     opacity: 0.8;
 }
 
-.fa-star {
+.fa-star,
+.fa-comment {
     color: #006400;
 }
 

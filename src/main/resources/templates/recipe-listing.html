@@ -16,12 +16,11 @@
                                 <img class="recipe-list-item-photo"
                                      src="../static/img/photo-dish.jpg"
                                      th:src="${recipe.image ne null} ? @{|/img/${recipe.image}|} : @{/img/photo-dish.jpg}"
-
                                      alt="Nazwa dania">
                             </a>
                             <div class="recipe-list-item-footer">
                                 <a href="#" class="recipe-list-item-footer-comment">
-                                    <i class="fa-regular fa-comment"></i> 15
+                                    <i class="fa-regular fa-comment"></i>15
                                 </a>
                                 <a href="#" class="recipe-list-item-footer-rating">
                                     <i class="fa-regular fa-star"></i>
