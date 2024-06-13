@@ -148,7 +148,6 @@ a {
     text-align: center;
 }
 
-
 .list-heading {
     text-align: center;
     margin: 18px;
@@ -212,8 +211,7 @@ a {
 }
 
 .recipe-container-comments-number,
-.recipe-rating-container
-{
+.recipe-rating-container {
     padding-right: 28px;
 }
 
@@ -254,8 +252,6 @@ a {
 .recipe-container-favourites-number:hover .tooltip-text {
     visibility: visible;
 }
-
-
 
 .recipe-base-description-container {
     text-align: justify;
@@ -343,6 +339,7 @@ li::marker {
     padding: 16px;
     text-align: center;
 }
+
 .list-admin-features-item > a {
     color: black;
     font-size: 20px;
@@ -399,10 +396,7 @@ li::marker {
     margin-top: 20px;
 }
 
-/*
-.add-form > input[type=file] {
-    color: white;
-}*/
+
 
 
 
