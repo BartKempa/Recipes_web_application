@@ -30,25 +30,23 @@
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i> 1
                 </div>
-
-                <div class="recipe-container-favourites-number" sec:authorize="authenticated">
-                    <form action="#" th:action="@{/dodaj-do-ulubione}" method="post"
-                          sec:authorize="isAuthenticated()">
+                <div class="recipe-container-favourites-number" sec:authorize="isAuthenticated()">
+                    <form action="#" th:action="@{/dodaj-do-ulubione}" method="post">
                         <input type="hidden" name="recipeId" th:value="${recipe.id}">
                         <button class="recipe-favorites-button">
                             <i class="fa-regular fa-heart"></i>
-                            <span th:text="${favourites}">19</span>
-                            <span class="tooltip-text">Dodaj lub usuń z ubionych</span>
                         </button>
+                        <span th:text="${favourites}">19</span>
+                        <span class="tooltip-text">Dodaj lub usuń z ubionych</span>
                     </form>
                 </div>
-
-                <div class="recipe-container-favourites-number" sec:authorize="!authenticated">
-                    <i class="fa-regular fa-heart"></i>
-                    <span th:text="${favourites}">19</span>
-                    <span class="tooltip-text">Zaloguj się żeby dodać do ulubionych!</span>
+                <div class="recipe-container-favourites-number" sec:authorize="!isAuthenticated()">
+                    <a href="#" th:href="@{/login}">
+                        <i class="fa-regular fa-heart"></i>
+                        <span class="recipe-favorites-count" th:text="${favourites}">19</span>
+                        <span class="tooltip-text">Zaloguj się żeby dodać do ulubionych!</span>
+                    </a>
                 </div>
-
             </div>
             <div class="recipe-base-description-container">
                 <p class="recipe-base-description" th:text="${recipe.description}">Burger drwala to jesienno-zimowy przebój największej sieci fast foodów w Polsce.

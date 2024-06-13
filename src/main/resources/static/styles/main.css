@@ -223,15 +223,19 @@ a {
     border: 0;
     padding: 1px;
     font-size: 18px;
+    opacity: 1;
+}
+
+.recipe-rating-button:hover {
     opacity: 0.8;
 }
 
-.recipe-rating-button {
-    opacity: 1;
+.recipe-favorites-button:hover {
+    opacity: 0.8;
 }
 
-.recipe-favorites-button:hover {
-    opacity: 1;
+.fa-star {
+    color: #006400;
 }
 
 .recipe-container-favourites-number .tooltip-text {
@@ -294,6 +298,7 @@ a {
 .recipe-base-statistics-container i {
     color: #006400;
 }
+
 
 .recipe-ingredients-list-container li {
     list-style-type: circle;
