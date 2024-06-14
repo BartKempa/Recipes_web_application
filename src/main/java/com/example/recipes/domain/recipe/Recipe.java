@@ -21,8 +21,6 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe")
     private Set<Rating> ratings = new HashSet<>();
-    @OneToMany(mappedBy = "recipe")
-    private Set<Comment> comments = new HashSet<>();
     private String description;
     private Integer preparationTime;
     private Integer cookingTime;
@@ -33,7 +31,8 @@ public class Recipe {
     private String ingredients;
     private String directions;
     private String image;
-
+    @OneToMany(mappedBy = "recipe")
+    private Set<Comment> comments = new HashSet<>();
 
 
     public Long getId() {

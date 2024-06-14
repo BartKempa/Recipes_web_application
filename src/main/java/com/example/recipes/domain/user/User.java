@@ -1,5 +1,6 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.recipe.Recipe;
 import jakarta.persistence.*;
 
@@ -29,6 +30,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     )
     private Set<Recipe> favoriteRecipes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Comment> comments = new HashSet<>();
 
     public Long getId() {
         return id;
