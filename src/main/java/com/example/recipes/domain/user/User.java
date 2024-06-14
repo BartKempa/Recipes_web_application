@@ -73,4 +73,13 @@ public class User {
     public void setFavoriteRecipes(Set<Recipe> favoriteRecipes) {
         this.favoriteRecipes = favoriteRecipes;
     }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
 }

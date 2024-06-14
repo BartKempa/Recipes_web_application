@@ -130,4 +130,12 @@ public class Recipe {
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
     }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
 }

@@ -9,6 +9,7 @@
     <include file="0004_create_table_users_and_role.xml" relativeToChangelogFile="true"/>
     <include file="0005_create_table_recipe_rating.xml" relativeToChangelogFile="true"/>
     <include file="0006_create_table_favorite_recipes.xml" relativeToChangelogFile="true"/>
+    <include file="0007_create_table_comment.xml" relativeToChangelogFile="true"/>
 
     <include file="../testdata/0001_types.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0002_difficulty_level.sql" relativeToChangelogFile="true" context="dev"/>
@@ -16,5 +17,6 @@
     <include file="../testdata/0004_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0005_recipe_rating.sql" relativeToChangelogFile="true" context="dev"/>
     <include file="../testdata/0006_favorite_recipes.sql" relativeToChangelogFile="true" context="dev"/>
+    <include file="../testdata/0007_comment.sql" relativeToChangelogFile="true" context="dev"/>
 
 </databaseChangeLog>

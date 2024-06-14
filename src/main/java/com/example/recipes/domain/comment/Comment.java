@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Comment {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime creationDate;
     private boolean approved;
@@ -19,7 +20,4 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
-
 }
