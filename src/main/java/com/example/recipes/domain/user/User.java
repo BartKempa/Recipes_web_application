@@ -24,7 +24,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "favorite_recipes",
+            name = "favorite_recipe",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     )

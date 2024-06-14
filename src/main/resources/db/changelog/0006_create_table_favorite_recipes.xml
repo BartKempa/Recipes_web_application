@@ -5,22 +5,22 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="0006-1" author="admin">
-        <createTable tableName="favorite_recipes">
+        <createTable tableName="favorite_recipe">
             <column name="user_id"  type="BIGINT">
                 <constraints nullable="false"
-                             foreignKeyName="fk_favorite_recipes_user_id"
+                             foreignKeyName="fk_favorite_recipe_user_id"
                              referencedTableName="users"
                              referencedColumnNames="id"/>
             </column>
             <column name="recipe_id" type="BIGINT">
                 <constraints nullable="false"
-                             foreignKeyName="fk_favorite_recipes_recipe_id"
+                             foreignKeyName="fk_favorite_recipe_recipe_id"
                              referencedTableName="recipe"
                              referencedColumnNames="id"/>
             </column>
         </createTable>
-        <addUniqueConstraint tableName="favorite_recipes"
-                             constraintName="unique_favorite_recipes"
+        <addUniqueConstraint tableName="favorite_recipe"
+                             constraintName="unique_favorite_recipe"
                              columnNames="user_id, recipe_id"/>
     </changeSet>
 </databaseChangeLog>
