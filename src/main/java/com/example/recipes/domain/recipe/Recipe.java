@@ -1,5 +1,6 @@
 package com.example.recipes.domain.recipe;
 
+import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.type.Type;
@@ -20,7 +21,8 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe")
     private Set<Rating> ratings = new HashSet<>();
-
+    @OneToMany(mappedBy = "recipe")
+    private Set<Comment> comments = new HashSet<>();
     private String description;
     private Integer preparationTime;
     private Integer cookingTime;
