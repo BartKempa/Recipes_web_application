@@ -20,7 +20,9 @@
                             </a>
                             <div class="recipe-list-item-footer">
                                 <a href="#" class="recipe-list-item-footer-comment">
-                                    <i class="fa-regular fa-comment"></i>15
+                                    <i class="fa-regular fa-comment"></i>
+                                    <span th:if="${recipe.commentCount}" th:text="${recipe.commentCount}">17</span>
+                                    <span th:if="!${recipe.commentCount}">0</span>
                                 </a>
                                 <a href="#" class="recipe-list-item-footer-rating">
                                     <i class="fa-regular fa-star"></i>
