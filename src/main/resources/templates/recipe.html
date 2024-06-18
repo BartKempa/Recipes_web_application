@@ -28,7 +28,9 @@
                     </div>
                 </a>
                 <div class="recipe-container-comments-number">
-                    <i class="fa-regular fa-comment"></i> 1
+                    <i class="fa-regular fa-comment"></i>
+                    <span th:if="${recipe.commentCount}" th:text="${recipe.commentCount}">7</span>
+                    <span th:if="!${recipe.commentCount}">7</span>
                 </div>
                 <div class="recipe-container-favourites-number" sec:authorize="isAuthenticated()">
                     <form action="#" th:action="@{/dodaj-do-ulubione}" method="post">
