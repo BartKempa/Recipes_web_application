@@ -1,5 +1,7 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.comment.CommentService;
+import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingService;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
@@ -12,16 +14,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Controller
 public class RecipeController {
     private final RecipeService recipeService;
     private final RatingService ratingService;
     private final UserService  userService;
+    private final CommentService commentService;
 
-    public RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService) {
+    public RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService, CommentService commentService) {
         this.recipeService = recipeService;
         this.ratingService = ratingService;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
 
@@ -39,6 +45,7 @@ public class RecipeController {
         }
         int favourites = userService.favoritesCount(id);
         model.addAttribute("favourites", favourites);
+        List<CommentDto> comments = commentService.getCommentsForRecipe(id);
         return "recipe";
     }
 }

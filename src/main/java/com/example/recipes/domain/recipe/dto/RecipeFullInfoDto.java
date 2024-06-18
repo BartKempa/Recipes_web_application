@@ -16,8 +16,9 @@ public class RecipeFullInfoDto {
     private String image;
     private double averageRating;
     private int ratingCount;
+    private int commentCount;
 
-    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, List<String> ingredients, List<String> directionsSteps, String image, double averageRating, int ratingCount) {
+    public RecipeFullInfoDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, List<String> ingredients, List<String> directionsSteps, String image, double averageRating, int ratingCount, int commentCount) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -31,6 +32,7 @@ public class RecipeFullInfoDto {
         this.image = image;
         this.averageRating = averageRating;
         this.ratingCount = ratingCount;
+        this.commentCount = commentCount;
     }
 
     public Long getId() {
@@ -135,5 +137,13 @@ public class RecipeFullInfoDto {
 
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 }

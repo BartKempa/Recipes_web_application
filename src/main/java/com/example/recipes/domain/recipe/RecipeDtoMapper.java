@@ -25,7 +25,8 @@ class RecipeDtoMapper {
                 Arrays.stream(recipe.getDirections().split("\\\\n")).map(String::trim).collect(Collectors.toList()),
                 recipe.getImage(),
                 getAverageRating(recipe),
-                recipe.getRatings().size()
+                recipe.getRatings().size(),
+                recipe.getComments().size()
         );
     }
 
@@ -43,7 +44,8 @@ class RecipeDtoMapper {
                 recipe.getType().getName(),
                 recipe.getImage(),
                 getAverageRating(recipe),
-                recipe.getRatings().size()
+                recipe.getRatings().size(),
+                recipe.getComments().size()
         );
     }
 }
