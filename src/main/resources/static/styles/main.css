@@ -274,7 +274,8 @@ a {
 .recipe-base-details-container,
 .recipe-ingredients-list-container,
 .recipe-directions-list,
-.recipe-rating {
+.recipe-rating,
+.recipe-comments {
     padding: 10px 30px;
     font-weight: 500;
     border: 1px #655858 solid;
@@ -284,11 +285,13 @@ a {
 
 .recipe-photo,.recipe-base-details-container,
 .recipe-ingredients-list-container,
-.recipe-directions-list {
+.recipe-directions-list,
+.recipe-rating {
     margin-bottom: 16px;
 }
 
-.recipe-base-details-item-bold {
+.recipe-base-details-item-bold,
+.recipe-comment-author {
     font-weight: 700;
 }
 
@@ -397,7 +400,23 @@ li::marker {
     margin-top: 20px;
 }
 
+.recipe-comment-time {
+    font-size: 14px;
+}
 
+.recipe-comment-content {
+    margin: 8px;
+}
+
+.recipe-comments-list {
+    list-style: none;
+}
+
+.recipe-comments-list-item {
+    border-bottom: 1px #655858 solid;
+    margin-bottom: 26px;
+
+}
 
 
 
