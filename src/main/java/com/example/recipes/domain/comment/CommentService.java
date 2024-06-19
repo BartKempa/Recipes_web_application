@@ -24,6 +24,5 @@ public class CommentService {
          return commentRepository.findAllByRecipeId(id).stream()
                  .map(CommentDtoMapper::map)
                  .collect(Collectors.toList());
-
     }
 }

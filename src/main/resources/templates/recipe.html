@@ -113,6 +113,19 @@
                         <a th:href="@{/login}" href="#">Zaloguj się, żeby dodać głos</a>
                     </p>
                 </div>
+
+            <h3 class="header-rating" th:text="|Komentarze (${recipe.commentCount})|">Komentarze (5)</h3>
+            <div class="recipe-comments">
+                <ul class="recipe-comments-list">
+                    <li th:each="comment: ${comments}">
+                        <p class="recipe-comment-author"><span th:text="${comment.email}">Bartosz</span></p>
+                        <p class="recipe-comment-time"><span th:text="${#temporals.format(comment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
+                        <p class="recipe-comment-content"><span th:text="${comment.text}">Bardzo odbra potrawa</span></p>
+
+                    </li>
+                </ul>
+            </div>
+
         </section>
     </main>
 </div>

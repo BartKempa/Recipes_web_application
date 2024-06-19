@@ -58,5 +58,6 @@ public class UserService {
     public int favoritesCount(long recipeId){
          return userRepository.countUsersByFavouriteRecipe(recipeId);
     }
+
 }
 

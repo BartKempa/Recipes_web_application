@@ -1,10 +1,5 @@
 package com.example.recipes.domain.comment.dto;
 
-import com.example.recipes.domain.recipe.Recipe;
-import com.example.recipes.domain.user.User;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
 import java.time.LocalDateTime;
 
 public class CommentDto {
@@ -12,12 +7,15 @@ public class CommentDto {
     private boolean approved;
     private String text;
     private LocalDateTime creationDate;
+    private String email;
 
-    public CommentDto(Long id, boolean approved, String text, LocalDateTime creationDate) {
+
+    public CommentDto(Long id, boolean approved, String text, LocalDateTime creationDate, String nickName) {
         this.id = id;
         this.approved = approved;
         this.text = text;
         this.creationDate = creationDate;
+        this.email = nickName;
     }
 
     public Long getId() {
@@ -50,5 +48,13 @@ public class CommentDto {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
