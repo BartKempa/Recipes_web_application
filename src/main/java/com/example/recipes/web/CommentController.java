@@ -19,11 +19,19 @@ public class CommentController {
     }
 
     @GetMapping("/dodaj-komentarz")
-    public String addRecipeComment(Model model){
+    public String addRecipeCommentForm(Model model){
         CommentDto comment = new CommentDto();
         model.addAttribute("comment", comment);
         return "recipe";
     }
-
+    @PostMapping("/dodaj-komentarz")
+    public String addRecipeComment(CommentDto comment,
+                                   Authentication authentication,
+                                   @RequestParam long recipeId,
+                                   @RequestHeader String referer){
+        String userEmail = authentication.getName();
+        commentService.addComment(comment, recipeId, userEmail);
+        return "redirect:" + referer;
+    }
 
 }
