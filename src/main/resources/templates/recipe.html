@@ -27,11 +27,13 @@
                         <span class="recipe-rating-votes-number" th:unless="${recipe.ratingCount}">(-)</span>
                     </div>
                 </a>
+                <a href="#recipe-rating-section">
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i>
                     <span th:if="${recipe.commentCount}" th:text="${recipe.commentCount}">7</span>
                     <span th:if="!${recipe.commentCount}">7</span>
                 </div>
+                </a>
                 <div class="recipe-container-favourites-number" sec:authorize="isAuthenticated()">
                     <form action="#" th:action="@{/dodaj-do-ulubione}" method="post">
                         <input type="hidden" name="recipeId" th:value="${recipe.id}">
@@ -117,7 +119,7 @@
             <div class="recipe-comments">
                 <ul class="recipe-comments-list">
                     <li class="recipe-comments-list-item" th:each="comment: ${comments}">
-                        <p class="recipe-comment-author"><span th:text="${comment.email}">Bartosz</span></p>
+                        <p class="recipe-comment-author"><span th:text="${comment.userEmail}">Bartosz</span></p>
                         <p class="recipe-comment-time"><span th:text="${#temporals.format(comment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
                         <p class="recipe-comment-content"><span th:text="${comment.text}">Bardzo odbra potrawa</span></p>
                     </li>

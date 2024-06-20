@@ -7,15 +7,15 @@ public class CommentDto {
     private boolean approved;
     private String text;
     private LocalDateTime creationDate;
-    private String email;
+    private String userEmail;
 
 
-    public CommentDto(Long id, boolean approved, String text, LocalDateTime creationDate, String nickName) {
+    public CommentDto(Long id, boolean approved, String text, LocalDateTime creationDate, String userEmail) {
         this.id = id;
         this.approved = approved;
         this.text = text;
         this.creationDate = creationDate;
-        this.email = nickName;
+        this.userEmail = userEmail;
     }
 
     public Long getId() {
@@ -50,11 +50,11 @@ public class CommentDto {
         this.creationDate = creationDate;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
