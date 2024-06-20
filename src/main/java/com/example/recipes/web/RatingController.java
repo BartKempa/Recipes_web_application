@@ -15,6 +15,7 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
+
     @PostMapping("/ocen-przepis")
     public String addRecipeRating(@RequestParam long recipeId,
                                   @RequestParam int rating,

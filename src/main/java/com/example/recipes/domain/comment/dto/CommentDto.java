@@ -9,6 +9,8 @@ public class CommentDto {
     private LocalDateTime creationDate;
     private String userEmail;
 
+    public CommentDto() {
+    }
 
     public CommentDto(Long id, boolean approved, String text, LocalDateTime creationDate, String userEmail) {
         this.id = id;
