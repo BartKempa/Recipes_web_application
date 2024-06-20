@@ -35,8 +35,9 @@ public class CommentService {
         Comment commentToSave = new Comment();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         User user = userRepository.findByEmail(userName).orElseThrow();
+        LocalDateTime date = LocalDateTime.now();
         commentToSave.setId(commentDto.getId());
-        commentToSave.setCreationDate(LocalDateTime.now());
+        commentToSave.setCreationDate(date);
         commentToSave.setApproved(true);
         commentToSave.setText(commentDto.getText());
         commentToSave.setRecipe(recipe);
