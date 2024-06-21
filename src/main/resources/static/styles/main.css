@@ -410,6 +410,7 @@ li::marker {
 
 .recipe-comments-list {
     list-style: none;
+    margin-top: 20px;
 }
 
 .recipe-comments-list-item {

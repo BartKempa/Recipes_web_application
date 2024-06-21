@@ -30,7 +30,6 @@ public class RecipeController {
         this.commentService = commentService;
     }
 
-
     @GetMapping("/przepis/{id}")
     public String getRecipe(@PathVariable long id,
                             Model model,
@@ -42,6 +41,8 @@ public class RecipeController {
             String currentUserName = authentication.getName();
             Integer rating = ratingService.getRatingForRecipe(currentUserName, id).orElse(0);
             model.addAttribute("userRating", rating);
+            CommentDto comment = new CommentDto();
+            model.addAttribute("comment", comment);
         }
         int favourites = userService.favoritesCount(id);
         model.addAttribute("favourites", favourites);
@@ -49,4 +50,6 @@ public class RecipeController {
         model.addAttribute("comments", comments);
         return "recipe";
     }
+
+
 }

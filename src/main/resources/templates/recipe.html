@@ -117,15 +117,25 @@
                 </div>
             <h3 class="header-comments" th:text="|Komentarze (${recipe.commentCount})|">Komentarze (5)</h3>
             <div class="recipe-comments">
+                <form action="#" th:action="@{/dodaj-komentarz}" method="post" th:object="${comment}"
+                      sec:authorize="isAuthenticated()"
+                      class="kb-form">
+                    <input type="hidden" name="recipeId" th:value="${recipe.id}">
+                    <label for="recipe-comment">Twój komentarz:</label>
+                    <textarea id="recipe-comment" th:field="*{text}" rows="6" placeholder="Co sądzisz o danym przepisie? (Komentarz zostanie dodany po zatwierdzeniu przez administartora)"></textarea>
+                    <button type="submit">Dodaj komentarz</button>
+                </form>
+                <p sec:authorize="!isAuthenticated()">
+                    <a href="#" th:href="@{/login}">Zaloguj się</a>, aby dodać koemntarz
+                </p>
                 <ul class="recipe-comments-list">
-                    <li class="recipe-comments-list-item" th:each="comment: ${comments}">
-                        <p class="recipe-comment-author"><span th:text="${comment.userEmail}">Bartosz</span></p>
-                        <p class="recipe-comment-time"><span th:text="${#temporals.format(comment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
-                        <p class="recipe-comment-content"><span th:text="${comment.text}">Bardzo odbra potrawa</span></p>
+                    <li class="recipe-comments-list-item" th:each="singleComment: ${comments}">
+                        <p class="recipe-comment-author"><span th:text="${singleComment.userEmail}">Bartosz</span></p>
+                        <p class="recipe-comment-time"><span th:text="${#temporals.format(singleComment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
+                        <p class="recipe-comment-content"><span th:text="${singleComment.text}">Bardzo dobra potrawa</span></p>
                     </li>
                 </ul>
             </div>
-
         </section>
     </main>
 </div>
