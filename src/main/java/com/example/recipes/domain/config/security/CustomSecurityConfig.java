@@ -23,6 +23,7 @@ public class CustomSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
         return http.authorizeHttpRequests(request -> request
+                        .requestMatchers("/dodaj-komentarz").authenticated()
                         .requestMatchers("/ocen-przepis").authenticated()
                         .requestMatchers("/dodaj-do-ulubione").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)

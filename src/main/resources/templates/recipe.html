@@ -126,7 +126,7 @@
                     <button type="submit">Dodaj komentarz</button>
                 </form>
                 <p sec:authorize="!isAuthenticated()">
-                    <a href="#" th:href="@{/login}">Zaloguj się</a>, aby dodać koemntarz
+                    <a href="#" th:href="@{/login}">Zaloguj się, aby dodać komentarz</a>
                 </p>
                 <ul class="recipe-comments-list">
                     <li class="recipe-comments-list-item" th:each="singleComment: ${comments}">
