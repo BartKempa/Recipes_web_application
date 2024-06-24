@@ -6,6 +6,8 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeRepository;
 import com.example.recipes.storage.FileStorageService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +29,19 @@ public class RecipeService {
         this.fileStorageService = fileStorageService;
     }
 
-    public List<RecipeMainInfoDto> findAllRecipes() {
-        return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
+    public List<RecipeMainInfoDto> findAllRecipes(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return recipeRepository.findAll(pageRequest)
                 .map(RecipeDtoMapper::mapMainInfo)
                 .toList();
+        /*return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
+                .map(RecipeDtoMapper::mapMainInfo)
+                .toList();*/
     }
+
+
+
+
 
     public Optional<RecipeFullInfoDto> findRecipeById(long id){
         return recipeRepository.findById(id)
