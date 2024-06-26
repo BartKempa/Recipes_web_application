@@ -66,6 +66,7 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("heading", "Wszytskie przepisy");
         return "recipe-listing";
 
     }
