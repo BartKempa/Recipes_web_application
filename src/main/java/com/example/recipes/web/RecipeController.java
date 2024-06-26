@@ -60,7 +60,7 @@ public class RecipeController {
     public String getAllRecipesPageable(@PathVariable(value = "pageNo") Optional<Integer> pageNo,
                                         Model model){
         int pageNumber = pageNo.orElse(1);
-        int pageSize = 15;
+        int pageSize = 6;
         Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, pageSize);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         model.addAttribute("recipes", recipes);
