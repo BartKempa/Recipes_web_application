@@ -22,12 +22,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model, @PageableDefault()
-                       @RequestParam(defaultValue = "0") Integer pageNumber,
-                       @RequestParam(defaultValue = "12") Integer pageSize){
-        List<RecipeMainInfoDto> recipes = recipeService.findAllRecipes(pageNumber, pageSize);
+    public String home(Model model){
+        List<RecipeMainInfoDto> recipes = recipeService.findAllRecipes();
         model.addAttribute("heading", "Wszytskie przepisy");
         model.addAttribute("recipes", recipes);
         return "recipe-listing";
     }
+    
+
 }

@@ -3,9 +3,12 @@ package com.example.recipes.web;
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingService;
+import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class RecipeController {
@@ -51,5 +56,18 @@ public class RecipeController {
         return "recipe";
     }
 
+    @GetMapping("/strona/{pageNo}")
+    public String getAllRecipesPageable(@PathVariable(value = "pageNo") Optional<Integer> pageNo,
+                                        Model model){
+        int pageNumber = pageNo.orElse(1);
+        int pageSize = 15;
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, pageSize);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+        model.addAttribute("recipes", recipes);
+        int totalPages = recipePage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+        return "recipe-listing";
+
+    }
 
 }
