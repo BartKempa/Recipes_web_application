@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @Controller
 public class RecipeController {
+    private final static int PAGE_SIZE = 6;
     private final RecipeService recipeService;
     private final RatingService ratingService;
     private final UserService  userService;
@@ -57,18 +58,17 @@ public class RecipeController {
     }
 
     @GetMapping("/strona/{pageNo}")
-    public String getAllRecipesPageable(@PathVariable(value = "pageNo") Optional<Integer> pageNo,
+    public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
                                         Model model){
         int pageNumber = pageNo.orElse(1);
-        int pageSize = 6;
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, pageSize);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Wszytskie przepisy");
         return "recipe-listing";
-
     }
 
 }

@@ -40,7 +40,6 @@ public class RecipeService {
          Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
          return this.recipeRepository.findAll(pageable)
                  .map(RecipeDtoMapper::mapMainInfo);
-
      }
 
     public Optional<RecipeFullInfoDto> findRecipeById(long id){

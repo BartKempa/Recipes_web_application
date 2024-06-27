@@ -154,13 +154,33 @@
                 </a>
             </li>
         </ul>
-        <div th:if ="${totalPages > 0}" class="pagination-container">
-
-            <div th:if ="${totalPages > 0}" class="pagination" th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-                <a href="#" th:text="${pageNum}" th:href="@{|/strona/${pageNum}|}"></a>
+        <div th:if="${totalPages > 1}" class="pagination-container">
+            <div th:if="${currentPage > 1}" class="pagination">
+                <a href="#" th:href="@{|/strona/${currentPage - 1}|}">&#171;</a>
             </div>
 
+            <div class="pagination">
+                <span th:if="${currentPage > 3}">
+                    <a href="#" th:href="@{|/strona/1|}">1</a>
+                    <span>...</span>
+                </span>
+
+                <span th:each="pageNum : ${#numbers.sequence(currentPage - 2 > 0 ? currentPage - 2 : 1, currentPage + 2 <= totalPages ? currentPage + 2 : totalPages)}">
+                    <a href="#" th:text="${pageNum}" th:href="@{|/strona/${pageNum}|}"
+                       th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
+                </span>
+
+                <span th:if="${currentPage < totalPages - 2}">
+                    <span>...</span>
+                    <a href="#" th:href="@{|/strona/${totalPages}|}">[[${totalPages}]]</a>
+                </span>
+            </div>
+
+            <div th:if="${currentPage < totalPages}" class="pagination">
+                <a href="#" th:href="@{|/strona/${currentPage + 1}|}">&#187;</a>
+            </div>
         </div>
+
     </main>
 </div>
 </body>
