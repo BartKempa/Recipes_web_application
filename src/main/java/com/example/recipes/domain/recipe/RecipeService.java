@@ -47,10 +47,10 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapFullInfo);
     }
 
-    public List<RecipeMainInfoDto> findRecipesByType(String type){
-       return recipeRepository.findAllByType_NameIgnoreCase(type).stream()
-               .map(RecipeDtoMapper::mapMainInfo)
-               .toList();
+    public Page<RecipeMainInfoDto> findRecipesByType(String type, int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+       return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
+               .map(RecipeDtoMapper::mapMainInfo);
     }
 
     @Transactional

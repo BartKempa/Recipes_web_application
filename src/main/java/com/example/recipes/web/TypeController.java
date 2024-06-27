@@ -4,6 +4,7 @@ import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TypeController {
@@ -23,11 +25,18 @@ public class TypeController {
         this.typeService = typeService;
     }
 
-    @GetMapping("/typ/{name}")
-    public String getType(@PathVariable String name, Model model){
+    @GetMapping("/typ/{name}/{pageNo}")
+    public String getType(@PathVariable String name,
+                          @PathVariable Optional<Integer> pageNo,
+                          Model model){
+        int pageNumber = pageNo.orElse(1);
         TypeDto typeDto = typeService.findTypeByName(name)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<RecipeMainInfoDto> recipes = recipeService.findRecipesByType(name);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByType(name, pageNumber, 3 );
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+        int totalPages = recipePage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", typeDto.getName());
         model.addAttribute("recipes", recipes);
         return "recipe-listing";
