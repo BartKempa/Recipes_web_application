@@ -52,7 +52,7 @@
         </ul>
         <ul class="menu-nav-list" th:remove="all-but-first">
             <li class="menu-nav-item" th:each="type: ${types}">
-                <a href="#" th:href="@{|/typ/${type.name}|}" th:text="${type.name}">BURGERY</a>
+                <a href="#" th:href="@{|/typ/${type.name}/strona/1|}" th:text="${type.name}">BURGERY</a>
             </li>
             <li class="menu-nav-item">
                 <a href="#">SŁODKOŚCI</a>

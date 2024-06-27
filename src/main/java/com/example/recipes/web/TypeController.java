@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Controller
 public class TypeController {
+    private final static int PAGE_SIZE = 3;
     private final RecipeService recipeService;
     private final TypeService typeService;
 
@@ -25,14 +26,14 @@ public class TypeController {
         this.typeService = typeService;
     }
 
-    @GetMapping("/typ/{name}/{pageNo}")
+    @GetMapping("/typ/{name}/strona/{pageNo}")
     public String getType(@PathVariable String name,
                           @PathVariable Optional<Integer> pageNo,
                           Model model){
         int pageNumber = pageNo.orElse(1);
         TypeDto typeDto = typeService.findTypeByName(name)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByType(name, pageNumber, 3 );
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByType(name, pageNumber, PAGE_SIZE);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         int totalPages = recipePage.getTotalPages();
         model.addAttribute("totalPages", totalPages);

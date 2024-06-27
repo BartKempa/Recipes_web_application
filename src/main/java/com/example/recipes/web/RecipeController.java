@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Controller
 public class RecipeController {
-    private final static int PAGE_SIZE = 6;
+    private final static int PAGE_SIZE = 3;
     private final RecipeService recipeService;
     private final RatingService ratingService;
     private final UserService  userService;
