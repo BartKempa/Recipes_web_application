@@ -68,6 +68,7 @@ public class RecipeController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Wszytskie przepisy");
+        model.addAttribute("baseUrl", "/strona");
         return "recipe-listing";
     }
 

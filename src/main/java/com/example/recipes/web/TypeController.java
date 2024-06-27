@@ -40,6 +40,7 @@ public class TypeController {
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", typeDto.getName());
         model.addAttribute("recipes", recipes);
+        model.addAttribute("baseUrl", "/typ/" + name + "/strona");
         return "recipe-listing";
     }
 }
