@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -56,6 +57,7 @@ public class RecipeService {
     @Transactional
     public void addRecipe(RecipeSaveDto recipeToSave){
         Recipe recipe = new Recipe();
+        LocalDateTime date = LocalDateTime.now();
         recipe.setId(recipeToSave.getId());
         recipe.setName(recipeToSave.getName());
                 recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getType()).orElseThrow());
@@ -70,6 +72,7 @@ public class RecipeService {
             String savedImage = fileStorageService.saveImage(recipeToSave.getImage());
             recipe.setImage(savedImage);
         }
+        recipe.setCreationDate(date);
         recipeRepository.save(recipe);
     }
 }

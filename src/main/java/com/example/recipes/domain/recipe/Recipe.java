@@ -6,6 +6,7 @@ import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.type.Type;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ public class Recipe {
     private String image;
     @OneToMany(mappedBy = "recipe")
     private Set<Comment> comments = new HashSet<>();
+    private LocalDateTime creationDate;
 
 
     public Long getId() {
@@ -137,5 +139,13 @@ public class Recipe {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

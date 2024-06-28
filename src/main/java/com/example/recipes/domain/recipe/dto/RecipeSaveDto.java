@@ -2,6 +2,8 @@ package com.example.recipes.domain.recipe.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 public class RecipeSaveDto {
     private Long id;
     private String name;
@@ -14,6 +16,7 @@ public class RecipeSaveDto {
     private String ingredients;
     private String directionsSteps;
     private MultipartFile image;
+    private LocalDateTime creationDate;
 
     public RecipeSaveDto() {
     }
@@ -104,5 +107,13 @@ public class RecipeSaveDto {
 
     public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

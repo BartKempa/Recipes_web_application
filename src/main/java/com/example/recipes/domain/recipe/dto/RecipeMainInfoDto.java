@@ -1,5 +1,7 @@
 package com.example.recipes.domain.recipe.dto;
 
+import java.time.LocalDateTime;
+
 public class RecipeMainInfoDto {
     private Long id;
     private String name;
@@ -8,8 +10,9 @@ public class RecipeMainInfoDto {
     private double averageRating;
     private int ratingCount;
     private int commentCount;
+    private LocalDateTime creationDate;
 
-    public RecipeMainInfoDto(Long id, String name, String type, String image, double averageRating, int ratingCount, int commentCount) {
+    public RecipeMainInfoDto(Long id, String name, String type, String image, double averageRating, int ratingCount, int commentCount, LocalDateTime creationDate) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -17,6 +20,7 @@ public class RecipeMainInfoDto {
         this.averageRating = averageRating;
         this.ratingCount = ratingCount;
         this.commentCount = commentCount;
+        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -73,5 +77,13 @@ public class RecipeMainInfoDto {
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }
