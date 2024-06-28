@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.Option;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @Controller
 public class RecipeController {
-    private final static int PAGE_SIZE = 3;
+    private final static int PAGE_SIZE = 6;
     private final RecipeService recipeService;
     private final RatingService ratingService;
     private final UserService  userService;
@@ -59,15 +60,17 @@ public class RecipeController {
 
     @GetMapping("/strona/{pageNo}")
     public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
+                                        @RequestParam("sortField") String sortField,
                                         Model model){
         int pageNumber = pageNo.orElse(1);
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, sortField);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Wszytskie przepisy");
+        model.addAttribute("sortField", sortField);
         model.addAttribute("baseUrl", "/strona");
         return "recipe-listing";
     }

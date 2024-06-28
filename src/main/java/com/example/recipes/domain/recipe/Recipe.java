@@ -4,6 +4,7 @@ import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.type.Type;
+import com.example.recipes.domain.user.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,8 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private Set<Comment> comments = new HashSet<>();
     private LocalDateTime creationDate;
+    @ManyToMany(mappedBy = "favoriteRecipes")
+    private Set<User> favourites = new HashSet<>();
 
 
     public Long getId() {
@@ -147,5 +150,13 @@ public class Recipe {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Set<User> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(Set<User> favourites) {
+        this.favourites = favourites;
     }
 }

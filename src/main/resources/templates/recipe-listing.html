@@ -7,10 +7,23 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading" th:text="${heading}">Nazwa grupy przepisów</h2>
+        <div class="sorting-container">
+            Sortuj:
+            <span class="sort-by-date">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage}?sortField=creationDate|}">
+                    Data publikacji
+                </a>
+            </span>
+            <span class="sort-by-popularity">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage}?sortField=name|}">
+                    Nazwa
+                </a>
+            </span>
+        </div>
         <ul class="recipe-list" th:remove="all-but-first">
                 <li class="recipe-list-item" th:each="recipe: ${recipes}">
                     <a href="#" th:href="@{|/przepis/${recipe.id}|}">
-                        <div class="recipe-list-name-container>">
+                        <div class="recipe-list-name-container">
                             <h3 class="recipe-list-item-name" th:text="${recipe.name}">Burger i frytkami</h3>
                             <a href="#" th:href="@{|/przepis/${recipe.id}|}">
                                 <img class="recipe-list-item-photo"
@@ -33,147 +46,27 @@
                         </div>
                     </a>
                 </li>
-                <li class="recipe-list-item">
-                    <a href="#">
-                        <div class="recipe-list-name-container>">
-                            <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                            <a href="#">
-                                <img class="recipe-list-item-photo"
-                                     src="../static/img/photo-dish.jpg"
-                                     alt="Nazwa dania">
-                            </a>
-                            <div class="recipe-list-item-footer">
-                                <a href="#" class="recipe-list-item-footer-comment">
-                                    <i class="fa-regular fa-comment"></i> 15
-                                </a>
-                                <a href="#" class="recipe-list-item-footer-rating">
-                                    <i class="fa-regular fa-star"></i> 5,48
-                                </a>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            <li class="recipe-list-item">
-                <a href="#">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                        <a href="#">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 5,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="recipe-list-item">
-                <a href="#">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                        <a href="#">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 4,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="recipe-list-item">
-                <a href="#">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                        <a href="#">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 5,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="recipe-list-item">
-                <a href="#">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                        <a href="#">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 5,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="recipe-list-item">
-                <a href="#">
-                    <div class="recipe-list-name-container>">
-                        <h3 class="recipe-list-item-name">Burger i frytkami</h3>
-                        <a href="#">
-                            <img class="recipe-list-item-photo"
-                                 src="../static/img/photo-dish.jpg"
-                                 alt="Nazwa dania">
-                        </a>
-                        <div class="recipe-list-item-footer">
-                            <a href="#" class="recipe-list-item-footer-comment">
-                                <i class="fa-regular fa-comment"></i> 15
-                            </a>
-                            <a href="#" class="recipe-list-item-footer-rating">
-                                <i class="fa-regular fa-star"></i> 5,48
-                            </a>
-                        </div>
-                    </div>
-                </a>
-            </li>
         </ul>
         <div th:if="${totalPages > 1}" class="pagination-container">
             <div th:if="${currentPage > 1}" class="pagination">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}|}">&#171;</a>
+                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}?sortField=${sortField}|}">&#171;</a>
             </div>
             <div class="pagination">
                 <span th:if="${currentPage > 3}">
-                     <a href="#" th:href="@{|${baseUrl}/1|}">1</a>
+                     <a href="#" th:href="@{|${baseUrl}/1?sortField=${sortField}|}">1</a>
                     <span>...</span>
                 </span>
                 <span th:each="pageNum : ${#numbers.sequence(currentPage - 2 > 0 ? currentPage - 2 : 1, currentPage + 2 <= totalPages ? currentPage + 2 : totalPages)}">
-                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}|}"
+                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}?sortField=${sortField}|}"
                      th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
                 </span>
                 <span th:if="${currentPage < totalPages - 2}">
                     <span>...</span>
-                     <a href="#" th:href="@{|${baseUrl}/${totalPages}|}">[[${totalPages}]]</a>
+                     <a href="#" th:href="@{|${baseUrl}/${totalPages}?sortField=${sortField}|}">[[${totalPages}]]</a>
                 </span>
             </div>
             <div th:if="${currentPage < totalPages}" class="pagination">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}|}">&#187;</a>
+                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}?sortField=${sortField}|}">&#187;</a>
             </div>
         </div>
     </main>

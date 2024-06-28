@@ -6,10 +6,7 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeRepository;
 import com.example.recipes.storage.FileStorageService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +34,9 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapMainInfo)
                 .toList();
     }
-     public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize){
-         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+     public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize, String sortField){
+         Sort sort = Sort.by(sortField).descending();
+         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
          return this.recipeRepository.findAll(pageable)
                  .map(RecipeDtoMapper::mapMainInfo);
      }
@@ -49,6 +47,7 @@ public class RecipeService {
     }
 
     public Page<RecipeMainInfoDto> findRecipesByType(String type, int pageNumber, int pageSize){
+
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
        return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
                .map(RecipeDtoMapper::mapMainInfo);
