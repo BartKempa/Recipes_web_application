@@ -30,6 +30,7 @@
             <column name="ingredients" type="VARCHAR(10000)"/>
             <column name="directions" type="VARCHAR(10000)"/>
             <column name="image" type="VARCHAR(100)"/>
+            <column name="creation_date" type="DATETIME(fsp)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
