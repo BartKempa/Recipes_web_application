@@ -9,12 +9,14 @@ import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,6 +74,16 @@ public class RecipeController {
         model.addAttribute("heading", "Wszytskie przepisy");
         model.addAttribute("sortField", sortField);
         model.addAttribute("baseUrl", "/strona");
+        return "recipe-listing";
+    }
+
+    @PostMapping("/search")
+    public String getRecipesBySearchText(Model model, @RequestParam String searchText){
+        List<RecipeMainInfoDto> recipes = recipeService.findRecipesByText(searchText);
+        System.out.println("liczba wyszukanych przepisów " + recipes.size());
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("heading", "Wyszkiwane przepisy");
         return "recipe-listing";
     }
 
