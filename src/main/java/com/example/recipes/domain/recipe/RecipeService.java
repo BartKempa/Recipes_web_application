@@ -74,4 +74,10 @@ public class RecipeService {
         recipe.setCreationDate(date);
         recipeRepository.save(recipe);
     }
+
+    public List<RecipeMainInfoDto> findRecipesByText(String searchText){
+        return recipeRepository.findRecipesBySearchText(searchText)
+                .stream().map(RecipeDtoMapper::mapMainInfo)
+                .toList();
+    }
 }
