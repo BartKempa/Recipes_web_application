@@ -368,6 +368,13 @@ li::marker {
     margin-top: 8px;
 }
 
+.search-form > input,
+.search-form > button {
+    font-size: 18px;
+    color: black;
+    padding: 2px;
+}
+
 .kb-form > input,
 .kb-form > button,
 .kb-form > select,
