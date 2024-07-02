@@ -10,12 +10,12 @@
         <div class="sorting-container">
             Sortuj:
             <span class="sort-by-date">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage}?sortField=creationDate|}">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=dataPublikacji|}">
                     Data publikacji
                 </a>
             </span>
             <span class="sort-by-popularity">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage}?sortField=name|}">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=nazwa|}">
                     Nazwa
                 </a>
             </span>
@@ -49,24 +49,24 @@
         </ul>
         <div th:if="${totalPages > 1}" class="pagination-container">
             <div th:if="${currentPage > 1}" class="pagination">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}?sortField=${sortField}|}">&#171;</a>
+                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}?poleSortowania=${sortField}|}">&#171;</a>
             </div>
             <div class="pagination">
                 <span th:if="${currentPage > 3}">
-                     <a href="#" th:href="@{|${baseUrl}/1?sortField=${sortField}|}">1</a>
+                     <a href="#" th:href="@{|${baseUrl}/1?poleSortowania=${sortField}|}">1</a>
                     <span>...</span>
                 </span>
                 <span th:each="pageNum : ${#numbers.sequence(currentPage - 2 > 0 ? currentPage - 2 : 1, currentPage + 2 <= totalPages ? currentPage + 2 : totalPages)}">
-                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}?sortField=${sortField}|}"
+                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}?poleSortowania=${sortField}|}"
                      th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
                 </span>
                 <span th:if="${currentPage < totalPages - 2}">
                     <span>...</span>
-                     <a href="#" th:href="@{|${baseUrl}/${totalPages}?sortField=${sortField}|}">[[${totalPages}]]</a>
+                     <a href="#" th:href="@{|${baseUrl}/${totalPages}?poleSortowania=${sortField}|}">[[${totalPages}]]</a>
                 </span>
             </div>
             <div th:if="${currentPage < totalPages}" class="pagination">
-                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}?sortField=${sortField}|}">&#187;</a>
+                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}?poleSortowania=${sortField}|}">&#187;</a>
             </div>
         </div>
     </main>

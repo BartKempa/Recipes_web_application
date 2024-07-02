@@ -35,6 +35,8 @@ public class Recipe {
     private String image;
     @OneToMany(mappedBy = "recipe")
     private Set<Comment> comments = new HashSet<>();
+
+
     private LocalDateTime creationDate;
     @ManyToMany(mappedBy = "favoriteRecipes")
     private Set<User> favourites = new HashSet<>();
