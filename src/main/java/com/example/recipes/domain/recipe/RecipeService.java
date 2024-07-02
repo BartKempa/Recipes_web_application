@@ -75,9 +75,10 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
-    public List<RecipeMainInfoDto> findRecipesByText(String searchText){
-        return recipeRepository.findRecipesBySearchText(searchText)
-                .stream().map(RecipeDtoMapper::mapMainInfo)
-                .toList();
+    public Page<RecipeMainInfoDto> findRecipesByText(String searchText, int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        return recipeRepository.findRecipesBySearchText(searchText, pageable)
+                .map(RecipeDtoMapper::mapMainInfo);
+
     }
 }

@@ -13,14 +13,12 @@ import java.util.Optional;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAndSortingRepository<Recipe, Long> {
     Page<Recipe> findAllByType_NameIgnoreCase(String name, Pageable pageable);
-    /*@Query("SELECT r FROM Recipe r WHERE LOWER(r.description) LIKE LOWER('%:searchText%')")
-    List<Recipe> findRecipesBySearchText(@Param("searchText") String searchText);*/
 
     @Query("SELECT r FROM Recipe r WHERE " +
             "LOWER(r.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(r.description) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(r.ingredients) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(r.directions) LIKE LOWER(CONCAT('%', :searchText, '%'))")
-    List<Recipe> findRecipesBySearchText(@Param("searchText") String searchText);
+    Page<Recipe> findRecipesBySearchText(@Param("searchText") String searchText, Pageable pageable);
 
 }

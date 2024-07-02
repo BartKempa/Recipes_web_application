@@ -78,11 +78,16 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public String getRecipesBySearchText(Model model, @RequestParam String searchText){
-        List<RecipeMainInfoDto> recipes = recipeService.findRecipesByText(searchText);
-        System.out.println("liczba wyszukanych przepisów " + recipes.size());
-
+    public String getRecipesBySearchText(@RequestParam String searchText,
+                                         @PathVariable Optional<Integer> pageNo,
+                                         Model model){
+        int pageNumber= pageNo.orElse(1);
+        Page<RecipeMainInfoDto> recipesPageByText = recipeService.findRecipesByText(searchText, pageNumber, PAGE_SIZE);
+        List<RecipeMainInfoDto> recipes = recipesPageByText.getContent();
+        int totalPages = recipesPageByText.getTotalPages();
         model.addAttribute("recipes", recipes);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Wyszkiwane przepisy");
         return "recipe-listing";
     }
