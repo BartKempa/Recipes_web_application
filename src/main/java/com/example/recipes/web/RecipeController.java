@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
@@ -65,25 +62,7 @@ public class RecipeController {
         return "recipe";
     }
 
-    @GetMapping("/strona/{pageNo}")
-    public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
-                                        @RequestParam("poleSortowania") String poleSortowania,
-                                        Model model){
-        int pageNumber = pageNo.orElse(1);
-        String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, sortField);
-        List<RecipeMainInfoDto> recipes = recipePage.getContent();
-        model.addAttribute("recipes", recipes);
-        int totalPages = recipePage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("heading", "Wszytskie przepisy");
-        model.addAttribute("sortField", poleSortowania);
-        model.addAttribute("baseUrl", "/strona");
-        return "recipe-listing";
-    }
-
-/*
+    /*
     @GetMapping("/strona/{pageNo}")
     public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
                                         @RequestParam("poleSortowania") String poleSortowania,
@@ -102,22 +81,42 @@ public class RecipeController {
     }
 */
 
-    @PostMapping("/search/{pageNo}")
+    @GetMapping("/strona/{pageNo}")
+    public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
+                                        @RequestParam(value ="poleSortowania", required = false) String poleSortowania,
+                                        Model model){
+        int pageNumber = pageNo.orElse(1);
+        String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+        model.addAttribute("recipes", recipes);
+        int totalPages = recipePage.getTotalPages();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("heading", "Wszytskie przepisy");
+        model.addAttribute("sortField", poleSortowania);
+        model.addAttribute("baseUrl", "/strona");
+        return "recipe-listing";
+    }
+
+    @GetMapping("/szukaj/strona/{pageNo}")
     public String getRecipesBySearchText(@RequestParam String searchText,
                                          @PathVariable Optional<Integer> pageNo,
-                                         Model model){
-        int pageNumber= pageNo.orElse(1);
-        Page<RecipeMainInfoDto> recipesPageByText = recipeService.findRecipesByText(searchText, pageNumber, PAGE_SIZE);
+                                         @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
+                                         Model model) {
+        int pageNumber = pageNo.orElse(1);
+        String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipesPageByText = recipeService.findRecipesByText(searchText, pageNumber, PAGE_SIZE, sortField);
         List<RecipeMainInfoDto> recipes = recipesPageByText.getContent();
         int totalPages = recipesPageByText.getTotalPages();
         model.addAttribute("recipes", recipes);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("baseUrl", "/strona");
-        model.addAttribute("heading", "Wyszkiwane przepisy");
+        model.addAttribute("sortField", poleSortowania);
+        model.addAttribute("baseUrl", "/szukaj/strona");
+        model.addAttribute("heading", "Wyszukiwane przepisy");
+        model.addAttribute("searchText", searchText);
         return "recipe-listing";
     }
-
-
 
 }

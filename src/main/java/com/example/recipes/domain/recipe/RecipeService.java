@@ -34,6 +34,7 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapMainInfo)
                 .toList();
     }
+
      public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize, String sortField){
          Sort sort = Sort.by(sortField).descending();
          Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -47,7 +48,6 @@ public class RecipeService {
     }
 
     public Page<RecipeMainInfoDto> findRecipesByType(String type, int pageNumber, int pageSize){
-
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
        return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
                .map(RecipeDtoMapper::mapMainInfo);
@@ -75,8 +75,9 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
-    public Page<RecipeMainInfoDto> findRecipesByText(String searchText, int pageNumber, int pageSize){
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    public Page<RecipeMainInfoDto> findRecipesByText(String searchText, int pageNumber, int pageSize, String sortField){
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return recipeRepository.findRecipesBySearchText(searchText, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
 
