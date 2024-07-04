@@ -80,6 +80,5 @@ public class RecipeService {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return recipeRepository.findRecipesBySearchText(searchText, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
-
     }
 }

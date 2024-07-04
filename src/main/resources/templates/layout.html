@@ -41,7 +41,7 @@
                 </a>
             </li>
             <li class="menu-utility-item">
-                <a href="#">Ulubione przepisy</a>
+                <a href="#" sec:authorize="${hasRole('USER')}">Ulubione przepisy</a>
             </li>
             <li class="menu-utility-item">
                 <a href="#" sec:authorize="${hasRole('USER')}">Panel użytkownika</a>

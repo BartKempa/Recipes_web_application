@@ -62,25 +62,6 @@ public class RecipeController {
         return "recipe";
     }
 
-    /*
-    @GetMapping("/strona/{pageNo}")
-    public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
-                                        @RequestParam("poleSortowania") String poleSortowania,
-                                        Model model){
-        int pageNumber = pageNo.orElse(1);
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, poleSortowania);
-        List<RecipeMainInfoDto> recipes = recipePage.getContent();
-        model.addAttribute("recipes", recipes);
-        int totalPages = recipePage.getTotalPages();
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("heading", "Wszytskie przepisy");
-        model.addAttribute("sortField", poleSortowania);
-        model.addAttribute("baseUrl", "/strona");
-        return "recipe-listing";
-    }
-*/
-
     @GetMapping("/strona/{pageNo}")
     public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
                                         @RequestParam(value ="poleSortowania", required = false) String poleSortowania,
