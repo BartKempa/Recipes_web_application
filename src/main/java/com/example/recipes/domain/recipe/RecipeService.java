@@ -81,4 +81,11 @@ public class RecipeService {
         return recipeRepository.findRecipesBySearchText(searchText, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
+
+    public Page<RecipeMainInfoDto> findFavouriteRecipesForUser(String email, int pageNumber, int pageSize, String sortField){
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return recipeRepository.findAllFavouritesRecipesForUser(email, pageable)
+                .map(RecipeDtoMapper::mapMainInfo);
+    }
 }
