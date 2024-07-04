@@ -100,4 +100,24 @@ public class RecipeController {
         return "recipe-listing";
     }
 
+    @GetMapping("/ulubione/strona/{pageNo}")
+    public String getFavouriteRecipesForUser(@PathVariable Optional<Integer> pageNo,
+                                             @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
+                                             Authentication authentication,
+                                             Model model){
+        String email = authentication.getName();
+        int pageNumber = pageNo.orElse(1);
+        String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creatinDate");
+        Page<RecipeMainInfoDto> favouriteRecipesPagesForUser = recipeService.findFavouriteRecipesForUser(email, pageNumber, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = favouriteRecipesPagesForUser.getContent();
+        int totalPages = favouriteRecipesPagesForUser.getTotalPages();
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("sortField", poleSortowania);
+        model.addAttribute("baseUrl", "/ulubione/strona");
+        model.addAttribute("heading", "Twoje ulubione przepisy");
+        return "recipe-listing";
+    }
+
 }
