@@ -8,6 +8,6 @@ public class UserController {
 
     @GetMapping("/uzytkownik")
     public String getUserPanel(){
-        return "user";
+        return "user-panel";
     }
 }
