@@ -10,7 +10,8 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Zaktualizuj dane </h2>
-        <form action="#" th:action="@{/rejestracja}" method="post" class="kb-form" th:object="${user}">
+        <form action="#" th:action="@{/uzytkownik/aktualizacja}" method="post" class="kb-form" th:object="${user}">
+
             <input type="hidden" th:field="*{id}">
             <label for="email">Adres email</label>
             <input id="email" name="email" placeholder="nazwa użytkownika" th:field="*{email}">

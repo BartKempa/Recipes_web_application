@@ -46,7 +46,6 @@ public class UserService {
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         boolean isRecipeFavourite = user.getFavoriteRecipes().stream().anyMatch(r -> r.getId() == recipeId);
-
        if (user.getFavoriteRecipes().contains(recipe)){
            user.getFavoriteRecipes().remove(recipe);
        } else {
@@ -62,8 +61,24 @@ public class UserService {
     public Optional<UserRegistrationDto> findUserById(long userId){
         return userRepository.findById(userId)
                 .map(UserRegistrationDtoMapper::map);
+    }
 
+    public Optional<UserRegistrationDto> findUserByName(String userName){
+        return userRepository.findByEmail(userName)
+                .map(UserRegistrationDtoMapper::map);
+    }
+
+    @Transactional
+    public void updateUser(UserRegistrationDto userRegistrationDto){
+        User user = new User();
+        user.setId(userRegistrationDto.getId());
+        user.setEmail(userRegistrationDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        UserRole userRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
+        user.getRoles().add(userRole);
+        userRepository.save(user);
     }
 
 }
+
 
