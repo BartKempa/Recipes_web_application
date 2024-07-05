@@ -2,6 +2,7 @@
 <html lang="pl"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <title>Panel użytkownika - Kuchnia Bartka</title>
@@ -9,7 +10,11 @@
 <body>
 <div class="container">
     <main class="main-content" layout:fragment="content">
-
+        <h2 class="list-heading" th:text="|Panel użytkownika ${#authentication.name}|">Panel użytkownika</h2>
+        <ul class="list-user-features">
+            <li class="list-user-features-item"><a href="#" th:href="@{/ulubione/strona/1}">Polubione przepisy</a></li>
+            <li class="list-user-features-item"><a href="#" >Edytuj dane użytkownika</a></li>
+        </ul>
     </main>
 </div>
 </body>

@@ -26,6 +26,7 @@ public class CustomSecurityConfig {
                         .requestMatchers("/dodaj-komentarz").authenticated()
                         .requestMatchers("/ocen-przepis").authenticated()
                         .requestMatchers("/dodaj-do-ulubione").authenticated()
+                        .requestMatchers("/uzytkownik/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)
                         .anyRequest().permitAll()
 

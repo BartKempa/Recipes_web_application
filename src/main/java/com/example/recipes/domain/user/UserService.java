@@ -59,5 +59,11 @@ public class UserService {
          return userRepository.countUsersByFavouriteRecipe(recipeId);
     }
 
+    public Optional<UserRegistrationDto> findUserById(long userId){
+        return userRepository.findById(userId)
+                .map(UserRegistrationDtoMapper::map);
+
+    }
+
 }
 
