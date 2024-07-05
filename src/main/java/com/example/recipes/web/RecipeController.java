@@ -105,7 +105,6 @@ public class RecipeController {
                                              @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                              Authentication authentication,
                                              Model model){
-        System.out.println("kontrole działa prawidłowo");
         String email = authentication.getName();
         int pageNumber = pageNo.orElse(1);
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
