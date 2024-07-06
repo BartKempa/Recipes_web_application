@@ -4,12 +4,13 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @Service
 public class UserService {
@@ -73,16 +74,21 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserRegistrationDto userRegistrationDto){
-        User user = new User();
-        user.setId(userRegistrationDto.getId());
-        user.setEmail(userRegistrationDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        UserRole userRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
-        user.getRoles().add(userRole);
+    public void updateUserData(UserRegistrationDto userRegistrationDto) {
+        User user = userRepository.findById(userRegistrationDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setFirstName(userRegistrationDto.getFirstName());
+        user.setLastName(userRegistrationDto.getLastName());
+        user.setNickName(userRegistrationDto.getNickName());
+        user.setAge(userRegistrationDto.getAge());
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUserPassword(UserRegistrationDto userRegistrationDto) {
+        User user = userRepository.findById(userRegistrationDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        userRepository.save(user);
+    }
 }
 
 

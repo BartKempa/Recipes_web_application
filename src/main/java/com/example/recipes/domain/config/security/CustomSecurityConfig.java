@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.util.Base64;
+
 @Configuration
 public class CustomSecurityConfig {
     private static final String USER_ROLE = "USER";
@@ -58,6 +60,6 @@ public class CustomSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
     }
+
 }

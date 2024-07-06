@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Aktualizacja danych do logowania - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Zaktualizuj dane do logowania </h2>
+        <form action="#" th:action="@{/uzytkownik/aktualizacja-logowanie}" method="post" class="kb-form" th:object="${user}">
+            <input type="hidden" th:field="*{id}">
+            <label for="password">Hasło</label>
+            <input id="password" name="password" type="password" placeholder="hasło" th:field="*{password}">
+            <p>Po zmianie hasła należy się ponownie zalogować.</p>
+            <button type="submit">Zaktualizuj i zaloguj się ponownie</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

@@ -38,6 +38,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
 
+
     public Long getId() {
         return id;
     }

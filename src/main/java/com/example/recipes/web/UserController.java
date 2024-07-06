@@ -4,7 +4,6 @@ import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +34,23 @@ public class UserController {
         model.addAttribute("user", user);
         return "user-update-form";
     }
-
     @PostMapping("/uzytkownik/aktualizacja")
-    public String updateUser(UserRegistrationDto user){
-        userService.updateUser(user);
-        return "redirect:/user-panel";
+    public String updateDataUser(UserRegistrationDto user){
+        userService.updateUserData(user);
+        return "redirect:/uzytkownik";
     }
+
+    @GetMapping("/uzytkownik/aktualizacja-do-logowania/{userId}")
+    public String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId, Model model){
+        UserRegistrationDto user = userService.findUserById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("user", user);
+        return "user-update-login-data-form";
+    }
+    @PostMapping("/uzytkownik/aktualizacja-logowanie")
+    public String updateUserDataLogin(UserRegistrationDto user){
+        userService.updateUserPassword(user);
+        return "redirect:/logout";
+    }
+
 }
