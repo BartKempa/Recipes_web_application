@@ -13,6 +13,14 @@
         <form action="#" th:action="@{/rejestracja}" method="post" class="kb-form" th:object="${user}">
             <label for="email">Adres email</label>
             <input id="email" name="email" placeholder="nazwa użytkownika" th:field="*{email}">
+            <label for="firstName">Imię</label>
+            <input id="firstName" name="firstName" placeholder="imie użytkownika" th:field="*{firstName}">
+            <label for="lastName">Nazwisko</label>
+            <input id="lastName" name="lastName" placeholder="nazwisko użytkownika" th:field="*{lastName}">
+            <label for="nickName">Nick</label>
+            <input id="nickName" name="nickName" placeholder="pseudonim użytkownika" th:field="*{nickName}">
+            <label for="age">Wiek</label>
+            <input id="age" name="age" placeholder="wiek użytkownika" th:field="*{age}">
             <label for="password">Hasło</label>
             <input id="password" name="password" type="password" placeholder="hasło" th:field="*{password}">
             <button type="submit">Zarejestruj się</button>

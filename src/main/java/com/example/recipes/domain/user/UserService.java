@@ -36,6 +36,10 @@ public class UserService {
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        user.setFirstName(userRegistrationDto.getFirstName());
+        user.setLastName(userRegistrationDto.getLastName());
+        user.setNickName(userRegistrationDto.getNickName());
+        user.setAge(userRegistrationDto.getAge());
         UserRole userRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
         user.getRoles().add(userRole);
         userRepository.save(user);

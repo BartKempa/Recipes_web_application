@@ -39,6 +39,6 @@ public class UserController {
     @PostMapping("/uzytkownik/aktualizacja")
     public String updateUser(UserRegistrationDto user){
         userService.updateUser(user);
-        return "redirect:/";
+        return "redirect:/user-panel";
     }
 }

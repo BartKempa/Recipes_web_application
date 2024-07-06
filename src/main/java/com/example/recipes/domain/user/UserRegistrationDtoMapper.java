@@ -7,7 +7,11 @@ public class UserRegistrationDtoMapper {
         return new UserRegistrationDto(
                 user.getId(),
                 user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getNickName(),
+                user.getAge()
         );
     }
 }
