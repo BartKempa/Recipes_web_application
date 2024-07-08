@@ -2,7 +2,7 @@ insert into
     users(email, first_name, last_name, nick_name, age, password)
 values
     ('admin@mail.com', 'Bartek', 'Kowalski', 'BigAdmin', 40, '{noop}adminpass'),
-    ('user@mail.com',  'Janek', 'Janecki', 'BigJohn', 28, '{bcrypt}userpass'),
+    ('user@mail.com',  'Janek', 'Janecki', 'BigJohn', 28, '{noop}userpass'),
     ('editor@mail.com',  'Daga', 'Szczepankowa', 'Dagula', 35, '{noop}editorpass');
 
 insert into
