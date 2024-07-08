@@ -89,6 +89,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
         userRepository.save(user);
     }
+
+    @Transactional
+    public void deleteUser(String email){
+        UserCredentialsDto userCredentialsDto = findCredentialsByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        userRepository.deleteUsers(email);
+    }
 }
 
 
