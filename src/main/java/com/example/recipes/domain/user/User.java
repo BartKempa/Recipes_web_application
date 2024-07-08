@@ -1,6 +1,7 @@
 package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.comment.Comment;
+import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.recipe.Recipe;
 import jakarta.persistence.*;
 
@@ -19,7 +20,7 @@ public class User {
     private String lastName;
     private String nickName;
     private int age;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -27,7 +28,7 @@ public class User {
     )
     private Set<UserRole> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,  cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "favorite_recipe",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -35,8 +36,10 @@ public class User {
     )
     private Set<Recipe> favoriteRecipes = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<Rating> ratings = new HashSet<>();
 
 
     public Long getId() {
@@ -117,5 +120,13 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

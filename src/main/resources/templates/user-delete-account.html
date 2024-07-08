@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Usuwanie konta użytkownika - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Usuń konto na portalu Kuchnia Bartka </h2>
+        <form action="#" th:action="@{/uzytkownik/usuwanie-konta}" method="post" class="kb-form" th:object="${user}">
+            <input type="hidden" th:field="*{id}">
+            <p> Twoje konto wraz ze wszystkimi komentarzami i polubieniami zostanie usunięte.</p>
+            <button type="submit">Usuń konto</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

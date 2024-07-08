@@ -1,5 +1,7 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.comment.CommentRepository;
+import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
@@ -19,12 +21,17 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final RecipeRepository recipeRepository;
+    private final CommentRepository commentRepository;
+    private final RatingRepository ratingRepository;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository) {
+
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.recipeRepository = recipeRepository;
+        this.commentRepository = commentRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email){
@@ -92,8 +99,8 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String email){
-        UserCredentialsDto userCredentialsDto = findCredentialsByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        userRepository.deleteUsers(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        userRepository.delete(user);
     }
 }
 

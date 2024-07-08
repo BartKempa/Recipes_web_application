@@ -6,8 +6,8 @@
 
     <changeSet id="0007-1" author="admin">
         <createTable tableName="comment">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKeyName="true" nullable="false"/>
             </column>
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"
