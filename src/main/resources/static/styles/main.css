@@ -332,12 +332,14 @@ li::marker {
     margin-bottom: 15px;
 }
 
-.list-admin-features {
+.list-admin-features,
+.list-user-features {
     margin: auto;
     list-style: none;
 }
 
-.list-admin-features-item {
+.list-admin-features-item,
+.list-user-features-item {
     border: 1px #006400 solid;
     background-color: #eaeaec;
     padding: 16px;

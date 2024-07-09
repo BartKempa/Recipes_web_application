@@ -36,7 +36,7 @@ public class UserController {
         model.addAttribute("user", user);
         return "user-update-form";
     }
-    
+
     @PostMapping("/uzytkownik/aktualizacja")
     public String updateDataUser(UserRegistrationDto user, RedirectAttributes redirectAttributes){
         userService.updateUserData(user);
