@@ -5,6 +5,10 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +47,13 @@ public class CommentService {
         commentToSave.setRecipe(recipe);
         commentToSave.setUser(user);
         commentRepository.save(commentToSave);
+    }
+
+    public Page<CommentDto> findAllUserComments(String email, int pageNumber, int pageSize, String sortField){
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return commentRepository.findAllUserComments(email, pageable)
+                .map(CommentDtoMapper::map);
+
     }
 }

@@ -1,6 +1,7 @@
 package com.example.recipes.domain.comment;
 
 import com.example.recipes.domain.user.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,6 +14,6 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findAllByRecipeId(long recipeId);
 
     @Query("SELECT c FROM Comment c JOIN c.user u WHERE u.email =: email")
-    List<Comment> findAllUserComments(@Param("email") String email, Pageable pageable);
+    Page<Comment> findAllUserComments(@Param("email") String email, Pageable pageable);
 
 }
