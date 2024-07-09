@@ -20,5 +20,4 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAn
     @Query("SELECT r FROM Recipe r JOIN r.favourites f WHERE f.email = :email")
     Page<Recipe> findAllFavouritesRecipesForUser(@Param("email") String email, Pageable pageable);
 
-
 }

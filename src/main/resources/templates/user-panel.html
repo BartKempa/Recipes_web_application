@@ -2,7 +2,6 @@
 <html lang="pl"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <title>Panel użytkownika - Kuchnia Bartka</title>
@@ -12,9 +11,9 @@
     <main class="main-content" layout:fragment="content">
         <p class="notification-bar" th:if="${userNotification}" th:text="${userNotification}">
             Belka z powiadomieniami</p>
-        <h2 class="list-heading" th:text="|Panel użytkownika ${#authentication.name}|">Panel użytkownika</h2>
+        <h2 class="list-heading" th:text="|Panel użytkownika ${user.nickName}|">Panel użytkownika</h2>
         <ul class="list-user-features">
-            <li class="list-user-features-item"><a href="#" th:href="@{/ulubione/strona/1}">Polubione przepisy</a></li>
+            <li class="list-user-features-item"><a href="#" th:href="@{/ulubione/strona/1}">Polubione przepisy użytkownika</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/aktualizacja/${user.id}|}">Edytuj dane użytkownika</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/aktualizacja-do-logowania/${user.id}|}">Edytuj dane do logowania</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/usuwanie-konta/${user.id}|}">Usuń konto</a></li>
