@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Komentarze użytkownika - Kuchnia Bartka</title>
 </head>
 <body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Twoje komentarze</h2>
 
+        <ul class="recipe-comments-list">
+            <li class="recipe-comments-list-item" th:each="singleComment: ${comments}">
+                <p class="recipe-comment-author"><span th:text="${singleComment.userEmail}">Bartosz</span></p>
+                <p class="recipe-comment-time"><span th:text="${#temporals.format(singleComment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
+                <p class="recipe-comment-content"><span th:text="${singleComment.text}">Bardzo dobra potrawa</span></p>
+            </li>
+        </ul>
+
+    </main>
+</div>
 </body>
 </html>

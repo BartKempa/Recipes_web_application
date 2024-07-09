@@ -86,11 +86,12 @@ public class UserController {
         return "redirect:/logout";
     }
 
-    @GetMapping("/użytkownik/komentarze/{pageNo}")
+    @GetMapping("/uzytkownik/komentarze/{pageNo}")
     public String getUserComments(@PathVariable Optional<Integer> pageNo,
                                   Authentication authentication,
                                   Model model){
         String currentEmail = authentication.getName();
+        System.out.println("email z kontrollerza " + currentEmail);
         int pageNumber = pageNo.orElse(1);
         Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(currentEmail, pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
         List<CommentDto> comments = allUserCommentsPages.getContent();

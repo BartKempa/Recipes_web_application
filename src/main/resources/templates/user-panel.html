@@ -14,6 +14,7 @@
         <h2 class="list-heading" th:text="|Panel użytkownika ${user.nickName}|">Panel użytkownika</h2>
         <ul class="list-user-features">
             <li class="list-user-features-item"><a href="#" th:href="@{/ulubione/strona/1}">Polubione przepisy użytkownika</a></li>
+            <li class="list-user-features-item"><a href="#" th:href="@{/uzytkownik/komentarze/1}">Komentarze użytkownika</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/aktualizacja/${user.id}|}">Edytuj dane użytkownika</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/aktualizacja-do-logowania/${user.id}|}">Edytuj dane do logowania</a></li>
             <li class="list-user-features-item"><a href="#" th:href="@{|/uzytkownik/usuwanie-konta/${user.id}|}">Usuń konto</a></li>

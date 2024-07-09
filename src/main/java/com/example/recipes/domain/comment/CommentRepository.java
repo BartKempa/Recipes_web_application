@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findAllByRecipeId(long recipeId);
 
-    @Query("SELECT c FROM Comment c JOIN c.user u WHERE u.email =: email")
-    Page<Comment> findAllUserComments(@Param("email") String email, Pageable pageable);
+    @Query("SELECT c FROM Comment c JOIN c.user u WHERE u.email =:email")
+    Page<Comment> findAllUserComments(String email, Pageable pageable);
 
 }
