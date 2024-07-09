@@ -54,6 +54,5 @@ public class CommentService {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return commentRepository.findAllUserComments(email, pageable)
                 .map(CommentDtoMapper::map);
-
     }
 }
