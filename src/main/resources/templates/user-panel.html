@@ -10,6 +10,8 @@
 <body>
 <div class="container">
     <main class="main-content" layout:fragment="content">
+        <p class="notification-bar" th:if="${userNotification}" th:text="${userNotification}">
+            Belka z powiadomieniami</p>
         <h2 class="list-heading" th:text="|Panel użytkownika ${#authentication.name}|">Panel użytkownika</h2>
         <ul class="list-user-features">
             <li class="list-user-features-item"><a href="#" th:href="@{/ulubione/strona/1}">Polubione przepisy</a></li>

@@ -41,7 +41,7 @@ public class RecipeManagementController {
     public String addRecipe(RecipeSaveDto recipe, RedirectAttributes redirectAttributes){
         recipeService.addRecipe(recipe);
         redirectAttributes.addFlashAttribute(
-                AdminController.NOTIFICATION_ATTRIBUTE,
+                AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
                 "Przepis %s został zapisany".formatted(recipe.getName()));
         return "redirect:/admin";
     }

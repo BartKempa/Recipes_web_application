@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AdminController {
-    public static final String NOTIFICATION_ATTRIBUTE = "notification";
+    public static final String ADMIN_NOTIFICATION_ATTRIBUTE = "adminNotification";
 
     @GetMapping("/admin")
     public String getAdminPanel(){

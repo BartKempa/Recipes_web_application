@@ -27,7 +27,7 @@ public class TypeManagementController {
     public String addType(TypeDto type, RedirectAttributes redirectAttributes){
         typeService.addType(type);
         redirectAttributes.addFlashAttribute(
-                AdminController.NOTIFICATION_ATTRIBUTE,
+                AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
                 ("Typ posiłku %s został zapisany").formatted(type.getName()));
         return "redirect:/admin";
     }
