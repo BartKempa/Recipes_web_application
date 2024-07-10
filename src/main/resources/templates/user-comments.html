@@ -11,13 +11,32 @@
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Twoje komentarze</h2>
 
-        <ul class="recipe-comments-list">
+        <!--<ul class="recipe-comments-list">
             <li class="recipe-comments-list-item" th:each="singleComment: ${comments}">
                 <p class="recipe-comment-author"><span th:text="${singleComment.userEmail}">Bartosz</span></p>
                 <p class="recipe-comment-time"><span th:text="${#temporals.format(singleComment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</span></p>
                 <p class="recipe-comment-content"><span th:text="${singleComment.text}">Bardzo dobra potrawa</span></p>
             </li>
-        </ul>
+        </ul>-->
+        <table class="user-comments-table">
+            <thead>
+                <tr class="user-comments-table-head">
+                    <th>Data dodania</th>
+                    <th>Treść komentarza</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="user-comments-table-body" th:each="singleComment: ${comments}">
+                    <td th:text="${#temporals.format(singleComment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</td>
+                    <td th:text="${singleComment.text}">Bardzo dobra potrawa</td>
+                    <td>
+                        <a href="#" class="user-comments-table-item-delete">Usuń</a>
+                        <a href="#" class="user-comments-table-item-edit">Edytuj</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
     </main>
 </div>

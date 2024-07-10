@@ -337,13 +337,21 @@ li::marker {
     margin: auto;
     list-style: none;
 }
+.list-user-features-item:nth-child(even),
+.list-admin-features-item:nth-child(even) {
+    background-color: #dad7d7;
+}
 
 .list-admin-features-item,
 .list-user-features-item {
     border: 1px #006400 solid;
-    background-color: #eaeaec;
     padding: 16px;
     text-align: center;
+}
+
+.list-user-features-item > a,
+.list-admin-features-item > a {
+    color: black;
 }
 
 .list-admin-features-item > a {
@@ -453,7 +461,32 @@ li::marker {
     border-radius: 5px;
 }
 
+.user-comments-table {
+    width: 100%;
+}
 
+.user-comments-table-body > *,
+.user-comments-table-head > * {
+    border: 1px solid;
+    padding: 8px;
+    text-align: center;
+}
+
+.user-comments-table-head {
+    background-color: #62b667;
+}
+
+.user-comments-table-body:nth-child(even) {
+   background-color: #dad7d7;
+}
+
+.user-comments-table-item-delete {
+    margin-right: 10px;
+}
+
+.user-comments-table-item-edit {
+    margin-left: 10px;
+}
 
 
 
