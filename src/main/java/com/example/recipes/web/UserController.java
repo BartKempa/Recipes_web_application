@@ -96,11 +96,10 @@ public class UserController {
         Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(currentEmail, pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
         List<CommentDto> comments = allUserCommentsPages.getContent();
         int totalPages = allUserCommentsPages.getTotalPages();
-
         model.addAttribute("comments", comments);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("baseUrl", "/użytkownik/komentarze");
+        model.addAttribute("baseUrl", "/uzytkownik/komentarze");
         model.addAttribute("heading", "Twoje komentarze");
         return "user-comments";
 
