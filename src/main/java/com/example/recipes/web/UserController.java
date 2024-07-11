@@ -102,6 +102,7 @@ public class UserController {
         model.addAttribute("baseUrl", "/uzytkownik/komentarze");
         model.addAttribute("heading", "Twoje komentarze");
         return "user-comments";
-
     }
+
+
 }
