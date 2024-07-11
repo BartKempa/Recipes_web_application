@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -105,8 +102,8 @@ public class UserController {
         return "user-comments";
     }
 
-    @PostMapping("/uzytkownik/komentarze/{id}")
-    public String deleteComment(@PathVariable Long id,
+    @PostMapping("/uzytkownik/komentarze")
+    public String deleteComment(@RequestParam("id") Long id,
                                 @RequestHeader String referer){
         commentService.deleteComment(id);
         return "redirect:" + referer;

@@ -27,5 +27,4 @@ public class CommentController {
         commentService.addComment(comment, recipeId, currentUserEmail);
         return "redirect:" + referer;
     }
-
 }

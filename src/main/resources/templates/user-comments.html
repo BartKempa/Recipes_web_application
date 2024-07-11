@@ -23,7 +23,11 @@
                     <td th:text="${#temporals.format(singleComment.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</td>
                     <td th:text="${singleComment.text}">Bardzo dobra potrawa</td>
                     <td>
-                        <a href="#" class="user-comments-table-item-delete">Usuń</a>
+                        <form action="#" th:action="@{/uzytkownik/komentarze}" method="post" class="user-comments-delete">
+                            <input type="hidden"  th:name="id" th:value="${singleComment.id}"/>
+                            <button type="submit">Usuń</button>
+                            <!--<a href="#" class="user-comments-table-item-delete" th:field="*{id}">Usuń</a>-->
+                        </form>
                         <a href="#" class="user-comments-table-item-edit">Edytuj</a>
                     </td>
                 </tr>

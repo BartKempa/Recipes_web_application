@@ -17,7 +17,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
