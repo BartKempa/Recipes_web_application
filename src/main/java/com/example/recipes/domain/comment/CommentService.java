@@ -63,4 +63,5 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         commentRepository.delete(comment);
     }
+
 }

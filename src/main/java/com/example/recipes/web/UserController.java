@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -103,6 +104,15 @@ public class UserController {
         model.addAttribute("heading", "Twoje komentarze");
         return "user-comments";
     }
+
+    @PostMapping("/uzytkownik/komentarze/{id}")
+    public String deleteComment(@PathVariable Long id,
+                                @RequestHeader String referer){
+        commentService.deleteComment(id);
+        return "redirect:" + referer;
+    }
+
+
 
 
 }
