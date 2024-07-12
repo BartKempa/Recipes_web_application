@@ -104,6 +104,13 @@ public class UserController {
         return "user-comments";
     }
 
+    @PostMapping("/uzytkownik/komentarze")
+    public String deleteComment(@RequestParam(value = "id") Long id,
+                                @RequestHeader String referer){
+        commentService.deleteComment(id);
+        return "redirect:" + referer;
+    }
+
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
     public String getEditCommentForm(@PathVariable(value = "id") Long id,
                                      Model model){
