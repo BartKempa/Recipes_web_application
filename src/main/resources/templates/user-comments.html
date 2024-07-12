@@ -25,10 +25,10 @@
                     <td>
                         <form action="#" th:action="@{/uzytkownik/komentarze}" method="post" class="user-comments-delete">
                             <input type="hidden"  th:name="id" th:value="${singleComment.id}"/>
-                            <button type="submit">Usuń</button>
-                            <!--<a href="#" class="user-comments-table-item-delete" th:field="*{id}">Usuń</a>-->
+                            <button class="user-comments-table-button" type="submit">Usuń</button>
                         </form>
-                        <a href="#" class="user-comments-table-item-edit">Edytuj</a>
+                        <a href="#" th:href="@{/uzytkownik/komentarze/edytuj}" class="user-comments-table-button"> Edytuj</a>
+
                     </td>
                 </tr>
             </tbody>

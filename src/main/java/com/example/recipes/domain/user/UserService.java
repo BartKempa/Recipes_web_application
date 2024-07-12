@@ -1,6 +1,8 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.comment.CommentDtoMapper;
 import com.example.recipes.domain.comment.CommentRepository;
+import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
@@ -34,13 +36,13 @@ public class UserService {
         this.ratingRepository = ratingRepository;
     }
 
-    public Optional<UserCredentialsDto> findCredentialsByEmail(String email){
+    public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(UserCredentialsDtoMapper::map);
     }
 
     @Transactional
-    public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto){
+    public void registerUserWithDefaultRole(UserRegistrationDto userRegistrationDto) {
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
@@ -54,28 +56,28 @@ public class UserService {
     }
 
     @Transactional
-    public void addOrUpdateFavoriteRecipe(String userEmail, long recipeId){
+    public void addOrUpdateFavoriteRecipe(String userEmail, long recipeId) {
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         boolean isRecipeFavourite = user.getFavoriteRecipes().stream().anyMatch(r -> r.getId() == recipeId);
-       if (user.getFavoriteRecipes().contains(recipe)){
-           user.getFavoriteRecipes().remove(recipe);
-       } else {
-           user.getFavoriteRecipes().add(recipe);
-       }
-       userRepository.save(user);
+        if (user.getFavoriteRecipes().contains(recipe)) {
+            user.getFavoriteRecipes().remove(recipe);
+        } else {
+            user.getFavoriteRecipes().add(recipe);
+        }
+        userRepository.save(user);
     }
 
-    public int favoritesCount(long recipeId){
-         return userRepository.countUsersByFavouriteRecipe(recipeId);
+    public int favoritesCount(long recipeId) {
+        return userRepository.countUsersByFavouriteRecipe(recipeId);
     }
 
-    public Optional<UserRegistrationDto> findUserById(long userId){
+    public Optional<UserRegistrationDto> findUserById(long userId) {
         return userRepository.findById(userId)
                 .map(UserRegistrationDtoMapper::map);
     }
 
-    public Optional<UserRegistrationDto> findUserByName(String userName){
+    public Optional<UserRegistrationDto> findUserByName(String userName) {
         return userRepository.findByEmail(userName)
                 .map(UserRegistrationDtoMapper::map);
     }
@@ -98,9 +100,13 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(String email){
+    public void deleteUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         userRepository.delete(user);
+    }
+
+    public Optional<CommentDto> findUsersCommentById(long commentId) {
+        return commentRepository.findById(commentId).map(CommentDtoMapper::map);
     }
 }
 

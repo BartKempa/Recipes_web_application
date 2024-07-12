@@ -484,9 +484,21 @@ li::marker {
     margin-right: 10px;
 }
 
-.user-comments-table-item-edit {
-    margin-left: 10px;
+.user-comments-table-button {
+    background-color: #62b667;
+    border: none;
+    border-radius: 3px;
+    color: black;
+    padding: 2px 4px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 1px 1px;
+    cursor: pointer;
 }
+
+
 
 
 

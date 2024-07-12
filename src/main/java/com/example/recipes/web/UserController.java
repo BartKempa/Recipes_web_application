@@ -56,7 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/aktualizacja-do-logowania/{userId}")
-    public String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId, Model model){
+    public String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId,
+                                            Model model){
         UserRegistrationDto user = userService.findUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
@@ -108,6 +109,8 @@ public class UserController {
         commentService.deleteComment(id);
         return "redirect:" + referer;
     }
+
+
 
 
 
