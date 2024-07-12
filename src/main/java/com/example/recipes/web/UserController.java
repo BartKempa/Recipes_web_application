@@ -92,7 +92,6 @@ public class UserController {
                                   Authentication authentication,
                                   Model model){
         String currentEmail = authentication.getName();
-        System.out.println("email z kontrollerza " + currentEmail);
         int pageNumber = pageNo.orElse(1);
         Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(currentEmail, pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
         List<CommentDto> comments = allUserCommentsPages.getContent();
@@ -107,7 +106,7 @@ public class UserController {
 
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
     public String getEditCommentForm(@PathVariable(value = "id") Long id,
-                              Model model){
+                                     Model model){
         CommentDto comment = userService.findUsersCommentById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("comment", comment);
