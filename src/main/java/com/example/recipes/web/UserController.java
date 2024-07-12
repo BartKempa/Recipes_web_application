@@ -46,7 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/aktualizacja")
-    public String updateDataUser(UserRegistrationDto user, RedirectAttributes redirectAttributes){
+    public String updateDataUser(UserRegistrationDto user,
+                                 RedirectAttributes redirectAttributes){
         userService.updateUserData(user);
         redirectAttributes.addFlashAttribute(
                 USER_NOTIFICATION_ATTRIBUTE,
@@ -71,7 +72,8 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/usuwanie-konta/{userId}")
-    public String deleteUserForm(@PathVariable(value = "userId") long userId, Model model){
+    public String deleteUserForm(@PathVariable(value = "userId") long userId,
+                                 Model model){
         UserRegistrationDto user = userService.findUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
@@ -104,7 +106,7 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
-    public String editComment(@PathVariable(value = "id") Long id,
+    public String getEditCommentForm(@PathVariable(value = "id") Long id,
                               Model model){
         CommentDto comment = userService.findUsersCommentById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -113,11 +115,8 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/komentarze/edytuj")
-    public String editComment(@RequestParam("id") Long id,
-                              @RequestHeader String referer){
-
-        return "redirect:" + referer;
+    public String editComment(CommentDto comment){
+        userService.updateUsersComment(comment);
+        return "redirect:/uzytkownik/komentarze/1";
     }
-
-
 }
