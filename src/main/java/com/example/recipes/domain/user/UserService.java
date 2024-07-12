@@ -1,5 +1,6 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.comment.CommentDtoMapper;
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.comment.dto.CommentDto;
@@ -107,6 +108,14 @@ public class UserService {
 
     public Optional<CommentDto> findUsersCommentById(long commentId) {
         return commentRepository.findById(commentId).map(CommentDtoMapper::map);
+    }
+
+    @Transactional
+    public void updateUsersComment(CommentDto commentDto){
+        Comment comment = commentRepository.findById(commentDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        comment.setText(commentDto.getText());
+        commentRepository.save(comment);
     }
 }
 

@@ -27,13 +27,11 @@
                             <input type="hidden"  th:name="id" th:value="${singleComment.id}"/>
                             <button class="user-comments-table-button" type="submit">Usuń</button>
                         </form>
-                        <a href="#" th:href="@{/uzytkownik/komentarze/edytuj}" class="user-comments-table-button"> Edytuj</a>
-
+                        <a href="#" th:href="@{|/uzytkownik/komentarze/edytuj/${singleComment.id}|}" class="user-comments-table-button"> Edytuj</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-
         <div th:if="${totalPages > 1}" class="pagination-container">
             <div th:if="${currentPage > 1}" class="pagination">
                 <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}|}">&#171;</a>

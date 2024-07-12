@@ -103,13 +103,6 @@ public class UserController {
         return "user-comments";
     }
 
-    @PostMapping("/uzytkownik/komentarze")
-    public String deleteComment(@RequestParam("id") Long id,
-                                @RequestHeader String referer){
-        commentService.deleteComment(id);
-        return "redirect:" + referer;
-    }
-
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
     public String editComment(@PathVariable(value = "id") Long id,
                               Model model){
@@ -119,7 +112,12 @@ public class UserController {
         return "user-update-comment";
     }
 
+    @PostMapping("/uzytkownik/komentarze/edytuj")
+    public String editComment(@RequestParam("id") Long id,
+                              @RequestHeader String referer){
 
+        return "redirect:" + referer;
+    }
 
 
 }
