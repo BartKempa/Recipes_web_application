@@ -110,7 +110,14 @@ public class UserController {
         return "redirect:" + referer;
     }
 
-
+    @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
+    public String editComment(@PathVariable(value = "id") Long id,
+                              Model model){
+        CommentDto comment = userService.findUsersCommentById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("comment", comment);
+        return "user-update-comment";
+    }
 
 
 
