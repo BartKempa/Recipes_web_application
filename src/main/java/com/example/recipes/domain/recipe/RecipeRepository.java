@@ -17,10 +17,10 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAn
             "LOWER(r.directions) LIKE LOWER(CONCAT('%', :searchText, '%'))")
     Page<Recipe> findRecipesBySearchText(@Param("searchText") String searchText, Pageable pageable);
 
-    @Query("SELECT r FROM Recipe r JOIN r.favourites f WHERE f.email = :email ORDER BY r.creationDate DESC")
+    @Query("SELECT r FROM Recipe r JOIN r.favourites f WHERE f.email = :email")
     Page<Recipe> findAllFavouritesRecipesForUser(@Param("email") String email, Pageable pageable);
 
-    @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email ORDER BY r.creationDate DESC ")
+    @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email")
     Page<Recipe> findAllRatedRecipesByUser(@Param("email") String email, Pageable pageable);
 
 }

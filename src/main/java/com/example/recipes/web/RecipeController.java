@@ -120,4 +120,23 @@ public class RecipeController {
         return "recipe-listing";
     }
 
+    @GetMapping("/ocenione/strona/{pageNo}")
+    public String getRatedRecipesForUser(@PathVariable Optional<Integer> pageNo,
+                                         @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
+                                         Authentication authentication,
+                                         Model model){
+        String email = authentication.getName();
+        int pageNumber = pageNo.orElse(1);
+        String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> ratedRecipesPagesForUser = recipeService.findRatedRecipesForUser(email, pageNumber, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = ratedRecipesPagesForUser.getContent();
+        int totalPages = ratedRecipesPagesForUser.getTotalPages();
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("sortField", poleSortowania);
+        model.addAttribute("baseUrl", "/ocenione/strona");
+        model.addAttribute("heading", "Twoje oceninone przepisy");
+        return "recipe-listing";
+    }
 }
