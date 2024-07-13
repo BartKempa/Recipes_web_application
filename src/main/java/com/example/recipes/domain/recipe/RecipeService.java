@@ -88,4 +88,5 @@ public class RecipeService {
         return recipeRepository.findAllFavouritesRecipesForUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
+
 }

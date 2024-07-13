@@ -36,7 +36,6 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
 
-
     private LocalDateTime creationDate;
     @ManyToMany(mappedBy = "favoriteRecipes", cascade = CascadeType.REMOVE)
     private Set<User> favourites = new HashSet<>();

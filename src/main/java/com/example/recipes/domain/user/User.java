@@ -38,7 +38,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     private Set<Rating> ratings = new HashSet<>();
 
     public Long getId() {
