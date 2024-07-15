@@ -49,7 +49,7 @@ public class RecipeService {
 
     public Page<RecipeMainInfoDto> findRecipesByType(String type, int pageNumber, int pageSize){
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-       return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
+        return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
                .map(RecipeDtoMapper::mapMainInfo);
     }
 

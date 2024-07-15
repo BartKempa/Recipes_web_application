@@ -28,7 +28,7 @@ public class User {
     )
     private Set<UserRole> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER,  cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "favorite_recipe",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -38,7 +38,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<Rating> ratings = new HashSet<>();
 
     public Long getId() {

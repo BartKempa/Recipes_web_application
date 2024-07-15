@@ -103,6 +103,10 @@ public class UserService {
     @Transactional
     public void deleteUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        commentRepository.deleteAll(user.getComments());
+        user.getFavoriteRecipes().clear();
+        user.getRoles().clear();
+        ratingRepository.deleteAll(user.getRatings());
         userRepository.delete(user);
     }
 
