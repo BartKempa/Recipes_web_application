@@ -492,7 +492,8 @@ li::marker {
     margin-right: 10px;
 }
 
-.user-comments-table-button {
+.user-comments-table-button,
+.admin-recipe-table-button {
     background-color: #62b667;
     border: none;
     border-radius: 3px;

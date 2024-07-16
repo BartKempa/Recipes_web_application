@@ -70,7 +70,6 @@ public class RecipeManagementController {
         int pageNumber = pageNo.orElse(1);
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
         Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, sortField);
-        System.out.println("recipePage" + recipePage);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
@@ -87,8 +86,12 @@ public class RecipeManagementController {
                                    Model model){
         RecipeSaveDto recipe = recipeService.findRecipeToSave(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<TypeDto> types = typeService.findAllTypes();
+        List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+        model.addAttribute("allDifficultyLevelDto", allDifficultyLevelDto);
+        model.addAttribute("types", types);
         model.addAttribute("recipe", recipe);
-        return "recipe-update-form";
+        return "admin/recipe-update-form";
     }
 
     @PostMapping("/admin/aktualizuj-przepis")

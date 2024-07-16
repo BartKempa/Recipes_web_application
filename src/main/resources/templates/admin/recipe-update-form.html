@@ -12,7 +12,7 @@
         <h2 class="list-heading">Zaktualizuj przepis </h2>
         <form action="#" th:action="@{/admin/aktualizuj-przepis}" method="post" enctype="multipart/form-data" class="kb-form" th:object="${recipe}">
 
-            <input type="hidden" th:field="${id}">
+            <input type="hidden" th:field="*{id}">
 
             <label for="name">Nazwa przepisu</label>
             <input id="name" type="text" th:field="*{name}">
@@ -49,6 +49,9 @@
 
             <label for="image">Zdjęcie potrawy</label>
             <input id="image" type="file" th:field="*{image}" accept="image/jpeg, image/png">
+
+            <input type="hidden" th:field="*{creationDate}">
+
             <button type="submit">Zaktualizuj</button>
         </form>
     </main>
