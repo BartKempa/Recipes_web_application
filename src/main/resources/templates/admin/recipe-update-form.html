@@ -10,18 +10,45 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading">Zaktualizuj przepis </h2>
-        <form action="#" th:action="@{/uzytkownik/aktualizacja}" method="post" class="kb-form" th:object="${user}">
-            <input type="hidden" th:field="*{id}">
-            <input type="hidden" th:field="*{email}">
-            <label for="firstName">Imię</label>
-            <input id="firstName" name="firstName" placeholder="imie użytkownika" th:field="*{firstName}">
-            <label for="lastName">Nazwisko</label>
-            <input id="lastName" name="lastName" placeholder="nazwisko użytkownika" th:field="*{lastName}">
-            <label for="nickName">Nick</label>
-            <input id="nickName" name="nickName" placeholder="pseudonim użytkownika" th:field="*{nickName}">
-            <label for="age">Wiek</label>
-            <input id="age" name="age" placeholder="wiek użytkownika" th:field="*{age}">
-            <input type="hidden" th:field="*{password}">
+        <form action="#" th:action="@{/admin/aktualizuj-przepis}" method="post" enctype="multipart/form-data" class="kb-form" th:object="${recipe}">
+
+            <input type="hidden" th:field="${id}">
+
+            <label for="name">Nazwa przepisu</label>
+            <input id="name" type="text" th:field="*{name}">
+
+            <label for="type">Typ posiłku:</label>
+            <select id="type" th:field="*{type}" required>
+                <option value="" hidden>Wybierz gatunek</option>
+                <option th:each="type: ${types}" th:value="${type.name}" th:text="${type.name}"></option>
+            </select>
+
+            <label for="description">Krótki opis potrawy</label>
+            <textarea id="description" rows="8" th:field="*{description}"></textarea>
+
+            <label for="preparationTime">Czas przygotwania posiłku w minutach</label>
+            <input id="preparationTime" type="number" th:field="*{preparationTime}">
+
+            <label for="cookingTime">Czas obróbki cieplnej</label>
+            <input id="cookingTime" type="number" th:field="*{cookingTime}">
+
+            <label for="serving">Liczba porcji - w sztukach</label>
+            <input id="serving" type="number" th:field="*{serving}">
+
+            <label for="difficultyLevel">Poziom trudności</label>
+            <select id="difficultyLevel" th:field="*{difficultyLevel}" required>
+                <option value="" hidden>Wybierz poziom trundości</option>
+                <option th:each="level: ${allDifficultyLevelDto}" th:value="${level.name}" th:text="${level.name}"></option>
+            </select>
+
+            <label for="ingredients">Lista składników</label>
+            <textarea id="ingredients" rows="15" th:field="*{ingredients}"></textarea>
+
+            <label for="directions">Opis przygotowania potrway</label>
+            <textarea id="directions" rows="25" th:field="*{directionsSteps}"></textarea>
+
+            <label for="image">Zdjęcie potrawy</label>
+            <input id="image" type="file" th:field="*{image}" accept="image/jpeg, image/png">
             <button type="submit">Zaktualizuj</button>
         </form>
     </main>

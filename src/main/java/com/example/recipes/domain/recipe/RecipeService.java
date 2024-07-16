@@ -47,6 +47,11 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapFullInfo);
     }
 
+    public Optional<RecipeSaveDto> findRecipeToSave(long id){
+        return recipeRepository.findById(id)
+                .map(RecipeDtoMapper::map);
+    }
+
     public Page<RecipeMainInfoDto> findRecipesByType(String type, int pageNumber, int pageSize){
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return recipeRepository.findAllByType_NameIgnoreCase(type, pageable)
@@ -99,7 +104,6 @@ public class RecipeService {
     @Transactional
     public void updateRecipe(RecipeSaveDto recipeToUpdate){
         Recipe recipe = recipeRepository.findById(recipeToUpdate.getId()).orElseThrow();
-        recipe.setId(recipeToUpdate.getId());
         recipe.setName(recipeToUpdate.getName());
         recipe.setType(typeRepository.findByNameIgnoreCase(recipeToUpdate.getType()).orElseThrow());
         recipe.setDescription(recipeToUpdate.getDescription());

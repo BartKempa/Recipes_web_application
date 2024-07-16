@@ -14,13 +14,13 @@
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{email}">
             <label for="firstName">Imię</label>
-            <input id="firstName" name="firstName" placeholder="imie użytkownika" th:field="*{firstName}">
+            <input id="firstName" name="firstName" th:field="*{firstName}">
             <label for="lastName">Nazwisko</label>
-            <input id="lastName" name="lastName" placeholder="nazwisko użytkownika" th:field="*{lastName}">
+            <input id="lastName" name="lastName" th:field="*{lastName}">
             <label for="nickName">Nick</label>
-            <input id="nickName" name="nickName" placeholder="pseudonim użytkownika" th:field="*{nickName}">
+            <input id="nickName" name="nickName" th:field="*{nickName}">
             <label for="age">Wiek</label>
-            <input id="age" name="age" placeholder="wiek użytkownika" th:field="*{age}">
+            <input id="age" name="age" th:field="*{age}">
             <input type="hidden" th:field="*{password}">
             <button type="submit">Zaktualizuj</button>
         </form>

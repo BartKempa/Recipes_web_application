@@ -3,6 +3,7 @@ package com.example.recipes.domain.recipe;
 import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
+import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -46,6 +47,23 @@ class RecipeDtoMapper {
                 getAverageRating(recipe),
                 recipe.getRatings().size(),
                 recipe.getComments().size(),
+                recipe.getCreationDate()
+        );
+    }
+
+    public static RecipeSaveDto map(Recipe recipe) {
+        return new RecipeSaveDto(
+                recipe.getId(),
+                recipe.getName(),
+                recipe.getType().getName(),
+                recipe.getDescription(),
+                recipe.getPreparationTime(),
+                recipe.getCookingTime(),
+                recipe.getServing(),
+                recipe.getDifficultyLevel().getName(),
+                recipe.getIngredients(),
+                recipe.getDirections(),
+                null,
                 recipe.getCreationDate()
         );
     }

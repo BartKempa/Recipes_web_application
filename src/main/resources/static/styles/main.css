@@ -461,23 +461,31 @@ li::marker {
     border-radius: 5px;
 }
 
-.user-comments-table {
+.user-comments-table,
+.admin-recipes-table {
     width: 100%;
 }
 
 .user-comments-table-body > *,
-.user-comments-table-head > * {
+.user-comments-table-head > *,
+.admin-recipes-table-head > *,
+.admin-recipes-table-body > * {
     border: 1px solid;
     padding: 8px;
     text-align: center;
 }
 
-.user-comments-table-head {
+.user-comments-table-head,
+.admin-recipes-table-head {
     background-color: #62b667;
 }
 
 .user-comments-table-body:nth-child(even) {
    background-color: #dad7d7;
+}
+
+.admin-recipes-table-body:nth-child(even) {
+    background-color: #dad7d7;
 }
 
 .user-comments-table-item-delete {

@@ -21,6 +21,21 @@ public class RecipeSaveDto {
     public RecipeSaveDto() {
     }
 
+    public RecipeSaveDto(Long id, String name, String type, String description, Integer preparationTime, Integer cookingTime, Integer serving, String difficultyLevel, String ingredients, String directionsSteps, MultipartFile image, LocalDateTime creationDate) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.preparationTime = preparationTime;
+        this.cookingTime = cookingTime;
+        this.serving = serving;
+        this.difficultyLevel = difficultyLevel;
+        this.ingredients = ingredients;
+        this.directionsSteps = directionsSteps;
+        this.image = image;
+        this.creationDate = creationDate;
+    }
+
     public Long getId() {
         return id;
     }
