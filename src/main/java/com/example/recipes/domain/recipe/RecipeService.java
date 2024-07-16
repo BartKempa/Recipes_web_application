@@ -95,4 +95,25 @@ public class RecipeService {
         return recipeRepository.findAllRatedRecipesByUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
+
+    @Transactional
+    public void updateRecipe(RecipeSaveDto recipeToUpdate){
+        Recipe recipe = recipeRepository.findById(recipeToUpdate.getId()).orElseThrow();
+        recipe.setId(recipeToUpdate.getId());
+        recipe.setName(recipeToUpdate.getName());
+        recipe.setType(typeRepository.findByNameIgnoreCase(recipeToUpdate.getType()).orElseThrow());
+        recipe.setDescription(recipeToUpdate.getDescription());
+        recipe.setPreparationTime(recipeToUpdate.getPreparationTime());
+        recipe.setCookingTime(recipeToUpdate.getCookingTime());
+        recipe.setServing(recipeToUpdate.getServing());
+        recipe.setDifficultyLevel(difficultyLevelRepository.findByName(recipeToUpdate.getDifficultyLevel()).orElseThrow());
+        recipe.setIngredients(recipeToUpdate.getIngredients());
+        recipe.setDirections(recipeToUpdate.getDirectionsSteps());
+        if (recipeToUpdate.getImage() != null && !recipeToUpdate.getImage().isEmpty()) {
+            String savedImage = fileStorageService.saveImage(recipeToUpdate.getImage());
+            recipe.setImage(savedImage);
+        }
+        recipe.setCreationDate(recipeToUpdate.getCreationDate());
+        recipeRepository.save(recipe);
+    }
 }

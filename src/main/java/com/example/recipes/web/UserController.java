@@ -38,7 +38,8 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/aktualizacja/{userId}")
-    public String getUpdateUserForm(@PathVariable(value = "userId") long userId, Model model){
+    public String getUpdateUserForm(@PathVariable(value = "userId") long userId,
+                                    Model model){
         UserRegistrationDto user = userService.findUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
