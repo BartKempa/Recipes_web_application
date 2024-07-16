@@ -7,9 +7,7 @@ import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,11 +51,20 @@ public class RecipeManagementController {
     }
 
     @GetMapping("/admin/aktualizuj-przepis/{recipeId}")
-    public String updateRecipe(@PathVariable long recipeId,
-                             Model model){
+    public String updateRecipeForm(@PathVariable long recipeId,
+                                   Model model){
         RecipeFullInfoDto recipe = recipeService.findRecipeById(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("recipe", recipe);
         return "recipe-update-form";
+    }
+
+    @PostMapping("/admin/aktualizuj-przepis")
+    public String updateRecipe(RecipeSaveDto recipe,
+                               RedirectAttributes redirectAttributes){
+        recipeService.updateRecipe(recipe);
+        redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                "Przepis %s został pomyślnie zaktualizowany".formatted(recipe.getName()));
+        return "redirect:/admin";
     }
 }
