@@ -120,4 +120,10 @@ public class RecipeService {
         recipe.setCreationDate(recipeToUpdate.getCreationDate());
         recipeRepository.save(recipe);
     }
+
+    @Transactional
+    public void deleteRecipe(long recipeId){
+        Recipe recipeToDelete = recipeRepository.findById(recipeId).orElseThrow();
+        recipeRepository.delete(recipeToDelete);
+    }
 }
