@@ -7,8 +7,10 @@ import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeRepository;
 import com.example.recipes.storage.FileStorageService;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -123,7 +125,9 @@ public class RecipeService {
 
     @Transactional
     public void deleteRecipe(long recipeId){
-        Recipe recipeToDelete = recipeRepository.findById(recipeId).orElseThrow();
+        Recipe recipeToDelete = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         recipeRepository.delete(recipeToDelete);
     }
+
 }
