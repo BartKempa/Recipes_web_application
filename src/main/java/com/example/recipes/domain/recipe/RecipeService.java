@@ -1,6 +1,8 @@
 package com.example.recipes.domain.recipe;
 
+import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
+import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
@@ -23,12 +25,16 @@ public class RecipeService {
     private final TypeRepository typeRepository;
     private final DifficultyLevelRepository difficultyLevelRepository;
     private final FileStorageService fileStorageService;
+    private final RatingRepository ratingRepository;
+    private final CommentRepository commentRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService) {
+    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService, RatingRepository ratingRepository, CommentRepository commentRepository) {
         this.recipeRepository = recipeRepository;
         this.typeRepository = typeRepository;
         this.difficultyLevelRepository = difficultyLevelRepository;
         this.fileStorageService = fileStorageService;
+        this.ratingRepository = ratingRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<RecipeMainInfoDto> findAllRecipes() {
@@ -123,11 +129,14 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
-    @Transactional
+        @Transactional
     public void deleteRecipe(long recipeId){
         Recipe recipeToDelete = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ratingRepository.deleteAll(recipeToDelete.getRatings());
+        commentRepository.deleteAll(recipeToDelete.getComments());
+        recipeToDelete.getFavourites().forEach(user -> user.getFavoriteRecipes().remove(recipeToDelete));
+        recipeToDelete.getFavourites().clear();
         recipeRepository.delete(recipeToDelete);
     }
-
 }

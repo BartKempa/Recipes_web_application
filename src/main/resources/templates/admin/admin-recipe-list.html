@@ -23,7 +23,7 @@
                 <td th:text="${#temporals.format(singleRecipe.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</td>
                 <td th:text="${singleRecipe.name}">Pierogi</td>
                 <td>
-                    <form action="#" method="post" class="admin-recipe-delete">
+                    <form action="#" th:action="@{/admin/usun-przepis}" method="post" class="admin-recipe-delete">
                         <input type="hidden"  th:name="id" th:value="${singleRecipe.id}"/>
                         <button class="admin-recipe-table-button" type="submit">Usuń</button>
                     </form>

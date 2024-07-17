@@ -100,8 +100,8 @@ public class RecipeManagementController {
         return "redirect:/admin";
     }
     
-    @PostMapping("admin/usun-przepis")
-    public String deleteRecipe(@RequestParam(value = "id") long id,
+    @PostMapping("/admin/usun-przepis")
+    public String deleteRecipe(@RequestParam(value = "id") Long id,
                                @RequestHeader String referer){
         recipeService.deleteRecipe(id);
         return "redirect:" + referer;
