@@ -13,8 +13,8 @@
         <table class="admin-recipes-table">
             <thead>
             <tr class="admin-recipes-table-head">
-                <th>Data dodania</th>
-                <th>Nazwa przepisu</th>
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=dataDodania&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}">Data dodania</a></th>
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=nazwa&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}">Nazwa przepisu</a></th>
                 <th>Akcje</th>
             </tr>
             </thead>

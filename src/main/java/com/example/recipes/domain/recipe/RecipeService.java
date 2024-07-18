@@ -50,6 +50,13 @@ public class RecipeService {
                  .map(RecipeDtoMapper::mapMainInfo);
      }
 
+    public Page<RecipeMainInfoDto> findPaginatedRecipesList(int pageNumber, int pageSize, String sortField, String sortDirection){
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending() ;
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return this.recipeRepository.findAll(pageable)
+                .map(RecipeDtoMapper::mapMainInfo);
+    }
+
     public Optional<RecipeFullInfoDto> findRecipeById(long id){
         return recipeRepository.findById(id)
                 .map(RecipeDtoMapper::mapFullInfo);

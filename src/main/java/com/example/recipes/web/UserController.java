@@ -19,7 +19,6 @@ import java.util.Optional;
 @Controller
 public class UserController {
     private final static String USER_NOTIFICATION_ATTRIBUTE = "userNotification";
-    private final static int PAGE_SIZE = 6;
     private final static String COMMENT_SORT_FILED = "creationDate";
     private final UserService userService;
     private final CommentService commentService;
@@ -94,7 +93,7 @@ public class UserController {
                                   Model model){
         String currentEmail = authentication.getName();
         int pageNumber = pageNo.orElse(1);
-        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(currentEmail, pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
+        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(currentEmail, pageNumber, RecipeController.PAGE_SIZE, COMMENT_SORT_FILED);
         List<CommentDto> comments = allUserCommentsPages.getContent();
         int totalPages = allUserCommentsPages.getTotalPages();
         model.addAttribute("comments", comments);

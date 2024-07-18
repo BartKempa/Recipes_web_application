@@ -62,11 +62,12 @@ public class RecipeManagementController {
 
     @GetMapping("/admin/lista-przepisow/{pageNo}")
     public String getRecipesList(@PathVariable Optional<Integer> pageNo,
-                                 @RequestParam(value ="poleSortowania", required = false) String poleSortowania,
+                                 @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
+                                 @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                                  Model model){
         int pageNumber = pageNo.orElse(1);
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNumber, PAGE_SIZE, sortField);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginatedRecipesList(pageNumber, PAGE_SIZE, sortField, sortDir);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
@@ -74,6 +75,7 @@ public class RecipeManagementController {
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Lista przepisów");
         model.addAttribute("sortField", poleSortowania);
+        model.addAttribute("sortDir", sortDir);
         model.addAttribute("baseUrl", "/admin/lista-przepisow");
         return "admin/admin-recipe-list";
     }

@@ -473,6 +473,7 @@ li::marker {
     border: 1px solid;
     padding: 8px;
     text-align: center;
+    text-decoration: none;
 }
 
 .user-comments-table-head,
