@@ -87,6 +87,11 @@ public class TypeService {
         typeToUpdate.setName(typeDto.getName());
         typeRepository.save(typeToUpdate);
     }
+
+    public Optional<TypeDto> findTypeById(long typeId){
+        return typeRepository.findById(typeId)
+                .map(TypeDtoMapper::map);
+    }
 }
 
 

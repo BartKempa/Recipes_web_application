@@ -65,5 +65,12 @@ public class TypeManagementController {
         return "redirect:" + referer;
     }
 
-
+    @GetMapping("/admin/aktualizuj-typ/{typeId}")
+    public String updateType(
+            @PathVariable long typeId,
+            Model model){
+        Optional<TypeDto> type = typeService.findTypeById(typeId);
+        model.addAttribute("type", type);
+        return "admin/update-type";
+    }
 }

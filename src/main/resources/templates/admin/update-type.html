@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Aktualizacja typu posiłku - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Zaktualizuj typ posiłku </h2>
+        <form action="#" th:action="@{/admin/aktualizuj-typ}" method="post" class="kb-form" th:object="${type}">
+            <input type="hidden" th:field="*{id}">
+            <label for="name">Nazwa typu</label>
+            <input id="name" type="text" th:field="*{name}">
+            <button type="submit">Zaktualizuj</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
