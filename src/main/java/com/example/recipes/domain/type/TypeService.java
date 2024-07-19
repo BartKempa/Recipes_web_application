@@ -79,6 +79,14 @@ public class TypeService {
         recipeRepository.deleteAllByType_Id(typeId);
         typeRepository.delete(typeToDelete);
     }
+
+    @Transactional
+    public void updateType(TypeDto typeDto){
+        Type typeToUpdate = typeRepository.findById(typeDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        typeToUpdate.setName(typeDto.getName());
+        typeRepository.save(typeToUpdate);
+    }
 }
 
 

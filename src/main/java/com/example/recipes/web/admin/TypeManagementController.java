@@ -64,4 +64,6 @@ public class TypeManagementController {
         typeService.deleteType(id);
         return "redirect:" + referer;
     }
+
+
 }
