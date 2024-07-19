@@ -20,7 +20,7 @@ public class User {
     private String lastName;
     private String nickName;
     private int age;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -28,7 +28,7 @@ public class User {
     )
     private Set<UserRole> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "favorite_recipe",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -36,9 +36,9 @@ public class User {
     )
     private Set<Recipe> favoriteRecipes = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     private Set<Rating> ratings = new HashSet<>();
 
     public Long getId() {

@@ -20,8 +20,7 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
-
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe"/*, cascade = CascadeType.REMOVE, orphanRemoval = true*/)
     private Set<Rating> ratings = new HashSet<>();
     private String description;
     private Integer preparationTime;
@@ -33,7 +32,7 @@ public class Recipe {
     private String ingredients;
     private String directions;
     private String image;
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe"/*,cascade = CascadeType.REMOVE, orphanRemoval = true*/)
     private Set<Comment> comments = new HashSet<>();
 
     private LocalDateTime creationDate;

@@ -21,7 +21,7 @@
             <tr class="admin-listing-table-body" th:each="singleType: ${types}">
                 <td th:text="${singleType.name}">Zupa</td>
                 <td>
-                    <form action="#" th:action="@{/admin/usun-przepis}" method="post" class="admin-item-delete">
+                    <form action="#" th:action="@{/admin/usun-typ}" method="post" class="admin-item-delete">
                         <input type="hidden"  th:name="id" th:value="${singleType.id}"/>
                         <button class="admin-item-table-button" type="submit">Usuń</button>
                     </form>
@@ -52,7 +52,6 @@
                 <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}?sortDir=${sortDir}|}">&#187;</a>
             </div>
         </div>
-
     </main>
 </div>
 </body>

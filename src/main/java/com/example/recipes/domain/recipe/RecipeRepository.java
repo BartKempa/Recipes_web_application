@@ -2,10 +2,13 @@ package com.example.recipes.domain.recipe;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAndSortingRepository<Recipe, Long> {
     Page<Recipe> findAllByType_NameIgnoreCase(String name, Pageable pageable);
@@ -23,4 +26,11 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAn
     @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email")
     Page<Recipe> findAllRatedRecipesByUser(@Param("email") String email, Pageable pageable);
 
+    /*@Modifying
+    @Query("DELETE FROM Recipe r WHERE r.type.id = :id")
+    void deleteAllRecipesByTypeId(long id);*/
+
+    void deleteAllByType_Id(long id);
+
+    List<Recipe> findAllByType_Id(long id);
 }

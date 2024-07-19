@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface TypeRepository extends CrudRepository<Type, Long>, PagingAndSortingRepository<Type, Long> {
     Optional<Type> findByNameIgnoreCase(String name);
+
+
 }
