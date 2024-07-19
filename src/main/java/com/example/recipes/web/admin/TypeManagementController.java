@@ -66,11 +66,21 @@ public class TypeManagementController {
     }
 
     @GetMapping("/admin/aktualizuj-typ/{typeId}")
-    public String updateType(
+    public String updateTypeForm(
             @PathVariable long typeId,
             Model model){
         Optional<TypeDto> type = typeService.findTypeById(typeId);
         model.addAttribute("type", type);
         return "admin/update-type";
+    }
+
+    @PostMapping("/admin/aktualizuj-typ")
+    public String updateType(
+            TypeDto type,
+            RedirectAttributes redirectAttributes){
+        typeService.updateType(type);
+        redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                "Zaktualizowano typ posiłku - %s".formatted(type.getName()));
+        return "redirect:/admin";
     }
 }
