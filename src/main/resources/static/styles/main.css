@@ -466,6 +466,7 @@ li::marker {
     width: 100%;
 }
 
+
 .user-comments-table-body > *,
 .user-comments-table-head > *,
 .admin-recipes-table-head > *,
@@ -474,6 +475,11 @@ li::marker {
     padding: 8px;
     text-align: center;
     text-decoration: none;
+}
+
+.admin-recipes-table-head-item {
+    font-weight: 600;
+    color: black;
 }
 
 .user-comments-table-head,

@@ -1,6 +1,10 @@
 package com.example.recipes.domain.type;
 
 import com.example.recipes.domain.type.dto.TypeDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,13 @@ public class TypeService {
         return StreamSupport.stream(typeRepository.findAll().spliterator(), false)
                 .map(TypeDtoMapper::map)
                 .toList();
+    }
+
+    public Page<TypeDto> findPaginatedTypesList(int pageNumber, int pageSize, String sortField, String sortDirection){
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return typeRepository.findAll(pageable)
+                .map(TypeDtoMapper::map);
     }
 
     @Transactional

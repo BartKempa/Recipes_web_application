@@ -80,6 +80,7 @@ public class RecipeController {
         return "recipe-listing";
     }
 
+
     @GetMapping("/szukaj/strona/{pageNo}")
     public String getRecipesBySearchText(@RequestParam String searchText,
                                          @PathVariable Optional<Integer> pageNo,
@@ -99,6 +100,7 @@ public class RecipeController {
         model.addAttribute("searchText", searchText);
         return "recipe-listing";
     }
+
 
     @GetMapping("/ulubione/strona/{pageNo}")
     public String getFavouriteRecipesForUser(@PathVariable Optional<Integer> pageNo,

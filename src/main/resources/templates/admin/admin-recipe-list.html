@@ -13,9 +13,9 @@
         <table class="admin-recipes-table">
             <thead>
             <tr class="admin-recipes-table-head">
-                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=dataDodania&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}">Data dodania</a></th>
-                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=nazwa&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}">Nazwa przepisu</a></th>
-                <th>Akcje</th>
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=dataDodania&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}" class="admin-recipes-table-head-item">Data dodania</a></th>
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=nazwa&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}" class="admin-recipes-table-head-item">Nazwa przepisu</a></th>
+                <th class="admin-recipes-table-head-item">Akcje</th>
             </tr>
             </thead>
             <tbody>
