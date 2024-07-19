@@ -56,7 +56,7 @@ public class TypeManagementController {
         model.addAttribute("heading", "Lista typów posiłków");
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("sortField", sorField);
-        model.addAttribute("baseUrl", "admin/lista-typow");
+        model.addAttribute("baseUrl", "/admin/lista-typow");
         return "admin/admin-type-list";
     }
 

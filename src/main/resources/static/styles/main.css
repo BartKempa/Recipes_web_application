@@ -462,28 +462,28 @@ li::marker {
 }
 
 .user-comments-table,
-.admin-recipes-table {
+.admin-listing-table {
     width: 100%;
 }
 
 
 .user-comments-table-body > *,
 .user-comments-table-head > *,
-.admin-recipes-table-head > *,
-.admin-recipes-table-body > * {
+.admin-listing-table-head > *,
+.admin-listing-table-body > * {
     border: 1px solid;
     padding: 8px;
     text-align: center;
     text-decoration: none;
 }
 
-.admin-recipes-table-head-item {
+.admin-listing-table-head-item {
     font-weight: 600;
     color: black;
 }
 
 .user-comments-table-head,
-.admin-recipes-table-head {
+.admin-listing-table-head {
     background-color: #62b667;
 }
 
@@ -491,7 +491,7 @@ li::marker {
    background-color: #dad7d7;
 }
 
-.admin-recipes-table-body:nth-child(even) {
+.admin-listing-table-body:nth-child(even) {
     background-color: #dad7d7;
 }
 
@@ -500,7 +500,7 @@ li::marker {
 }
 
 .user-comments-table-button,
-.admin-recipe-table-button {
+.admin-item-table-button {
     background-color: #62b667;
     border: none;
     border-radius: 3px;
