@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Controller
 public class TypeManagementController {
+    private final static int PAGE_SIZE = 6;
     private final TypeService typeService;
 
     public TypeManagementController(TypeService typeService) {
@@ -38,5 +39,26 @@ public class TypeManagementController {
                 ("Typ posiłku %s został zapisany").formatted(type.getName()));
         return "redirect:/admin";
     }
+
+    @GetMapping("/admin/lista-typow/{pageNo}")
+    public String getTypesList(
+            @PathVariable Optional<Integer> pageNo,
+            @RequestParam (value = "sortDir", defaultValue = "asc") String sortDir,
+            Model model){
+        int pageNumber = pageNo.orElse(1);
+        String sorField = "name";
+        Page<TypeDto> typesPage = typeService.findPaginatedTypesList(pageNumber, PAGE_SIZE, sorField, sortDir);
+        List<TypeDto> types = typesPage.getContent();
+        int totalPages = typesPage.getTotalPages();
+        model.addAttribute("types", types);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("heading", "Lista typów posiłków");
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortField", sorField);
+        model.addAttribute("baseUrl", "admin/lista-typow");
+        return "admin/admin-type-list";
+    }
+
 
 }
