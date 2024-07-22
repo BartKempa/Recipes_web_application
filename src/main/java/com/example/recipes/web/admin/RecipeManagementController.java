@@ -69,8 +69,8 @@ public class RecipeManagementController {
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
         Page<RecipeMainInfoDto> recipePage = recipeService.findPaginatedRecipesList(pageNumber, PAGE_SIZE, sortField, sortDir);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
-        model.addAttribute("recipes", recipes);
         int totalPages = recipePage.getTotalPages();
+        model.addAttribute("recipes", recipes);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Lista przepisów");
