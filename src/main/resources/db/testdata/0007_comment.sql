@@ -2,10 +2,10 @@ INSERT INTO
     comment(user_id, recipe_id, creation_date, approved, text)
 VALUES
     (1, 1, '2024-06-14T11:33:54.478613800', 'true', 'Bardzo fajny przepis, zaskoczyłem rodziną rewalcyjnym obiadem'),
-    (2, 2, '2024-06-13T12:34:20.123456700', 'true', 'Przepis na medal! Wszystko wyszło idealnie.'),
-    (3, 3, '2024-06-13T13:35:30.234567800', 'true', 'Bardzo smaczne, na pewno jeszcze powtórzę ten przepis.'),
-    (1, 4, '2024-06-13T14:36:40.345678900', 'true', 'Dzieci były zachwycone! Przepis do powtórki.'),
-    (2, 5, '2024-06-12T15:37:50.456789000', 'true', 'Trochę za dużo soli, ale ogólnie super.'),
+    (2, 2, '2024-06-13T12:34:20.123456700', 'false', 'Przepis na medal! Wszystko wyszło idealnie.'),
+    (3, 3, '2024-06-13T13:35:30.234567800', 'false', 'Bardzo smaczne, na pewno jeszcze powtórzę ten przepis.'),
+    (1, 4, '2024-06-13T14:36:40.345678900', 'false', 'Dzieci były zachwycone! Przepis do powtórki.'),
+    (2, 5, '2024-06-12T15:37:50.456789000', 'false', 'Trochę za dużo soli, ale ogólnie super.'),
     (3, 6, '2024-06-12T16:38:00.567890100', 'true', 'Nieco trudny, ale efekt końcowy rewelacyjny.'),
     (1, 7, '2024-06-12T17:39:10.678901200', 'true', 'Mój mąż był zachwycony tym daniem.'),
     (2, 8, '2024-06-12T18:40:20.789012300', 'true', 'Polecam ten przepis każdemu, kto lubi dobrze zjeść.'),
