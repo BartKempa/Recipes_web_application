@@ -13,10 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class CommentManagementController {
-    private final static int PAGE_SIZE = 6;
+    private final static int PAGE_SIZE = 30;
     private final CommentService commentService;
 
     public CommentManagementController(CommentService commentService) {
@@ -25,7 +26,7 @@ public class CommentManagementController {
 
     private final static Map<String,String> COMMENT_SORT_FIELD_MAP = new HashMap<>();
     static {
-        COMMENT_SORT_FIELD_MAP.put("dataDodania", "creationData");
+        COMMENT_SORT_FIELD_MAP.put("dataDodania", "creationDate");
         COMMENT_SORT_FIELD_MAP.put("zatwierdzenie", "approved");
     }
 
@@ -35,7 +36,7 @@ public class CommentManagementController {
                                   @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                                   Model model){
         int pageNumber = pageNo.orElse(1);
-        String sortFiled = COMMENT_SORT_FIELD_MAP.getOrDefault("zatwierdzenie", "approved");
+        String sortFiled = COMMENT_SORT_FIELD_MAP.getOrDefault(poleSortowania, "approved");
         Page<CommentDto> commentsPage = commentService.findPaginatedCommentsList(pageNumber, PAGE_SIZE, sortFiled, sortDir);
         List<CommentDto> comments = commentsPage.getContent();
         int totalPages = commentsPage.getTotalPages();
