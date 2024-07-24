@@ -28,7 +28,7 @@ class RecipeDtoMapper {
                 recipe.getImage(),
                 getAverageRating(recipe),
                 recipe.getRatings().size(),
-                recipe.getComments().size()
+                (int)recipe.getComments().stream().filter(Comment::isApproved).count()
         );
     }
 

@@ -30,8 +30,8 @@
                 <a href="#recipe-rating-section">
                 <div class="recipe-container-comments-number">
                     <i class="fa-regular fa-comment"></i>
-                    <span th:if="${recipe.commentCount}" th:text="${recipe.commentCount}">7</span>
-                    <span th:if="!${recipe.commentCount}">7</span>
+                    <span th:if="${recipe.approvedCommentCount}" th:text="${recipe.approvedCommentCount}">7</span>
+                    <span th:if="!${recipe.approvedCommentCount}">7</span>
                 </div>
                 </a>
                 <div class="recipe-container-favourites-number" sec:authorize="isAuthenticated()">
@@ -115,7 +115,7 @@
                         <a th:href="@{/login}" href="#">Zaloguj się, żeby dodać głos</a>
                     </p>
                 </div>
-            <h3 class="header-comments" th:text="|Komentarze (${recipe.commentCount})|">Komentarze (5)</h3>
+            <h3 class="header-comments" th:text="|Komentarze (${recipe.approvedCommentCount})|">Komentarze (5)</h3>
             <div class="recipe-comments">
                 <form action="#" th:action="@{/dodaj-komentarz}" method="post" th:object="${comment}"
                       sec:authorize="isAuthenticated()"
