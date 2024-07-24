@@ -9,17 +9,17 @@ public class RecipeMainInfoDto {
     private String image;
     private double averageRating;
     private int ratingCount;
-    private int commentCount;
+    private int approvedCommentCount;
     private LocalDateTime creationDate;
 
-    public RecipeMainInfoDto(Long id, String name, String type, String image, double averageRating, int ratingCount, int commentCount, LocalDateTime creationDate) {
+    public RecipeMainInfoDto(Long id, String name, String type, String image, double averageRating, int ratingCount, int approvedCommentCount, LocalDateTime creationDate) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.image = image;
         this.averageRating = averageRating;
         this.ratingCount = ratingCount;
-        this.commentCount = commentCount;
+        this.approvedCommentCount = approvedCommentCount;
         this.creationDate = creationDate;
     }
 
@@ -71,12 +71,12 @@ public class RecipeMainInfoDto {
         this.ratingCount = ratingCount;
     }
 
-    public int getCommentCount() {
-        return commentCount;
+    public int getApprovedCommentCount() {
+        return approvedCommentCount;
     }
 
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
+    public void setApprovedCommentCount(int approvedCommentCount) {
+        this.approvedCommentCount = approvedCommentCount;
     }
 
     public LocalDateTime getCreationDate() {

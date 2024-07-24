@@ -1,5 +1,6 @@
 package com.example.recipes.domain.recipe;
 
+import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
@@ -46,7 +47,7 @@ class RecipeDtoMapper {
                 recipe.getImage(),
                 getAverageRating(recipe),
                 recipe.getRatings().size(),
-                recipe.getComments().size(),
+                (int)recipe.getComments().stream().filter(Comment::isApproved).count(),
                 recipe.getCreationDate()
         );
     }
