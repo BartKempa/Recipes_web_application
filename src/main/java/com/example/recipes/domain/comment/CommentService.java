@@ -30,9 +30,10 @@ public class CommentService {
         this.recipeRepository = recipeRepository;
     }
 
-    public List<CommentDto> getCommentsForRecipe(long id){
+    public List<CommentDto> getActiveCommentsForRecipe(long id){
          return commentRepository.findAllByRecipeId(id).stream()
                  .map(CommentDtoMapper::map)
+                 .filter(CommentDto::isApproved)
                  .collect(Collectors.toList());
     }
 
@@ -44,7 +45,7 @@ public class CommentService {
         LocalDateTime date = LocalDateTime.now();
         commentToSave.setId(commentDto.getId());
         commentToSave.setCreationDate(date);
-        commentToSave.setApproved(true);
+        commentToSave.setApproved(false);
         commentToSave.setText(commentDto.getText());
         commentToSave.setRecipe(recipe);
         commentToSave.setUser(user);

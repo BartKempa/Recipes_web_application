@@ -57,7 +57,7 @@ public class RecipeController {
         }
         int favourites = userService.favoritesCount(id);
         model.addAttribute("favourites", favourites);
-        List<CommentDto> comments = commentService.getCommentsForRecipe(id);
+        List<CommentDto> comments = commentService.getActiveCommentsForRecipe(id);
         model.addAttribute("comments", comments);
         return "recipe";
     }
