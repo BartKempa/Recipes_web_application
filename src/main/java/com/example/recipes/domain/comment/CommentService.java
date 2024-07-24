@@ -74,11 +74,10 @@ public class CommentService {
     }
 
     @Transactional
-    public void approveComment(CommentDto commentDto){
-        Comment comment = commentRepository.findById(commentDto.getId())
+    public void approveComment(long commentId){
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         comment.setApproved(true);
         commentRepository.save(comment);
-
     }
 }
