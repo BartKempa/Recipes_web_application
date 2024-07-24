@@ -28,7 +28,7 @@
                 <td th:if="${singleComment.approved}">Tak</td>
                 <td th:unless="${singleComment.approved}">Nie</td>
                 <td>
-                    <form action="#" th:action="@{/admin/usun-przepis}" method="post" class="admin-item-delete">
+                    <form action="#" th:action="@{/admin/zatwierdz-przepis}" method="post" class="admin-item-delete">
                         <!--<input type="hidden"  th:name="id" th:value="${singleRecipe.id}"/>-->
                         <button class="admin-item-table-button" type="submit">Zatwierdz</button>
                     </form>

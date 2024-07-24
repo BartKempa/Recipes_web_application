@@ -72,4 +72,13 @@ public class CommentService {
                 .map(CommentDtoMapper::map);
 
     }
+
+    @Transactional
+    public void approveComment(CommentDto commentDto){
+        Comment comment = commentRepository.findById(commentDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        comment.setApproved(true);
+        commentRepository.save(comment);
+
+    }
 }

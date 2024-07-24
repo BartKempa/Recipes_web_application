@@ -119,6 +119,7 @@ public class UserService {
         Comment comment = commentRepository.findById(commentDto.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         comment.setText(commentDto.getText());
+        comment.setApproved(false);
         commentRepository.save(comment);
     }
 }
