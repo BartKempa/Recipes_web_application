@@ -54,5 +54,12 @@ public class CommentManagementController {
         return "redirect:" + referer;
     }
 
+    @PostMapping("/admin/lista-komentarzy/usun")
+    public String deleteComment(@RequestParam long commentIt,
+                                @RequestHeader String referer){
+        commentService.deleteComment(commentIt);
+        return "redirect:" + referer;
+
+    }
 
 }
