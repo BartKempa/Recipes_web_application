@@ -29,12 +29,15 @@
                 <td th:unless="${singleComment.approved}">Nie</td>
                 <td>
                     <div th:unless="${singleComment.approved}">
-                        <form action="#" th:action="@{/admin/lista-komentarzy/zatwierdz-komentarz}" method="post" class="admin-item-delete">
+                        <form action="#" th:action="@{/admin/lista-komentarzy/zatwierdz-komentarz}" method="post">
                             <input type="hidden"  th:name="id" th:value="${singleComment.id}"/>
                             <button class="admin-item-table-button" type="submit">Zatwierdz</button>
                         </form>
                     </div>
-                    <!--<a href="#" th:href="@{|/admin/aktualizuj-przepis/${singleRecipe.id}|}" class="admin-item-table-button"> Edytuj</a>-->
+                        <form action="#" th:action="@{/admin/lista-komentarzy/usun}" method="post">
+                            <input type="hidden" th:name="id" th:value="${singleComment.id}">
+                            <button class="admin-item-table-button" type="submit">Usuń</button>
+                        </form>
                 </td>
             </tr>
             </tbody>
