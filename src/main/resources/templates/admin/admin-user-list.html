@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista użytkowników - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading">Lista użytkowników</h2>
+        <table class="admin-listing-table">
+            <thead>
+            <tr class="admin-listing-table-head">
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=nazwaUzytkownika&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}" class="admin-listing-table-head-item">Nick</a></th>
+                <th class="admin-listing-table-head-item">Imię</th>
+                <th class="admin-listing-table-head-item">Nazwisko</th>
+                <th><a href="#" th:href="@{|${baseUrl}/${currentPage}?poleSortowania=adresEmail&sortDir=${sortDir == 'asc' ? 'desc' : 'asc'}|}" class="admin-listing-table-head-item">Email</a></th>
+                <th class="admin-listing-table-head-item">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="admin-listing-table-body" th:each="singleUser:${users}">
+                <td th:text="${singleUser.nickName}">Ziomeczek</td>
+                <td th:text="${singleUser.firstName}">Piotr</td>
+                <td th:text="${singleUser.lastName}">Kowalski</td>
+                <td th:text="${singleUser.email}">piotr@kowalski.pl</td>
+                <td>
+                    <a href="#" th:href="@{|/admin/uzytkownik/${singleUser.id}|}" class="admin-item-table-button">Szczegóły</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${totalPages > 1}" class="pagination-container">
+            <div th:if="${currentPage > 1}" class="pagination">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}?poleSortowania=${sortField}&sortDir=${sortDir}|}">&#171;</a>
+            </div>
+            <div class="pagination">
+                <span th:if="${currentPage > 3}">
+                     <a href="#" th:href="@{|${baseUrl}/1?poleSortowania=${sortField}&sortDir=${sortDir}|}">1</a>
+                    <span>...</span>
+                </span>
+                <span th:each="pageNum : ${#numbers.sequence(currentPage - 2 > 0 ? currentPage - 2 : 1, currentPage + 2 <= totalPages ? currentPage + 2 : totalPages)}">
+                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}?poleSortowania=${sortField}&sortDir=${sortDir}|}"
+                       th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
+                </span>
+                <span th:if="${currentPage < totalPages - 2}">
+                    <span>...</span>
+                     <a href="#" th:href="@{|${baseUrl}/${totalPages}?poleSortowania=${sortField}&sortDir=${sortDir}|}">[[${totalPages}]]</a>
+                </span>
+            </div>
+            <div th:if="${currentPage < totalPages}" class="pagination">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}?poleSortowania=${sortField}&sortDir=${sortDir}|}">&#187;</a>
+            </div>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>
