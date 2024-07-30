@@ -127,7 +127,7 @@ public class UserService {
         commentRepository.save(comment);
     }
 
-    public Page<UserRegistrationDto> getAllUsers(int pageNumber, int pageSize, String sortField, String sortDirection){
+    public Page<UserRegistrationDto> findAllUsers(int pageNumber, int pageSize, String sortField, String sortDirection){
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, sort);
         return userRepository.findAll(pageable)

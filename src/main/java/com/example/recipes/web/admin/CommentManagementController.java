@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Controller
 public class CommentManagementController {
-    private final static int PAGE_SIZE = 30;
+    private final static int PAGE_SIZE = 6;
     private final CommentService commentService;
 
     public CommentManagementController(CommentService commentService) {
