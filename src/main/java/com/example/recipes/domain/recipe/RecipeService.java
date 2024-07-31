@@ -109,6 +109,11 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapMainInfo);
     }
 
+    public long countFavouriteUserRecipes(String email){
+        List<Recipe> allFavouritesRecipesForUser = recipeRepository.findAllFavouritesRecipesForUser(email);
+        return allFavouritesRecipesForUser.size();
+    }
+
     public Page<RecipeMainInfoDto> findRatedRecipesForUser(String email, int pageNumber, int pageSize, String sortField) {
         Sort sort = Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);

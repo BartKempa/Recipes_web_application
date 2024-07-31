@@ -65,7 +65,6 @@ public class UserManagementController {
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         long commentCount = commentService.countUserComments(user.getEmail());
 
-
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("user", user);
         return "admin/admin-user-details";

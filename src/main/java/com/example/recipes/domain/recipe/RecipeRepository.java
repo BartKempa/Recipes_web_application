@@ -23,12 +23,12 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAn
     @Query("SELECT r FROM Recipe r JOIN r.favourites f WHERE f.email = :email")
     Page<Recipe> findAllFavouritesRecipesForUser(@Param("email") String email, Pageable pageable);
 
+    @Query("SELECT r FROM Recipe r JOIN r.favourites f WHERE f.email = :email")
+    List<Recipe> findAllFavouritesRecipesForUser(@Param("email") String email);
+
     @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email")
     Page<Recipe> findAllRatedRecipesByUser(@Param("email") String email, Pageable pageable);
 
-    /*@Modifying
-    @Query("DELETE FROM Recipe r WHERE r.type.id = :id")
-    void deleteAllRecipesByTypeId(long id);*/
 
     void deleteAllByType_Id(long id);
 
