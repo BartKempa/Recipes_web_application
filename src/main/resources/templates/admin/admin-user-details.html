@@ -24,6 +24,9 @@
             <label for="commentCount">Liczba dodanych komentarzy</label>
             <input id="commentCount" th:value="${commentCount}" readonly>
             <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/komentarze/1|}" class="admin-kb-form-button"> Podgląd komentarzy</a>
+            <label for="favouriteRecipesCount">Liczba polubionych przepisów</label>
+            <input id="favouriteRecipesCount" th:value="${favouriteRecipesCount}" readonly>
+            <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/ulubione/1|}" class="admin-kb-form-button"> Podgląd polubionych przepisów</a>
 
 
 

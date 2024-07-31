@@ -2,10 +2,9 @@ package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
-import com.example.recipes.domain.user.User;
+import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
-import com.example.recipes.web.UserController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -26,10 +25,12 @@ public class UserManagementController {
     private final static int PAGE_SIZE = 6;
     private final UserService userService;
     private final CommentService commentService;
+    private final RecipeService recipeService;
 
-    public UserManagementController(UserService userService, CommentService commentService) {
+    public UserManagementController(UserService userService, CommentService commentService, RecipeService recipeService) {
         this.userService = userService;
         this.commentService = commentService;
+        this.recipeService = recipeService;
     }
 
     private final static Map<String, String> USER_SORT_FIELD_MAP = new HashMap<>();
@@ -64,7 +65,9 @@ public class UserManagementController {
                                  Model model){
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         long commentCount = commentService.countUserComments(user.getEmail());
+        long favouriteRecipesCount = recipeService.countFavouriteUserRecipes(user.getEmail());
 
+        model.addAttribute("favouriteRecipesCount", favouriteRecipesCount);
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("user", user);
         return "admin/admin-user-details";
@@ -86,9 +89,6 @@ public class UserManagementController {
         model.addAttribute("heading", "Komentarze użytkownika " + user.getNickName());
         return "admin/admin-user-comments";
     }
-
-
-
 
 
 }
