@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,6 +60,11 @@ public class CommentService {
                 .map(CommentDtoMapper::map);
     }
 
+    public long countUserComments(String email){
+        List<Comment> allUserComments = commentRepository.findAllUserComments(email);
+        return allUserComments.size();
+    }
+
     @Transactional
     public void deleteComment(long commentId){
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -70,8 +76,9 @@ public class CommentService {
         Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
         return commentRepository.findAll(pageable)
                 .map(CommentDtoMapper::map);
-
     }
+
+
 
     @Transactional
     public void approveComment(long commentId){

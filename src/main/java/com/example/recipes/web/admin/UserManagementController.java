@@ -1,7 +1,11 @@
 package com.example.recipes.web.admin;
 
+import com.example.recipes.domain.comment.CommentService;
+import com.example.recipes.domain.comment.dto.CommentDto;
+import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.web.UserController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,11 +22,14 @@ import java.util.Optional;
 
 @Controller
 public class UserManagementController {
+    private final static String COMMENT_SORT_FILED = "creationDate";
     private final static int PAGE_SIZE = 6;
     private final UserService userService;
+    private final CommentService commentService;
 
-    public UserManagementController(UserService userService) {
+    public UserManagementController(UserService userService, CommentService commentService) {
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     private final static Map<String, String> USER_SORT_FIELD_MAP = new HashMap<>();
@@ -56,10 +63,29 @@ public class UserManagementController {
     public String getUserDetails(@PathVariable long userId,
                                  Model model){
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        long commentCount = commentService.countUserComments(user.getEmail());
 
+
+        model.addAttribute("commentCount", commentCount);
         model.addAttribute("user", user);
         return "admin/admin-user-details";
+    }
 
+    @GetMapping("/admin/uzytkownik/{userId}/komentarze/{pageNo}")
+    public String getUserComments(@PathVariable long userId,
+                                  @PathVariable Optional<Integer> pageNo,
+                                  Model model){
+        int pageNumber = pageNo.orElse(1);
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(user.getEmail(), pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
+        int totalPages = allUserCommentsPages.getTotalPages();
+        List<CommentDto> comments = allUserCommentsPages.getContent();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("comments", comments);
+        model.addAttribute("baseUrl", "/admin/uzytkownik/" + userId + "/komentarze");
+        model.addAttribute("heading", "Komentarze użytkownika " + user.getNickName());
+        return "admin/admin-user-comments";
     }
 
 

@@ -17,4 +17,7 @@ public interface CommentRepository extends CrudRepository<Comment, Long>, Paging
     @Query("SELECT c FROM Comment c JOIN c.user u WHERE u.email =:email")
     Page<Comment> findAllUserComments(String email, Pageable pageable);
 
+    @Query("SELECT c FROM Comment c JOIN c.user u WHERE u.email =:email")
+    List<Comment> findAllUserComments(String email);
+
 }

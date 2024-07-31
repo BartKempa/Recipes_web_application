@@ -387,6 +387,7 @@ li::marker {
 
 .kb-form > input,
 .kb-form > button,
+.kb-form > a,
 .kb-form > select,
 .kb-form > textarea {
     font-size: 18px;
@@ -399,7 +400,8 @@ li::marker {
     font-weight: 500;
 }
 
-.kb-form > button {
+.kb-form > button,
+.kb-form > a {
     margin-top: 10px;
     background-color: #eaeaec
 }
@@ -408,6 +410,11 @@ li::marker {
     text-align: center;
     font-size: 18px;
     font-weight: 600;
+}
+
+.admin-kb-form-button {
+    text-align: center;
+   border: 2px solid black;
 }
 
 .registration-link {

@@ -10,18 +10,23 @@
 <div class="container">
     <main class="main-content" layout:fragment="content">
         <h2 class="list-heading" th:text="|Informacje o użytkowniku ${user.nickName}|">Informacje o użytkowniku</h2>
-        <div class="kb-form" th:object="${user}">
+        <div class="kb-form">
             <label for="email">Adres email</label>
-            <input id="email" type="email" th:field="*{email}" readonly>
+            <input id="email" type="email" th:value="${user.email}" readonly>
             <label for="firstName">Imię</label>
-            <input id="firstName" name="firstName" th:field="*{firstName}" readonly>
+            <input id="firstName" name="firstName" th:value="${user.firstName}" readonly>
             <label for="lastName">Nazwisko</label>
-            <input id="lastName" name="lastName" th:field="*{lastName}" readonly>
+            <input id="lastName" name="lastName" th:value="${user.lastName}" readonly>
             <label for="nickName">Nick</label>
-            <input id="nickName" name="nickName" th:field="*{nickName}" readonly>
+            <input id="nickName" name="nickName" th:value="${user.nickName}" readonly>
             <label for="age">Wiek</label>
-            <input id="age" name="age" th:field="*{age}" readonly>
-          
+            <input id="age" name="age" th:value="${user.age}" readonly>
+            <label for="commentCount">Liczba dodanych komentarzy</label>
+            <input id="commentCount" th:value="${commentCount}" readonly>
+            <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/komentarze/1|}" class="admin-kb-form-button"> Podgląd komentarzy</a>
+
+
+
         </div>
     </main>
 </div>
