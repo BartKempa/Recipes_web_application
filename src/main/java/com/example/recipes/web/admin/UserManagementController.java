@@ -3,11 +3,13 @@ package com.example.recipes.web.admin;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +37,7 @@ public class UserManagementController {
                                @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                                Model model){
         int pageNumber = pageNo.orElse(1);
-        String sortField = USER_SORT_FIELD_MAP.getOrDefault("adresEmail", "email");
+        String sortField = USER_SORT_FIELD_MAP.getOrDefault(poleSortowania, "email");
         Page<UserRegistrationDto> usersPage = userService.findAllUsers(pageNumber, PAGE_SIZE, sortField, sortDir);
         int totalPages = usersPage.getTotalPages();
         List<UserRegistrationDto> users = usersPage.getContent();
@@ -44,14 +46,23 @@ public class UserManagementController {
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", "Lista użytkoników");
-        model.addAttribute("poleSortowania", sortField);
+        model.addAttribute("sortField", poleSortowania);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("baseUrl", "/admin/list-uzytkownikow");
         return "admin/admin-user-list";
+    }
 
+    @GetMapping("/admin/uzytkownik/{userId}")
+    public String getUserDetails(@PathVariable long userId,
+                                 Model model){
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        model.addAttribute("user", user);
+        return "admin/admin-user-details";
 
     }
+
+
 
 
 
