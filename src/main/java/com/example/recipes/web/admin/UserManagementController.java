@@ -3,6 +3,7 @@ package com.example.recipes.web.admin;
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.recipe.RecipeService;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.springframework.data.domain.Page;
@@ -89,6 +90,25 @@ public class UserManagementController {
         model.addAttribute("heading", "Komentarze użytkownika " + user.getNickName());
         return "admin/admin-user-comments";
     }
+
+    @GetMapping("/admin/uzytkownik/{userId}/ulubione/{pageNo}")
+    public String getUserFavouriteRecipes(@PathVariable long userId,
+                                          @PathVariable Optional<Integer> pageNo,
+                                          Model model){
+        int pageNumber = pageNo.orElse(1);
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<RecipeMainInfoDto> favouriteRecipesPagesForUser = recipeService.findFavouriteRecipesForUser(user.getEmail(), pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
+        int totalPages = favouriteRecipesPagesForUser.getTotalPages();
+        List<RecipeMainInfoDto> recipes = favouriteRecipesPagesForUser.getContent();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("baseUrl", "/admin/uzytkownik/" + userId + "/ulubione");
+        model.addAttribute("heading", "Komentarze użytkownika " + user.getNickName());
+        return "admin/admin-user-favourites";
+
+    }
+
 
 
 }
