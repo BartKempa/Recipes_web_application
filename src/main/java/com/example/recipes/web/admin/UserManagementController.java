@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Controller
 public class UserManagementController {
-    private final static String COMMENT_SORT_FILED = "creationDate";
+    private final static String SORT_FILED = "creationDate";
     private final static int PAGE_SIZE = 6;
     private final UserService userService;
     private final CommentService commentService;
@@ -80,7 +80,7 @@ public class UserManagementController {
                                   Model model){
         int pageNumber = pageNo.orElse(1);
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(user.getEmail(), pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
+        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(user.getEmail(), pageNumber, PAGE_SIZE, SORT_FILED);
         int totalPages = allUserCommentsPages.getTotalPages();
         List<CommentDto> comments = allUserCommentsPages.getContent();
         model.addAttribute("totalPages", totalPages);
@@ -97,14 +97,14 @@ public class UserManagementController {
                                           Model model){
         int pageNumber = pageNo.orElse(1);
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Page<RecipeMainInfoDto> favouriteRecipesPagesForUser = recipeService.findFavouriteRecipesForUser(user.getEmail(), pageNumber, PAGE_SIZE, COMMENT_SORT_FILED);
+        Page<RecipeMainInfoDto> favouriteRecipesPagesForUser = recipeService.findFavouriteRecipesForUser(user.getEmail(), pageNumber, PAGE_SIZE, SORT_FILED);
         int totalPages = favouriteRecipesPagesForUser.getTotalPages();
         List<RecipeMainInfoDto> recipes = favouriteRecipesPagesForUser.getContent();
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("recipes", recipes);
         model.addAttribute("baseUrl", "/admin/uzytkownik/" + userId + "/ulubione");
-        model.addAttribute("heading", "Komentarze użytkownika " + user.getNickName());
+        model.addAttribute("heading", "Polubione przepisy użytkownika " + user.getNickName());
         return "admin/admin-user-favourites";
 
     }
