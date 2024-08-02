@@ -130,7 +130,7 @@ public class RecipeController {
         String email = authentication.getName();
         int pageNumber = pageNo.orElse(1);
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
-        Page<RecipeMainInfoDto> ratedRecipesPagesForUser = recipeService.findRatedRecipesForUser(email, pageNumber, PAGE_SIZE, sortField);
+        Page<RecipeMainInfoDto> ratedRecipesPagesForUser = recipeService.findRatedRecipesByUser(email, pageNumber, PAGE_SIZE, sortField);
         List<RecipeMainInfoDto> recipes = ratedRecipesPagesForUser.getContent();
         int totalPages = ratedRecipesPagesForUser.getTotalPages();
         model.addAttribute("recipes", recipes);

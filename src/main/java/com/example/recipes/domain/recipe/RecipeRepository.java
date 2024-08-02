@@ -29,6 +29,8 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, PagingAn
     @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email")
     Page<Recipe> findAllRatedRecipesByUser(@Param("email") String email, Pageable pageable);
 
+    @Query("SELECT r FROM Recipe r JOIN r.ratings rt WHERE rt.user.email = :email")
+    List<Recipe> findAllRatedRecipesByUser(@Param("email") String email);
 
     void deleteAllByType_Id(long id);
 

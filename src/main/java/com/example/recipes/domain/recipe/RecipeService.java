@@ -114,11 +114,17 @@ public class RecipeService {
         return allFavouritesRecipesForUser.size();
     }
 
-    public Page<RecipeMainInfoDto> findRatedRecipesForUser(String email, int pageNumber, int pageSize, String sortField) {
+    public Page<RecipeMainInfoDto> findRatedRecipesByUser(String email, int pageNumber, int pageSize, String sortField) {
         Sort sort = Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return recipeRepository.findAllRatedRecipesByUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
+    }
+
+    public long countRatedRecipeByUser(String email){
+        List<Recipe> allRatedRecipesByUser = recipeRepository.findAllRatedRecipesByUser(email);
+        return allRatedRecipesByUser.size();
+
     }
 
     @Transactional
