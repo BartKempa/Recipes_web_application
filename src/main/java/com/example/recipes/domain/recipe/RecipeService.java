@@ -2,6 +2,7 @@ package com.example.recipes.domain.recipe;
 
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
+import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
@@ -16,7 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -119,6 +122,11 @@ public class RecipeService {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return recipeRepository.findAllRatedRecipesByUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
+    }
+
+    public Map<Long, Integer>getUserRatings(String email){
+        List<Rating> userRatings = ratingRepository.findAllByUser_Email(email);
+        return userRatings.stream().collect(Collectors.toMap(rating -> rating.getRecipe().getId(), Rating::getRating));
     }
 
     public long countRatedRecipeByUser(String email){

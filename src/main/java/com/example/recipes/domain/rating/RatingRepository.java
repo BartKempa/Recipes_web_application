@@ -11,6 +11,4 @@ public interface RatingRepository extends CrudRepository<Rating, Long> {
     Optional<Rating> findByUser_EmailAndRecipe_Id(String userEmail, Long recipeId);
     List<Rating> findAllByUser_Email(String email);
 
-
-
 }
