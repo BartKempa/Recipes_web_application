@@ -109,8 +109,22 @@ public class UserManagementController {
         return "admin/admin-user-favourites";
     }
 
-
-
+    @GetMapping("/admin/uzytkownik/{userId}/ocenione/{pageNo}")
+    public String getUserRatedRecipes(@PathVariable long userId,
+                                      @PathVariable Optional<Integer> pageNo,
+                                      Model model){
+        int pageNumber = pageNo.orElse(1);
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<RecipeMainInfoDto> ratedRecipesPagesByUser = recipeService.findRatedRecipesByUser(user.getEmail(), pageNumber, PAGE_SIZE, SORT_FILED);
+        int totalPages = ratedRecipesPagesByUser.getTotalPages();
+        List<RecipeMainInfoDto> recipes = ratedRecipesPagesByUser.getContent();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("baseUrl", "/admin/uzytkownik/"+userId+"/ocenione");
+        model.addAttribute("heading", "Ocenione przepisy użytkownika " + user.getNickName());
+        return "admin/admin-user-rated-recipes";
+    }
 
 
 }
