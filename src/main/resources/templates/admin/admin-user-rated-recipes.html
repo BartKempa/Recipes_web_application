@@ -24,7 +24,7 @@
                 <td th:text="${#temporals.format(singleRecipe.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</td>
                 <td th:text="${singleRecipe.name}">Lin w śmietanie</td>
                 <td th:text="${singleRecipe.averageRating}">5.5</td>
-                <td th:text="${singleRecipe.averageRating}">5.5</td>
+                <td th:value="${singleRecipe.id}" th:text="${rating}">5.5</td>
             </tr>
             </tbody>
         </table>

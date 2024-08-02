@@ -2,6 +2,7 @@ package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
+import com.example.recipes.domain.rating.RatingService;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
@@ -27,11 +28,13 @@ public class UserManagementController {
     private final UserService userService;
     private final CommentService commentService;
     private final RecipeService recipeService;
+    private final RatingService ratingService;
 
-    public UserManagementController(UserService userService, CommentService commentService, RecipeService recipeService) {
+    public UserManagementController(UserService userService, CommentService commentService, RecipeService recipeService, RatingService ratingService) {
         this.userService = userService;
         this.commentService = commentService;
         this.recipeService = recipeService;
+        this.ratingService = ratingService;
     }
 
     private final static Map<String, String> USER_SORT_FIELD_MAP = new HashMap<>();
@@ -112,12 +115,17 @@ public class UserManagementController {
     @GetMapping("/admin/uzytkownik/{userId}/ocenione/{pageNo}")
     public String getUserRatedRecipes(@PathVariable long userId,
                                       @PathVariable Optional<Integer> pageNo,
+                                      @RequestParam long recipeId,
                                       Model model){
         int pageNumber = pageNo.orElse(1);
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Page<RecipeMainInfoDto> ratedRecipesPagesByUser = recipeService.findRatedRecipesByUser(user.getEmail(), pageNumber, PAGE_SIZE, SORT_FILED);
         int totalPages = ratedRecipesPagesByUser.getTotalPages();
         List<RecipeMainInfoDto> recipes = ratedRecipesPagesByUser.getContent();
+
+        Integer rating = ratingService.getRatingForRecipe(user.getEmail(), recipeId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("rating", rating);
+
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("recipes", recipes);

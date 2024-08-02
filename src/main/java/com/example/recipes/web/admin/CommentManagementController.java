@@ -59,7 +59,6 @@ public class CommentManagementController {
                                 @RequestHeader String referer){
         commentService.deleteComment(id);
         return "redirect:" + referer;
-
     }
 
 }
