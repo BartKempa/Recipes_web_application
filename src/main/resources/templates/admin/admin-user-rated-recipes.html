@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Oceny użytkownika - Kuchnia Bartka</title>
+</head>
+<body>
+<div class="container">
+    <main class="main-content" layout:fragment="content">
+        <h2 class="list-heading" th:text="${heading}">Oceny</h2>
+        <table class="user-comments-table">
+            <thead>
+            <tr class="user-comments-table-head">
+                <th>Data dodania przepisu</th>
+                <th>Nazwa przepisu</th>
+                <th>Średnia ocena</th>
+                <th>Ocena użytkowniak</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="user-comments-table-body" th:each="singleRecipe: ${recipes}">
+                <td th:text="${#temporals.format(singleRecipe.creationDate, 'dd-MM-yyyy HH:mm')}">2024-01-01 12:12</td>
+                <td th:text="${singleRecipe.name}">Lin w śmietanie</td>
+                <td th:text="${singleRecipe.averageRating}">5.5</td>
+                <td th:text="${singleRecipe.averageRating}">5.5</td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${totalPages > 1}" class="pagination-container">
+            <div th:if="${currentPage > 1}" class="pagination">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage - 1}|}">&#171;</a>
+            </div>
+            <div class="pagination">
+                <span th:if="${currentPage > 3}">
+                     <a href="#" th:href="@{|${baseUrl}/1|}">1</a>
+                    <span>...</span>
+                </span>
+                <span th:each="pageNum : ${#numbers.sequence(currentPage - 2 > 0 ? currentPage - 2 : 1, currentPage + 2 <= totalPages ? currentPage + 2 : totalPages)}">
+                    <a href="#" th:text="${pageNum}" th:href="@{|${baseUrl}/${pageNum}|}"
+                       th:classappend="${pageNum == currentPage} ? 'active' : ''"></a>
+                </span>
+                <span th:if="${currentPage < totalPages - 2}">
+                    <span>...</span>
+                     <a href="#" th:href="@{|${baseUrl}/${totalPages}|}">[[${totalPages}]]</a>
+                </span>
+            </div>
+            <div th:if="${currentPage < totalPages}" class="pagination">
+                <a href="#" th:href="@{|${baseUrl}/${currentPage + 1}|}">&#187;</a>
+            </div>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>
