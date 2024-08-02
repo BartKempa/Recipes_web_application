@@ -115,17 +115,14 @@ public class UserManagementController {
     @GetMapping("/admin/uzytkownik/{userId}/ocenione/{pageNo}")
     public String getUserRatedRecipes(@PathVariable long userId,
                                       @PathVariable Optional<Integer> pageNo,
-                                      @RequestParam long recipeId,
                                       Model model){
         int pageNumber = pageNo.orElse(1);
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Page<RecipeMainInfoDto> ratedRecipesPagesByUser = recipeService.findRatedRecipesByUser(user.getEmail(), pageNumber, PAGE_SIZE, SORT_FILED);
         int totalPages = ratedRecipesPagesByUser.getTotalPages();
         List<RecipeMainInfoDto> recipes = ratedRecipesPagesByUser.getContent();
-
-        Integer rating = ratingService.getRatingForRecipe(user.getEmail(), recipeId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        model.addAttribute("rating", rating);
-
+        Map<Long, Integer> userRatings = ratingService.getUserRatings(user.getEmail());
+        model.addAttribute("userRatings", userRatings);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("recipes", recipes);
@@ -133,6 +130,4 @@ public class UserManagementController {
         model.addAttribute("heading", "Ocenione przepisy użytkownika " + user.getNickName());
         return "admin/admin-user-rated-recipes";
     }
-
-
 }

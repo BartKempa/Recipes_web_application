@@ -7,7 +7,10 @@ import com.example.recipes.domain.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RatingService {
@@ -36,5 +39,10 @@ public class RatingService {
     public Optional<Integer> getRatingForRecipe(String userEmail, long recipeId){
         return ratingRepository.findByUser_EmailAndRecipe_Id(userEmail, recipeId)
                 .map(Rating::getRating);
+    }
+
+    public Map<Long, Integer> getUserRatings(String email){
+        List<Rating> userRatings = ratingRepository.findAllByUser_Email(email);
+        return userRatings.stream().collect(Collectors.toMap(rating -> rating.getRecipe().getId(), Rating::getRating));
     }
 }

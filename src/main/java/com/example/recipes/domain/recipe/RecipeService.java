@@ -124,11 +124,6 @@ public class RecipeService {
                 .map(RecipeDtoMapper::mapMainInfo);
     }
 
-    public Map<Long, Integer>getUserRatings(String email){
-        List<Rating> userRatings = ratingRepository.findAllByUser_Email(email);
-        return userRatings.stream().collect(Collectors.toMap(rating -> rating.getRecipe().getId(), Rating::getRating));
-    }
-
     public long countRatedRecipeByUser(String email){
         List<Recipe> allRatedRecipesByUser = recipeRepository.findAllRatedRecipesByUser(email);
         return allRatedRecipesByUser.size();
