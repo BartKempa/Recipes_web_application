@@ -124,7 +124,6 @@ public class RecipeService {
     public long countRatedRecipeByUser(String email){
         List<Recipe> allRatedRecipesByUser = recipeRepository.findAllRatedRecipesByUser(email);
         return allRatedRecipesByUser.size();
-
     }
 
     @Transactional

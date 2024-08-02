@@ -27,8 +27,9 @@
             <label for="favouriteRecipesCount">Liczba polubionych przepisów</label>
             <input id="favouriteRecipesCount" th:value="${favouriteRecipesCount}" readonly>
             <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/ulubione/1|}" class="admin-kb-form-button"> Podgląd polubionych przepisów</a>
-            <input id="ratedRecipesCount" th:value="${favouriteRecipesCount}" readonly>
-            <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/oceny/1|}" class="admin-kb-form-button"> Podgląd ocenionych przepisów</a>
+            <label for="ratedRecipesCount">Liczba ocenionych przepisów</label>
+            <input id="ratedRecipesCount" th:value="${ratedRecipesByUser}" readonly>
+            <a href="#" th:href="@{|/admin/uzytkownik/${user.id}/ocenione/1|}" class="admin-kb-form-button"> Podgląd ocenionych przepisów</a>
 
 
 

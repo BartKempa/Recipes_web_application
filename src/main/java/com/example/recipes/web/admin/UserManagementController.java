@@ -67,7 +67,8 @@ public class UserManagementController {
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         long commentCount = commentService.countUserComments(user.getEmail());
         long favouriteRecipesCount = recipeService.countFavouriteUserRecipes(user.getEmail());
-
+        long ratedRecipesByUser = recipeService.countRatedRecipeByUser(user.getEmail());
+        model.addAttribute("ratedRecipesByUser", ratedRecipesByUser);
         model.addAttribute("favouriteRecipesCount", favouriteRecipesCount);
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("user", user);
@@ -106,8 +107,9 @@ public class UserManagementController {
         model.addAttribute("baseUrl", "/admin/uzytkownik/" + userId + "/ulubione");
         model.addAttribute("heading", "Polubione przepisy użytkownika " + user.getNickName());
         return "admin/admin-user-favourites";
-
     }
+
+
 
 
 
