@@ -40,12 +40,6 @@ public class RecipeService {
         this.commentRepository = commentRepository;
     }
 
-    public List<RecipeMainInfoDto> findAllRecipes() {
-        return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
-                .map(RecipeDtoMapper::mapMainInfo)
-                .toList();
-    }
-
      public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize, String sortField){
          Sort sort = Sort.by(sortField).descending();
          Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -82,7 +76,7 @@ public class RecipeService {
         LocalDateTime date = LocalDateTime.now();
         recipe.setId(recipeToSave.getId());
         recipe.setName(recipeToSave.getName());
-                recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getType()).orElseThrow());
+        recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getType()).orElseThrow());
         recipe.setDescription(recipeToSave.getDescription());
         recipe.setPreparationTime(recipeToSave.getPreparationTime());
         recipe.setCookingTime(recipeToSave.getCookingTime());
@@ -149,7 +143,7 @@ public class RecipeService {
         recipeRepository.save(recipe);
     }
 
-        @Transactional
+    @Transactional
     public void deleteRecipe(long recipeId){
         Recipe recipeToDelete = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
