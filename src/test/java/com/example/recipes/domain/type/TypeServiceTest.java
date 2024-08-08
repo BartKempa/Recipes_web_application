@@ -6,14 +6,15 @@ import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.type.dto.TypeDto;
 import com.example.recipes.domain.user.UserRepository;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +23,23 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TypeServiceTest {
+    private TypeService typeService;
+    @Mock private RecipeRepository recipeRepositoryMock;
+    @Mock private TypeRepository typeRepositoryMock;
+    @Mock private UserRepository userRepositoryMock;
+    @Mock private RatingRepository ratingRepositoryMock;
+    @Mock private CommentRepository commentRepositoryMock;
+
+    @BeforeEach
+    void init(){
+        MockitoAnnotations.openMocks(this);
+        typeService = new TypeService(typeRepositoryMock, recipeRepositoryMock, ratingRepositoryMock, commentRepositoryMock, userRepositoryMock);
+
+    }
 
     @Test
     void shouldAddNewType() {
         //given
-        RecipeRepository recipeRepositoryMock = Mockito.mock(RecipeRepository.class);
-        TypeRepository typeRepositoryMock = Mockito.mock(TypeRepository.class);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        RatingRepository ratingRepositoryMock = Mockito.mock(RatingRepository.class);
-        CommentRepository commentRepositoryMock = Mockito.mock(CommentRepository.class);
-        TypeService typeService = new TypeService(typeRepositoryMock, recipeRepositoryMock, ratingRepositoryMock, commentRepositoryMock, userRepository);
 
         //when
         TypeDto typeDto = new TypeDto(null, "Zupy" );
@@ -48,13 +56,6 @@ class TypeServiceTest {
     @Test
     void shouldFindTypeByNameIgnoreCase() {
         //given
-        RecipeRepository recipeRepositoryMock = Mockito.mock(RecipeRepository.class);
-        TypeRepository typeRepositoryMock = Mockito.mock(TypeRepository.class);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        RatingRepository ratingRepositoryMock = Mockito.mock(RatingRepository.class);
-        CommentRepository commentRepositoryMock = Mockito.mock(CommentRepository.class);
-        TypeService typeService = new TypeService(typeRepositoryMock, recipeRepositoryMock, ratingRepositoryMock, commentRepositoryMock, userRepository);
-
         Type type = new Type();
         type.setId(1L);
         type.setName("Zupa");
@@ -72,13 +73,6 @@ class TypeServiceTest {
     @Test
     void shouldFindAllTypes() {
         //given
-        RecipeRepository recipeRepositoryMock = Mockito.mock(RecipeRepository.class);
-        TypeRepository typeRepositoryMock = Mockito.mock(TypeRepository.class);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        RatingRepository ratingRepositoryMock = Mockito.mock(RatingRepository.class);
-        CommentRepository commentRepositoryMock = Mockito.mock(CommentRepository.class);
-        TypeService typeService = new TypeService(typeRepositoryMock, recipeRepositoryMock, ratingRepositoryMock, commentRepositoryMock, userRepository);
-
         Type type1 = new Type();
         type1.setId(1L);
         type1.setName("Zupa");
