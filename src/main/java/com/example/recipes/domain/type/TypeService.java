@@ -68,7 +68,8 @@ public class TypeService {
         List<Recipe> recipesToDelete = recipeRepository.findAllByType_Id(typeId);
         for (Recipe recipe : recipesToDelete) {
             for (User user : recipe.getFavourites()) {
-                user.getFavoriteRecipes().remove(recipe);
+                boolean removed = user.getFavoriteRecipes().remove(recipe);
+                System.out.println("Recipe removed: " + removed);
                 userRepository.save(user);
             }
         }
