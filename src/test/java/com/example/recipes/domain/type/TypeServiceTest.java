@@ -229,7 +229,7 @@ class TypeServiceTest {
     }
 
     @Test
-    void shouldPropagateExceptionFormRepository(){
+    void shouldPropagateExceptionFromRepository(){
         //given
         Type type = new Type();
         type.setId(1L);
@@ -261,6 +261,39 @@ class TypeServiceTest {
     }
 
     @Test
-    void findTypeById() {
+    void shouldFindTypeById() {
+        //given
+        Type type1 = new Type();
+        type1.setId(1L);
+        type1.setName("Zupa");
+
+        Type type2 = new Type();
+        type2.setId(2L);
+        type2.setName("Pizza");
+
+        Mockito.when(typeRepositoryMock.findById(type1.getId())).thenReturn(Optional.of(type1));
+        Mockito.when(typeRepositoryMock.findById(type2.getId())).thenReturn(Optional.of(type2));
+
+        //when
+        TypeDto typeDto1 = typeService.findTypeById(type1.getId()).orElseThrow();
+        TypeDto typeDto2 = typeService.findTypeById(type2.getId()).orElseThrow();
+
+        //then
+        assertThat("Zupa", is(typeDto1.getName()));
+        assertEquals("Pizza", typeDto2.getName());
+    }
+
+    @Test
+    void shouldReturnEmptyOptionalWhenTypeNotFound(){
+        //given
+        long notExistedId = 5L;
+        
+        Mockito.when(typeRepositoryMock.findById(notExistedId)).thenReturn(Optional.empty());
+
+        //when
+        Optional<TypeDto> result = typeService.findTypeById(notExistedId);
+
+        //then
+        assertTrue(result.isEmpty());
     }
 }
