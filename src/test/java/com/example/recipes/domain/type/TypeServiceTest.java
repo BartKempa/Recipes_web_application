@@ -228,6 +228,21 @@ class TypeServiceTest {
         Mockito.verify(typeRepositoryMock).delete(type);
     }
 
+    @Test
+    void shouldPropagateExceptionFormRepository(){
+        //given
+        Type type = new Type();
+        type.setId(1L);
+        type.setName("Zupa");
+
+        Mockito.when(typeRepositoryMock.findById(type.getId())).thenReturn(Optional.of(type));
+        Mockito.doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(typeRepositoryMock).delete(type);
+
+        //when
+        //then
+        ResponseStatusException exc = assertThrows(ResponseStatusException.class, () -> typeService.deleteType(type.getId()));
+        assertThat(exc.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
 
     @Test
     void updateType() {
