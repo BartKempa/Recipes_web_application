@@ -245,6 +245,18 @@ class TypeServiceTest {
     }
 
     @Test
+    void shouldHandleExceptionWhenRepositoryThrowsError(){
+        //given
+        Mockito.when(typeRepositoryMock.findAll()).thenThrow(new RuntimeException("Database error"));
+
+        //when
+        //then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> typeService.findAllTypes());
+        assertThat(exception.getMessage(), equalTo("Database error"));
+
+    }
+
+    @Test
     void updateType() {
     }
 
