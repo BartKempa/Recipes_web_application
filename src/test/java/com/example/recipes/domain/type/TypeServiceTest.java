@@ -280,6 +280,18 @@ class TypeServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenTypeNotFound() {
+        //given
+        TypeDto typeDto = new TypeDto();
+        typeDto.setId(1L);
+
+        Mockito.when(typeRepositoryMock.findById(typeDto.getId())).thenReturn(Optional.empty());
+
+        //when + then
+        assertThrows(ResponseStatusException.class, () -> typeService.updateType(typeDto));
+    }
+
+    @Test
     void shouldFindTypeById() {
         //given
         Type type1 = new Type();
