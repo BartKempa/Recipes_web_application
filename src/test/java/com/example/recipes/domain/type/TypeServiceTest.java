@@ -16,7 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,8 +42,9 @@ class TypeServiceTest {
     @Test
     void shouldAddNewType() {
         //given
-        //when
         TypeDto typeDto = new TypeDto(null, "Zupy" );
+
+        //when
         typeService.addType(typeDto);
 
         //then
@@ -54,7 +54,6 @@ class TypeServiceTest {
         Type savedType = typeArgumentCaptor.getValue();
         assertEquals("Zupy", savedType.getName());
     }
-
 
     @Test
     void shouldFindTypeByNameIgnoreCase() {
@@ -253,11 +252,31 @@ class TypeServiceTest {
         //then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> typeService.findAllTypes());
         assertThat(exception.getMessage(), equalTo("Database error"));
-
     }
 
     @Test
-    void updateType() {
+    void shouldUpdateTypeName() {
+        //given
+        TypeDto typeDto = new TypeDto();
+        typeDto.setId(1L);
+        typeDto.setName("Zupeczki");
+
+        Type type = new Type();
+        type.setId(1L);
+        type.setName("Zypy");
+
+        Mockito.when(typeRepositoryMock.findById(typeDto.getId())).thenReturn(Optional.of(type));
+
+        //when
+        typeService.updateType(typeDto);
+
+        //then
+        ArgumentCaptor<Type> typeArgumentCaptor = ArgumentCaptor.forClass(Type.class);
+        Mockito.verify(typeRepositoryMock).save(typeArgumentCaptor.capture());
+
+        Type typeResult = typeArgumentCaptor.getValue();
+        assertEquals("Zupeczki", typeResult.getName());
+        assertEquals(1L, typeResult.getId());
     }
 
     @Test

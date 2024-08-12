@@ -61,6 +61,7 @@ public class TypeService {
         typeRepository.save(typeToSave);
     }
 
+
     @Transactional
     public void deleteType(long typeId) {
         Type typeToDelete = typeRepository.findById(typeId)
