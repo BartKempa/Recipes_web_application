@@ -16,6 +16,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -135,7 +139,45 @@ class TypeServiceTest {
     }
 
     @Test
-    void findPaginatedTypesList() {
+    void shouldFindPaginatedTypesList() {
+        //given
+        Type type1 = new Type();
+        type1.setId(1L);
+        type1.setName("Zupa");
+
+        Type type2 = new Type();
+        type2.setId(2L);
+        type2.setName("Pizza");
+
+        Type type3 = new Type();
+        type3.setId(3L);
+        type3.setName("Burger");
+
+        List<Type> typeList = Arrays.asList(type1, type2, type3);
+        Page<Type> page = new PageImpl<>(typeList);
+
+        Mockito.when(typeRepositoryMock.findAll(Mockito.any(Pageable.class))).thenReturn(page);
+
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "name";
+        String sortDirection = "ASC";
+        
+        //when
+        Page<TypeDto> paginatedTypes = typeService.findPaginatedTypesList(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertThat(paginatedTypes.getContent().get(0).getName(), is("Zupa"));
+        assertThat(paginatedTypes.getContent().get(1).getName(), is("Pizza"));
+        assertThat(paginatedTypes.getContent().get(2).getName(), is("Burger"));
+
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        Mockito.verify(typeRepositoryMock).findAll(pageableCaptor.capture());
+
+        Pageable capturedPageable  = pageableCaptor.getValue();
+        assertEquals(pageNumber - 1, capturedPageable.getPageNumber());
+        assertEquals(pageSize, capturedPageable.getPageSize());
+        assertEquals(Sort.by(Sort.Direction.ASC, sortField), capturedPageable.getSort());
     }
 
     @Test
