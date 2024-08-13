@@ -123,6 +123,22 @@ class RatingServiceTest {
         assertThrows(NoSuchElementException.class, () -> ratingService.addOrUpdateRating("user@example.com", 1L, 5));
     }
 
+
+    @Test
+    void shouldThrowExceptionWhenRecipeNotFound() {
+        //given
+        User user = new User();
+        user.setId(10L);
+        user.setEmail("user@example.com");
+
+        Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> ratingService.addOrUpdateRating("user@example.com", 1L, 5));
+    }
+
     @Test
     void shouldGetUserRatingForRecipe() {
         //given
