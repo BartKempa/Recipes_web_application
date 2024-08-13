@@ -8,21 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class RatingServiceTest {
@@ -38,7 +32,7 @@ class RatingServiceTest {
 
     @Test
     void shouldAddRating() {
-        //then
+        //given
         User user = new User();
         user.setId(10L);
         user.setEmail("user@example.com");
@@ -92,7 +86,7 @@ class RatingServiceTest {
 
     @Test
     void shouldUpdateExistingRating() {
-        //then
+        //given
         User user = new User();
         user.setId(10L);
         user.setEmail("user@example.com");
@@ -117,6 +111,16 @@ class RatingServiceTest {
         assertEquals(captorValue.getRating(), 5);
         assertEquals(captorValue.getUser(), user);
         assertEquals(captorValue.getRecipe(), recipe1);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        //given
+        Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> ratingService.addOrUpdateRating("user@example.com", 1L, 5));
     }
 
     @Test
