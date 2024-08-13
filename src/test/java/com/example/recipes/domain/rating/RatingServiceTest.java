@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class RatingServiceTest {
@@ -33,8 +34,6 @@ class RatingServiceTest {
 
     @Test
     void addOrUpdateRating() {
-
-
 
     }
 
@@ -59,6 +58,18 @@ class RatingServiceTest {
         assertThat(rating, is(3));
     }
 
+    @Test
+    void shouldReturnEmptyOptionalWhenRatingNotFound() {
+        //given
+        Mockito.when(ratingRepositoryMock.findByUser_EmailAndRecipe_Id("user@example.com", 1L))
+                .thenReturn(Optional.empty());
+
+        //when
+        Optional<Integer> rating = ratingService.getRatingForRecipe("user@example.com", 1L);
+
+        //then
+        assertTrue(rating.isEmpty());
+    }
 
     @Test
     void shouldGetListOfUsersRating() {
