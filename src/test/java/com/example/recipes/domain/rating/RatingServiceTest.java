@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -38,8 +39,26 @@ class RatingServiceTest {
     }
 
     @Test
-    void getRatingForRecipe() {
+    void shouldGetUserRatingForRecipe() {
+        //given
+        User user = new User();
+        user.setId(10L);
+        user.setEmail("user@example.com");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(1L);
+
+        Rating rating1 = new Rating(user, recipe1, 3);
+
+        Mockito.when(ratingRepositoryMock.findByUser_EmailAndRecipe_Id("user@example.com", 1L)).thenReturn(Optional.of(rating1));
+
+        //when
+        Integer rating = ratingService.getRatingForRecipe("user@example.com", 1L).orElseThrow();
+
+        //then
+        assertThat(rating, is(3));
     }
+
 
     @Test
     void shouldGetListOfUsersRating() {
