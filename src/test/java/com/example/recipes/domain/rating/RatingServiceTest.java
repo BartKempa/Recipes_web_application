@@ -64,6 +64,62 @@ class RatingServiceTest {
     }
 
     @Test
+    void shouldAddNewRatingWhenNoExistingRating() {
+        //given
+        User user = new User();
+        user.setId(10L);
+        user.setEmail("user@example.com");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(1L);
+
+        Mockito.when(ratingRepositoryMock.findByUser_EmailAndRecipe_Id("user@example.com", 1L)).thenReturn(Optional.empty());
+        Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.of(recipe1));
+
+        //when
+        ratingService.addOrUpdateRating("user@example.com", 1L, 4);
+
+        ArgumentCaptor<Rating> ratingCaptor = ArgumentCaptor.forClass(Rating.class);
+        Mockito.verify(ratingRepositoryMock).save(ratingCaptor.capture());
+
+        //then
+        Rating captorValue = ratingCaptor.getValue();
+        assertEquals(captorValue.getRating(), 4);
+        assertEquals(captorValue.getUser(), user);
+        assertEquals(captorValue.getRecipe(), recipe1);
+    }
+
+    @Test
+    void shouldUpdateExistingRating() {
+        //then
+        User user = new User();
+        user.setId(10L);
+        user.setEmail("user@example.com");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(1L);
+
+        Rating rating = new Rating(user, recipe1, 3);
+
+        Mockito.when(ratingRepositoryMock.findByUser_EmailAndRecipe_Id("user@example.com", 1L)).thenReturn(Optional.of(rating));
+        Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.of(recipe1));
+
+        //when
+        ratingService.addOrUpdateRating("user@example.com", 1L, 5);
+
+        ArgumentCaptor<Rating> ratingCaptor = ArgumentCaptor.forClass(Rating.class);
+        Mockito.verify(ratingRepositoryMock).save(ratingCaptor.capture());
+
+        //then
+        Rating captorValue = ratingCaptor.getValue();
+        assertEquals(captorValue.getRating(), 5);
+        assertEquals(captorValue.getUser(), user);
+        assertEquals(captorValue.getRecipe(), recipe1);
+    }
+
+    @Test
     void shouldGetUserRatingForRecipe() {
         //given
         User user = new User();

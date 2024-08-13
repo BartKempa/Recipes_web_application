@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class RatingService {
-
     private final RatingRepository ratingRepository;
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
