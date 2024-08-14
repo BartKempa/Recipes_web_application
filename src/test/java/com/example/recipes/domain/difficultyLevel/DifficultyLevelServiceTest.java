@@ -62,6 +62,13 @@ class DifficultyLevelServiceTest {
         assertThat(allDifficultyLevelDto.isEmpty(), is(true));
     }
 
+    @Test
+    void shouldThrowExceptionWhenRepositoryFails() {
+        //given
+        Mockito.when(difficultyLevelRepositoryMock.findAll()).thenThrow(new RuntimeException("Database error"));
 
+        //when & then
+        assertThrows(RuntimeException.class, () -> difficultyLevelService.findAllDifficultyLevelDto());
+    }
 
 }
