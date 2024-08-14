@@ -26,5 +26,29 @@ class DifficultyLevelServiceTest {
         difficultyLevelService = new DifficultyLevelService(difficultyLevelRepositoryMock);
     }
 
+    @Test
+    void shouldFindAllDifficultyLevelDto(){
+        //given
+        DifficultyLevel difficultyLevel1 = new DifficultyLevel();
+        difficultyLevel1.setId(1L);
+        difficultyLevel1.setName("proste");
+
+        DifficultyLevel difficultyLevel2 = new DifficultyLevel();
+        difficultyLevel2.setId(2L);
+        difficultyLevel2.setName("trudne");
+
+        List<DifficultyLevel> difficultyLevelList = Arrays.asList(difficultyLevel1, difficultyLevel2);
+
+        Mockito.when(difficultyLevelRepositoryMock.findAll()).thenReturn(difficultyLevelList);
+
+        //when
+        List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+
+        //then
+        assertThat(allDifficultyLevelDto.size(), is(2));
+        assertThat(allDifficultyLevelDto.get(0).getName(), is("proste"));
+        assertThat(allDifficultyLevelDto.get(1).getId(), is(2L));
+    }
+
 
 }
