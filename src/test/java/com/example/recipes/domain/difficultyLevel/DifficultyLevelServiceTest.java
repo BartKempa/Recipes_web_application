@@ -50,5 +50,18 @@ class DifficultyLevelServiceTest {
         assertThat(allDifficultyLevelDto.get(1).getId(), is(2L));
     }
 
+    @Test
+    void shouldReturnEmptyListWhenNoDifficultyLevelsFound() {
+        //given
+        Mockito.when(difficultyLevelRepositoryMock.findAll()).thenReturn(Collections.emptyList());
+
+        //when
+        List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+
+        //then
+        assertThat(allDifficultyLevelDto.isEmpty(), is(true));
+    }
+
+
 
 }
