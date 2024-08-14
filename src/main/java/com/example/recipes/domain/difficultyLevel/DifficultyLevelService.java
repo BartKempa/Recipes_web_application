@@ -16,15 +16,9 @@ public class DifficultyLevelService {
         this.difficultyLevelRepository = difficultyLevelRepository;
     }
 
-    public Optional<DifficultyLevelDto> findDifficultyLevelByName(String name){
-        return difficultyLevelRepository.findByName(name).
-                map(DifficultyLevelMapper::map);
-    }
-
     public List<DifficultyLevelDto> findAllDifficultyLevelDto(){
         return StreamSupport.stream(difficultyLevelRepository.findAll().spliterator(),false)
                 .map(DifficultyLevelMapper::map)
                 .toList();
-
     }
 }

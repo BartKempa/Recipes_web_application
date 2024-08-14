@@ -123,7 +123,6 @@ class RatingServiceTest {
         assertThrows(NoSuchElementException.class, () -> ratingService.addOrUpdateRating("user@example.com", 1L, 5));
     }
 
-
     @Test
     void shouldThrowExceptionWhenRecipeNotFound() {
         //given
