@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -100,8 +101,34 @@ class CommentServiceTest {
         assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, 2L, "user@example.com"));
     }
 
+    @Test
+    void shouldSetApprovedToFalse() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
 
+        User user = new User();
+        user.setEmail("user@example.com");
 
+        CommentDto commentDto = new CommentDto();
+        commentDto.setText("Test Comment");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.of(recipe));
+        Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        Mockito.when(dateTimeProvider.getCurrentTime()).thenReturn(now);
+
+        //when
+        commentService.addComment(commentDto, recipe.getId(), user.getEmail());
+
+        //then
+        ArgumentCaptor<Comment> commentCaptor = ArgumentCaptor.forClass(Comment.class);
+        Mockito.verify(commentRepositoryMock).save(commentCaptor.capture());
+
+        Comment savedComment = commentCaptor.getValue();
+        assertFalse(savedComment.isApproved());
+    }
 
     @Test
     void getActiveCommentsForRecipe() {
