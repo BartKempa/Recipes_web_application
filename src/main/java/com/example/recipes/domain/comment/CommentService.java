@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +23,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
+    private final CommentDateTimeProvider dateTimeProvider;
 
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, RecipeRepository recipeRepository) {
+    public CommentService(CommentRepository commentRepository, UserRepository userRepository, RecipeRepository recipeRepository, CommentDateTimeProvider dateTimeProvider) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.recipeRepository = recipeRepository;
+        this.dateTimeProvider = dateTimeProvider;
     }
 
     public List<CommentDto> getActiveCommentsForRecipe(long id){
@@ -43,7 +44,7 @@ public class CommentService {
         Comment commentToSave = new Comment();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         User user = userRepository.findByEmail(userName).orElseThrow();
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = dateTimeProvider.getCurrentTime();
         commentToSave.setId(commentDto.getId());
         commentToSave.setCreationDate(date);
         commentToSave.setApproved(false);
@@ -85,6 +86,4 @@ public class CommentService {
         comment.setApproved(true);
         commentRepository.save(comment);
     }
-
-
 }
