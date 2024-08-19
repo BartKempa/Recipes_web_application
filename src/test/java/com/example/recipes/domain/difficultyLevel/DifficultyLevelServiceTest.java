@@ -70,5 +70,4 @@ class DifficultyLevelServiceTest {
         //when & then
         assertThrows(RuntimeException.class, () -> difficultyLevelService.findAllDifficultyLevelDto());
     }
-
 }

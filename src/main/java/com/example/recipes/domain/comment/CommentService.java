@@ -78,8 +78,6 @@ public class CommentService {
                 .map(CommentDtoMapper::map);
     }
 
-
-
     @Transactional
     public void approveComment(long commentId){
         Comment comment = commentRepository.findById(commentId)
