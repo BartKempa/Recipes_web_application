@@ -85,7 +85,20 @@ class CommentServiceTest {
         assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, recipe.getId(), "user@example.com"));
     }
 
+    @Test
+    void shouldThrowExceptionWhenRecipeNotExists() {
+        //given
+        User user = new User();
+        user.setEmail("user@example.com");
 
+        CommentDto commentDto = new CommentDto();
+
+        Mockito.when(recipeRepositoryMock.findById(2L)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, 2L, "user@example.com"));
+    }
 
 
 
