@@ -14,11 +14,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -68,6 +69,26 @@ class CommentServiceTest {
         assertThat(captorValue.getCreationDate(), is(now));
         assertThat(captorValue.getRecipe().getId(), is(1L));
     }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotExists() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        CommentDto commentDto = new CommentDto();
+
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.of(recipe));
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, recipe.getId(), "user@example.com"));
+    }
+
+
+
+
+
 
     @Test
     void getActiveCommentsForRecipe() {
