@@ -242,6 +242,16 @@ class CommentServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenRepositoryFails() {
+        //given
+        long recipeId = 1L;
+        Mockito.when(commentRepositoryMock.findAllByRecipeId(recipeId)).thenThrow(new RuntimeException("Database error"));
+
+        //when/then
+        assertThrows(RuntimeException.class, () -> commentService.getActiveCommentsForRecipe(recipeId));
+    }
+
+    @Test
     void findAllUserComments() {
     }
 
