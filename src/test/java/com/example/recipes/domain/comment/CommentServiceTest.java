@@ -210,6 +210,38 @@ class CommentServiceTest {
     }
 
     @Test
+    void shouldMapCommentsToDtoCorrectly() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment = new Comment();
+        comment.setId(10L);
+        comment.setCreationDate(now);
+        comment.setApproved(true);
+        comment.setText("example comment");
+        comment.setRecipe(recipe);
+        comment.setUser(user);
+
+        Mockito.when(commentRepositoryMock.findAllByRecipeId(recipe.getId())).thenReturn(List.of(comment));
+
+        //when
+        List<CommentDto> activeCommentsForRecipe = commentService.getActiveCommentsForRecipe(1L);
+
+        //then
+        assertThat(activeCommentsForRecipe.size(), is(1));
+        CommentDto dto = activeCommentsForRecipe.get(0);
+        assertThat(dto.getText(), is("example comment"));
+        assertThat(dto.isApproved(), is(true));
+        assertThat(dto.getUserEmail(), is("user@example.com"));
+    }
+
+    @Test
     void findAllUserComments() {
     }
 
