@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -133,14 +132,6 @@ class CommentServiceTest {
         assertFalse(savedComment.isApproved());
     }
 
-/*    public List<CommentDto> getActiveCommentsForRecipe(long id){
-        return commentRepository.findAllByRecipeId(id).stream()
-                .map(CommentDtoMapper::map)
-                .filter(CommentDto::isApproved)
-                .collect(Collectors.toList());
-    }*/
-
-
     @Test
     void shouldGetOneActiveCommentsForRecipe() {
         //given
@@ -179,7 +170,44 @@ class CommentServiceTest {
         assertThat(activeCommentsForRecipe.size(), is(1));
     }
 
+    @Test
+    void shouldGetEmptyListOfActiveCommentsForRecipe() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
 
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now);
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Comment comment2 = new Comment();
+        comment2.setId(11L);
+        comment2.setCreationDate(now);
+        comment2.setApproved(false);
+        comment2.setText("second example comment");
+        comment2.setRecipe(recipe);
+        comment2.setUser(user);
+
+        List<Comment> comments = List.of(comment1, comment2);
+
+        Mockito.when(commentRepositoryMock.findAllByRecipeId(recipe.getId())).thenReturn(comments);
+
+        //when
+        List<CommentDto> activeCommentsForRecipe = commentService.getActiveCommentsForRecipe(1L);
+
+        //then
+        assertThat(activeCommentsForRecipe.size(), is(0));
+        assertTrue(activeCommentsForRecipe.isEmpty());
+    }
 
     @Test
     void findAllUserComments() {
