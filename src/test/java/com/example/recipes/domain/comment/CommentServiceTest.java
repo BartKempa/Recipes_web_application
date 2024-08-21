@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -321,9 +321,46 @@ class CommentServiceTest {
     }
 
     @Test
-    void countUserComments() {
-    }
+    void shouldGetTwoUserComments() {
 
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now);
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Comment comment2 = new Comment();
+        comment2.setId(11L);
+        comment2.setCreationDate(now);
+        comment2.setApproved(false);
+        comment2.setText("second example comment");
+        comment2.setRecipe(recipe);
+        comment2.setUser(user);
+
+        List<Comment> commentList = Arrays.asList(comment1, comment2);
+
+        Mockito.when(commentRepositoryMock.findAllUserComments("user@example.com")).thenReturn(commentList);
+
+        //when
+        long countUserComments = commentService.countUserComments("user@example.com");
+
+        //then
+        assertEquals(countUserComments, commentList.size());
+        Mockito.verify(commentRepositoryMock).findAllUserComments("user@example.com");
+
+    }
+    
     @Test
     void deleteComment() {
     }
