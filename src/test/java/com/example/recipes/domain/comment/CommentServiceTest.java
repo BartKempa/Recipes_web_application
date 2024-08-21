@@ -409,6 +409,17 @@ class CommentServiceTest {
 
     }
 
+    @Test
+    void shouldThrowResponseStatusExceptionWhenTryDeleteNotExistsComment() {
+
+        //given
+        Mockito.when(commentRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(ResponseStatusException.class, () -> commentService.deleteComment(1L));
+
+    }
 
 
 
