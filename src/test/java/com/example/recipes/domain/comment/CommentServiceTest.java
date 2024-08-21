@@ -461,5 +461,18 @@ class CommentServiceTest {
         assertTrue(captorValue.isApproved());
 
     }
-    
+
+    @Test
+    void shouldThrowResponseStatusExceptionWhenApproveNotExistsComment() {
+
+        //given
+        Mockito.when(commentRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> commentService.approveComment(1L));
+
+        assertThat(exception.getStatusCode(), is(HttpStatus.NOT_FOUND));
+
+    }
 }
