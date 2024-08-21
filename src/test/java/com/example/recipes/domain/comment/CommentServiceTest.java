@@ -13,6 +13,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -377,8 +380,37 @@ class CommentServiceTest {
     }
 
     @Test
-    void deleteComment() {
+    void shouldDeleteComment() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now);
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Mockito.when(commentRepositoryMock.findById(10L)).thenReturn(Optional.of(comment1));
+
+        //when
+        commentService.deleteComment(10L);
+
+        //then
+        Mockito.verify(commentRepositoryMock).delete(comment1);
+        Mockito.verify(commentRepositoryMock, Mockito.times(1)).delete(comment1);
+
     }
+
+
+
 
     @Test
     void findPaginatedCommentsList() {
