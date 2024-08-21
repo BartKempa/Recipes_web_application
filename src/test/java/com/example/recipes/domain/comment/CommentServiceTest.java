@@ -360,7 +360,22 @@ class CommentServiceTest {
         Mockito.verify(commentRepositoryMock).findAllUserComments("user@example.com");
 
     }
-    
+
+    @Test
+    void shouldGetEmptyListOfUserComments() {
+
+        //given
+        Mockito.when(commentRepositoryMock.findAllUserComments("otherUser@example.com")).thenReturn(Collections.emptyList());
+
+        //when
+        long countUserComments = commentService.countUserComments("otherUser@example.com");
+
+        //then
+        assertEquals(0, countUserComments);
+        Mockito.verify(commentRepositoryMock).findAllUserComments("otherUser@example.com");
+
+    }
+
     @Test
     void deleteComment() {
     }
