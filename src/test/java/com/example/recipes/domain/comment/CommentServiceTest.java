@@ -12,17 +12,19 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -421,13 +423,43 @@ class CommentServiceTest {
 
     }
 
-
-
     @Test
     void findPaginatedCommentsList() {
     }
 
     @Test
-    void approveComment() {
+    void shouldApproveComment() {
+
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now);
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Mockito.when(commentRepositoryMock.findById(10L)).thenReturn(Optional.of(comment1));
+
+        //when
+        commentService.approveComment(10L);
+
+        //then
+        ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
+        Mockito.verify(commentRepositoryMock).save(commentArgumentCaptor.capture());
+
+        Comment captorValue = commentArgumentCaptor.getValue();
+        assertThat(captorValue.getText(), is("example comment"));
+        assertTrue(captorValue.isApproved());
+
     }
+    
 }

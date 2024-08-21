@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,6 +69,7 @@ class DifficultyLevelServiceTest {
         Mockito.when(difficultyLevelRepositoryMock.findAll()).thenThrow(new RuntimeException("Database error"));
 
         //when & then
-        assertThrows(RuntimeException.class, () -> difficultyLevelService.findAllDifficultyLevelDto());
+        RuntimeException exc = assertThrows(RuntimeException.class, () -> difficultyLevelService.findAllDifficultyLevelDto());
+        assertThat(exc.getMessage(), is(HttpStatus.NOT_FOUND));
     }
 }
