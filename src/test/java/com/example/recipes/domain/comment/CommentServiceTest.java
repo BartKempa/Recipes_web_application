@@ -12,12 +12,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,6 +37,7 @@ class CommentServiceTest {
 
     @Test
     void shouldAddNewComment() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -59,7 +58,6 @@ class CommentServiceTest {
         Mockito.when(userRepositoryMock.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         Mockito.when(dateTimeProvider.getCurrentTime()).thenReturn(now);
 
-
         //when
         commentService.addComment(commentDto, recipe.getId(), user.getEmail());
 
@@ -71,10 +69,12 @@ class CommentServiceTest {
         assertThat(captorValue.getText(), is(commentDto.getText()));
         assertThat(captorValue.getCreationDate(), is(now));
         assertThat(captorValue.getRecipe().getId(), is(1L));
+
     }
 
     @Test
     void shouldThrowExceptionWhenUserNotExists() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -90,6 +90,7 @@ class CommentServiceTest {
 
     @Test
     void shouldThrowExceptionWhenRecipeNotExists() {
+
         //given
         User user = new User();
         user.setEmail("user@example.com");
@@ -101,10 +102,12 @@ class CommentServiceTest {
         //when
         //then
         assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, 2L, "user@example.com"));
+
     }
 
     @Test
     void shouldSetApprovedToFalse() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -130,10 +133,12 @@ class CommentServiceTest {
 
         Comment savedComment = commentCaptor.getValue();
         assertFalse(savedComment.isApproved());
+
     }
 
     @Test
     void shouldGetOneActiveCommentsForRecipe() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -168,10 +173,12 @@ class CommentServiceTest {
 
         //then
         assertThat(activeCommentsForRecipe.size(), is(1));
+
     }
 
     @Test
     void shouldGetEmptyListOfActiveCommentsForRecipe() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -207,10 +214,12 @@ class CommentServiceTest {
         //then
         assertThat(activeCommentsForRecipe.size(), is(0));
         assertTrue(activeCommentsForRecipe.isEmpty());
+
     }
 
     @Test
     void shouldMapCommentsToDtoCorrectly() {
+
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -239,20 +248,76 @@ class CommentServiceTest {
         assertThat(dto.getText(), is("example comment"));
         assertThat(dto.isApproved(), is(true));
         assertThat(dto.getUserEmail(), is("user@example.com"));
+
     }
 
     @Test
     void shouldThrowExceptionWhenRepositoryFails() {
+
         //given
         long recipeId = 1L;
         Mockito.when(commentRepositoryMock.findAllByRecipeId(recipeId)).thenThrow(new RuntimeException("Database error"));
 
         //when/then
         assertThrows(RuntimeException.class, () -> commentService.getActiveCommentsForRecipe(recipeId));
+
     }
 
     @Test
-    void findAllUserComments() {
+    void shouldFindAllUserComments() {
+
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now);
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Comment comment2 = new Comment();
+        comment2.setId(11L);
+        comment2.setCreationDate(now);
+        comment2.setApproved(false);
+        comment2.setText("second example comment");
+        comment2.setRecipe(recipe);
+        comment2.setUser(user);
+
+        List<Comment> commentList = Arrays.asList(comment1, comment2);
+        Page<Comment> commentPage = new PageImpl<>(commentList);
+
+
+        Mockito.when(commentRepositoryMock.findAllUserComments(Mockito.eq("user@example.com"), Mockito.any(Pageable.class))).thenReturn(commentPage);
+
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "text";
+
+        //when
+        Page<CommentDto> allUserComments = commentService.findAllUserComments("user@example.com", pageNumber, pageSize, sortField);
+
+        //then
+        assertThat(allUserComments.getContent().get(0).getText(), is("example comment"));
+        assertThat(allUserComments.getContent().get(0).getUserEmail(), is("user@example.com"));
+
+        assertEquals(2, allUserComments.getTotalElements());
+
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        Mockito.verify(commentRepositoryMock).findAllUserComments(Mockito.eq("user@example.com"), pageableCaptor.capture());
+
+        Pageable captorValue = pageableCaptor.getValue();
+        assertEquals(pageNumber -1, captorValue.getPageNumber());
+        assertEquals(pageSize, captorValue.getPageSize());
+        assertEquals(Sort.by(sortField).descending(), captorValue.getSort());
+
     }
 
     @Test
