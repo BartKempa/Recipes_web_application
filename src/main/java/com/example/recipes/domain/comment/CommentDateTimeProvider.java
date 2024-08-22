@@ -1,8 +1,11 @@
 package com.example.recipes.domain.comment;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
-class CommentDateTimeProvider {
+@Service
+public class CommentDateTimeProvider {
     LocalDateTime getCurrentTime(){
         return LocalDateTime.now();
     }

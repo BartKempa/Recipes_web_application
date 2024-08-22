@@ -12,16 +12,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -42,7 +40,6 @@ class CommentServiceTest {
 
     @Test
     void shouldAddNewComment() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -74,12 +71,10 @@ class CommentServiceTest {
         assertThat(captorValue.getText(), is(commentDto.getText()));
         assertThat(captorValue.getCreationDate(), is(now));
         assertThat(captorValue.getRecipe().getId(), is(1L));
-
     }
 
     @Test
     void shouldThrowExceptionWhenUserNotExists() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -95,7 +90,6 @@ class CommentServiceTest {
 
     @Test
     void shouldThrowExceptionWhenRecipeNotExists() {
-
         //given
         User user = new User();
         user.setEmail("user@example.com");
@@ -107,12 +101,10 @@ class CommentServiceTest {
         //when
         //then
         assertThrows(NoSuchElementException.class, () -> commentService.addComment(commentDto, 2L, "user@example.com"));
-
     }
 
     @Test
     void shouldSetApprovedToFalse() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -138,12 +130,10 @@ class CommentServiceTest {
 
         Comment savedComment = commentCaptor.getValue();
         assertFalse(savedComment.isApproved());
-
     }
 
     @Test
     void shouldGetOneActiveCommentsForRecipe() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -178,12 +168,10 @@ class CommentServiceTest {
 
         //then
         assertThat(activeCommentsForRecipe.size(), is(1));
-
     }
 
     @Test
     void shouldGetEmptyListOfActiveCommentsForRecipe() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -219,12 +207,10 @@ class CommentServiceTest {
         //then
         assertThat(activeCommentsForRecipe.size(), is(0));
         assertTrue(activeCommentsForRecipe.isEmpty());
-
     }
 
     @Test
     void shouldMapCommentsToDtoCorrectly() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -253,24 +239,20 @@ class CommentServiceTest {
         assertThat(dto.getText(), is("example comment"));
         assertThat(dto.isApproved(), is(true));
         assertThat(dto.getUserEmail(), is("user@example.com"));
-
     }
 
     @Test
     void shouldThrowExceptionWhenRepositoryFails() {
-
         //given
         long recipeId = 1L;
         Mockito.when(commentRepositoryMock.findAllByRecipeId(recipeId)).thenThrow(new RuntimeException("Database error"));
 
         //when/then
         assertThrows(RuntimeException.class, () -> commentService.getActiveCommentsForRecipe(recipeId));
-
     }
 
     @Test
     void shouldFindAllUserComments() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -322,12 +304,10 @@ class CommentServiceTest {
         assertEquals(pageNumber -1, captorValue.getPageNumber());
         assertEquals(pageSize, captorValue.getPageSize());
         assertEquals(Sort.by(sortField).descending(), captorValue.getSort());
-
     }
 
     @Test
     void shouldGetTwoUserComments() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -363,12 +343,10 @@ class CommentServiceTest {
         //then
         assertEquals(countUserComments, commentList.size());
         Mockito.verify(commentRepositoryMock).findAllUserComments("user@example.com");
-
     }
 
     @Test
     void shouldGetEmptyListOfUserComments() {
-
         //given
         Mockito.when(commentRepositoryMock.findAllUserComments("otherUser@example.com")).thenReturn(Collections.emptyList());
 
@@ -378,7 +356,6 @@ class CommentServiceTest {
         //then
         assertEquals(0, countUserComments);
         Mockito.verify(commentRepositoryMock).findAllUserComments("otherUser@example.com");
-
     }
 
     @Test
@@ -408,7 +385,6 @@ class CommentServiceTest {
         //then
         Mockito.verify(commentRepositoryMock).delete(comment1);
         Mockito.verify(commentRepositoryMock, Mockito.times(1)).delete(comment1);
-
     }
 
     @Test
@@ -425,11 +401,62 @@ class CommentServiceTest {
 
     @Test
     void findPaginatedCommentsList() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now.minusDays(1));
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Comment comment2 = new Comment();
+        comment2.setId(11L);
+        comment2.setCreationDate(now);
+        comment2.setApproved(false);
+        comment2.setText("second example comment");
+        comment2.setRecipe(recipe);
+        comment2.setUser(user);
+
+        List<Comment> commentList = Arrays.asList(comment1, comment2);
+        Page<Comment> commentPage = new PageImpl<>(commentList);
+
+        Mockito.when(commentRepositoryMock.findAll(Mockito.any(Pageable.class))).thenReturn(commentPage);
+
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "text";
+        String sortDirection = "ASC";
+
+        //when
+        Page<CommentDto> paginatedCommentsList = commentService.findPaginatedCommentsList(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertThat(paginatedCommentsList.getContent().get(0).getText(), is("example comment"));
+        assertThat(paginatedCommentsList.getContent().get(1).getText(), is("second example comment"));
+
+        assertEquals(2, paginatedCommentsList.getTotalElements());
+
+        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+        Mockito.verify(commentRepositoryMock).findAll(pageableArgumentCaptor.capture());
+
+        Pageable captorValue = pageableArgumentCaptor.getValue();
+        assertEquals(pageNumber - 1, captorValue.getPageNumber());
+        assertEquals(pageSize, captorValue.getPageSize());
+        assertEquals(Sort.by(sortField).ascending(), captorValue.getSort());
     }
+
 
     @Test
     void shouldApproveComment() {
-
         //given
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -459,12 +486,10 @@ class CommentServiceTest {
         Comment captorValue = commentArgumentCaptor.getValue();
         assertThat(captorValue.getText(), is("example comment"));
         assertTrue(captorValue.isApproved());
-
     }
 
     @Test
     void shouldThrowResponseStatusExceptionWhenApproveNotExistsComment() {
-
         //given
         Mockito.when(commentRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
@@ -473,6 +498,5 @@ class CommentServiceTest {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> commentService.approveComment(1L));
 
         assertThat(exception.getStatusCode(), is(HttpStatus.NOT_FOUND));
-
     }
 }

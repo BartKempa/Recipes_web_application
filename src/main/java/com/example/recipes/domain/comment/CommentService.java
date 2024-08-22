@@ -74,6 +74,7 @@ public class CommentService {
 
     public Page<CommentDto> findPaginatedCommentsList(int pageNumber, int pageSize, String sortField, String sortDirection){
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        System.out.println("Sort: " + sort);
         Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
         return commentRepository.findAll(pageable)
                 .map(CommentDtoMapper::map);
