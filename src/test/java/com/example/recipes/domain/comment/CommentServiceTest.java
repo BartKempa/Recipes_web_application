@@ -12,9 +12,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -396,7 +399,6 @@ class CommentServiceTest {
         //when
         //then
         assertThrows(ResponseStatusException.class, () -> commentService.deleteComment(1L));
-
     }
 
     @Test
@@ -454,6 +456,69 @@ class CommentServiceTest {
         assertEquals(Sort.by(sortField).ascending(), captorValue.getSort());
     }
 
+    @Test
+    void findPaginatedCommentsListDescendingByCreationDate() {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment1 = new Comment();
+        comment1.setId(10L);
+        comment1.setCreationDate(now.minusDays(1));
+        comment1.setApproved(false);
+        comment1.setText("example comment");
+        comment1.setRecipe(recipe);
+        comment1.setUser(user);
+
+        Comment comment2 = new Comment();
+        comment2.setId(11L);
+        comment2.setCreationDate(now);
+        comment2.setApproved(false);
+        comment2.setText("second example comment");
+        comment2.setRecipe(recipe);
+        comment2.setUser(user);
+
+        List<Comment> commentList = Arrays.asList(comment1, comment2);
+        Mockito.when(commentRepositoryMock.findAll(Mockito.any(Pageable.class))).thenAnswer(invocation -> {
+            Pageable pageable = invocation.getArgument(0);
+            List<Comment> sortedComments = commentList.stream().sorted((c1, c2) -> {
+                        if (pageable.getSort().getOrderFor("creationDate") != null && pageable.getSort().getOrderFor("creationDate").isAscending()) {
+                            return c1.getCreationDate().compareTo(c2.getCreationDate());
+                        } else {
+                            return c2.getCreationDate().compareTo(c1.getCreationDate());
+                        }
+                    })
+                    .toList();
+            return new PageImpl<>(sortedComments, pageable, sortedComments.size());
+        });
+
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "creationDate";
+        String sortDirection = "desc";
+
+        //when
+        Page<CommentDto> paginatedCommentsList = commentService.findPaginatedCommentsList(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertThat(paginatedCommentsList.getContent().get(0).getText(), is("second example comment"));
+        assertThat(paginatedCommentsList.getContent().get(1).getText(), is("example comment"));
+
+        assertEquals(2, paginatedCommentsList.getTotalElements());
+
+        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+        Mockito.verify(commentRepositoryMock).findAll(pageableArgumentCaptor.capture());
+
+        Pageable captorValue = pageableArgumentCaptor.getValue();
+        assertEquals(pageNumber - 1, captorValue.getPageNumber());
+        assertEquals(pageSize, captorValue.getPageSize());
+        assertEquals(Sort.by(sortField).descending(), captorValue.getSort());
+    }
 
     @Test
     void shouldApproveComment() {
