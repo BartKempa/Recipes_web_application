@@ -91,7 +91,15 @@ class RecipeServiceTest {
         assertEquals(5, recipeFullInfoDto.getServing());
     }
 
+    @Test
+    void shouldThrowExceptionWhenRecipeNotExists(){
+        //given
+        Mockito.when(recipeRepositoryMock.findById(2L)).thenReturn(Optional.empty());
 
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> recipeService.findRecipeById(2L).orElseThrow());
+    }
 
     @Test
     void findRecipeToSave() {
