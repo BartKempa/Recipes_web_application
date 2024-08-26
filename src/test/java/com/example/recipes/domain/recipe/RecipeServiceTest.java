@@ -16,8 +16,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,7 +65,6 @@ class RecipeServiceTest {
     void shouldAddNewRecipe() {
         //given
         RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
-        recipeSaveDto.setId(1L);
         recipeSaveDto.setName("Pomidorowa");
         recipeSaveDto.setType("Zupa");
         recipeSaveDto.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
@@ -105,7 +107,22 @@ class RecipeServiceTest {
         assertEquals(20, recipeCaptorValue.getCookingTime());
         assertEquals(5, recipeCaptorValue.getServing());
         assertNull(recipeCaptorValue.getImage());
+        assertEquals(now, recipeCaptorValue.getCreationDate());
     }
+
+   @Test
+   void shouldThrowExceptionWhenAddRecipeWithNotExistingType(){
+        //give
+       RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
+       recipeSaveDto.setName("Pomidorowa");
+       recipeSaveDto.setDifficultyLevel("NieIstniejacyTyp");
+
+       Mockito.when(typeRepositoryMock.findByNameIgnoreCase("NieIstniejacyTyp")).thenReturn(Optional.empty());
+
+       //when
+       //then
+       assertThrows(NoSuchElementException.class, () -> recipeService.addRecipe(recipeSaveDto));
+   }
 
     @Test
     void findRecipesByText() {
