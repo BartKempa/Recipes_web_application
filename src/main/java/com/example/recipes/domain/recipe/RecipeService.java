@@ -2,7 +2,6 @@ package com.example.recipes.domain.recipe;
 
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
-import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
@@ -17,10 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class RecipeService {
@@ -30,14 +26,16 @@ public class RecipeService {
     private final FileStorageService fileStorageService;
     private final RatingRepository ratingRepository;
     private final CommentRepository commentRepository;
+    private final RecipeDateTimeProvider recipeDateTimeProvider;
 
-    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService, RatingRepository ratingRepository, CommentRepository commentRepository) {
+    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService, RatingRepository ratingRepository, CommentRepository commentRepository, RecipeDateTimeProvider recipeDateTimeProvider) {
         this.recipeRepository = recipeRepository;
         this.typeRepository = typeRepository;
         this.difficultyLevelRepository = difficultyLevelRepository;
         this.fileStorageService = fileStorageService;
         this.ratingRepository = ratingRepository;
         this.commentRepository = commentRepository;
+        this.recipeDateTimeProvider = recipeDateTimeProvider;
     }
 
      public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize, String sortField){
@@ -73,7 +71,7 @@ public class RecipeService {
     @Transactional
     public void addRecipe(RecipeSaveDto recipeToSave){
         Recipe recipe = new Recipe();
-        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime date = recipeDateTimeProvider.getCurrentTime();
         recipe.setId(recipeToSave.getId());
         recipe.setName(recipeToSave.getName());
         recipe.setType(typeRepository.findByNameIgnoreCase(recipeToSave.getType()).orElseThrow());

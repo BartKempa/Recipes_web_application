@@ -30,12 +30,12 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TypeServiceTest {
-    private TypeService typeService;
     @Mock private RecipeRepository recipeRepositoryMock;
     @Mock private TypeRepository typeRepositoryMock;
     @Mock private UserRepository userRepositoryMock;
     @Mock private RatingRepository ratingRepositoryMock;
     @Mock private CommentRepository commentRepositoryMock;
+    private TypeService typeService;
 
     @BeforeEach
     void init(){
