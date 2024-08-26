@@ -4,6 +4,7 @@ import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
 import com.example.recipes.domain.rating.RatingRepository;
+import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.Type;
 import com.example.recipes.domain.type.TypeRepository;
@@ -23,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,8 +53,45 @@ class RecipeServiceTest {
     }
 
     @Test
-    void findRecipeById() {
+    void shouldFindRecipeById() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+        recipe.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
+        recipe.setPreparationTime(15);
+        recipe.setCookingTime(20);
+        recipe.setServing(5);
+        recipe.setDifficultyLevel(difficultyLevel);
+        recipe.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        Mockito.when(recipeRepositoryMock.findById(11L)).thenReturn(Optional.of(recipe));
+
+        //when
+        RecipeFullInfoDto recipeFullInfoDto = recipeService.findRecipeById(11L).orElseThrow();
+
+        //then
+        assertEquals("Pomidorowa", recipeFullInfoDto.getName());
+        assertEquals("Trudne", recipeFullInfoDto.getDifficultyLevel());
+        assertEquals(15, recipeFullInfoDto.getPreparationTime());
+        assertTrue(recipeFullInfoDto.getIngredients().contains("kurczak"));
+        assertEquals(20, recipeFullInfoDto.getCookingTime());
+        assertEquals(5, recipeFullInfoDto.getServing());
     }
+
+
 
     @Test
     void findRecipeToSave() {
@@ -115,9 +155,9 @@ class RecipeServiceTest {
         //give
        RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
        recipeSaveDto.setName("Pomidorowa");
-       recipeSaveDto.setDifficultyLevel("NieIstniejacyTyp");
+       recipeSaveDto.setType("NieistniejącyTyp");
 
-       Mockito.when(typeRepositoryMock.findByNameIgnoreCase("NieIstniejacyTyp")).thenReturn(Optional.empty());
+       Mockito.when(typeRepositoryMock.findByNameIgnoreCase("NieistniejącyTyp")).thenReturn(Optional.empty());
 
        //when
        //then
