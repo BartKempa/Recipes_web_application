@@ -420,7 +420,69 @@ class RecipeServiceTest {
         assertThat(mainInfoDtoPage.getContent().get(0).getName(), is("Burczkowa"));
         assertThat(mainInfoDtoPage.getContent().get(1).getName(), is("Pomidorowa"));
     }
+    @Test
+    void shouldFindTwoRecipesByTextAndSortResultByCreationDate() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
 
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Pomidorowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now().minusDays(1));
+        recipe1.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe1.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now());
+        recipe2.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe2.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+
+        List<Recipe> sortedRecipeList = Arrays.asList(recipe2, recipe1);
+        Page<Recipe> sortedRecipesPage = new PageImpl<>(sortedRecipeList);
+
+        Mockito.when(recipeRepositoryMock.findRecipesBySearchText(Mockito.eq("kurczak"), Mockito.any(Pageable.class)))
+                .thenReturn(sortedRecipesPage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "creationDate";
+
+        //when
+        Page<RecipeMainInfoDto> mainInfoDtoPage = recipeService.findRecipesByText("kurczak", pageNumber, pageSize, sortField);
+
+        //then
+        assertThat(mainInfoDtoPage.getContent().size(), is(2));
+        assertThat(mainInfoDtoPage.getContent().get(0).getName(), is("Burczkowa"));
+        assertThat(mainInfoDtoPage.getContent().get(1).getName(), is("Pomidorowa"));
+    }
+
+    @Test
+    void shouldReturnEmptyPageWhenNoRecipesFoundByText() {
+        //given
+
+        Mockito.when(recipeRepositoryMock.findRecipesBySearchText(Mockito.eq("burger"), Mockito.any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "creationDate";
+
+        //when
+        Page<RecipeMainInfoDto> mainInfoDtoPage = recipeService.findRecipesByText("burger", pageNumber, pageSize, sortField);
+
+        //then
+        assertThat(mainInfoDtoPage.getContent().size(), is(0));
+        assertNotNull(mainInfoDtoPage);
+    }
 
 
 
