@@ -203,6 +203,19 @@ class RecipeServiceTest {
     }
 
     @Test
+    void shouldReturnEmptyPageWhenNoRecipesFound() {
+        // given
+        Mockito.when(recipeRepositoryMock.findAllByType_NameIgnoreCase(Mockito.eq("NieistniejącyTyp"), Mockito.any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        // when
+        Page<RecipeMainInfoDto> pageRecipesByType = recipeService.findRecipesByType("NieistniejącyTyp", 1, 4);
+
+        // then
+        assertTrue(pageRecipesByType.isEmpty());
+    }
+
+    @Test
     void shouldAddNewRecipe() {
         //given
         RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
