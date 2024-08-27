@@ -5,6 +5,7 @@ import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.Type;
 import com.example.recipes.domain.type.TypeRepository;
@@ -17,10 +18,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -102,7 +109,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void findRecipeToSave() {
+    void shouldFindRecipeToSave() {
         //given
         Type type = new Type();
         type.setId(11L);
@@ -141,7 +148,58 @@ class RecipeServiceTest {
     }
 
     @Test
-    void findRecipesByType() {
+    void shouldThrowExceptionWhenTryFindNotExistsRecipeToSave(){
+        //given
+        Mockito.when(recipeRepositoryMock.findById(123L)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> recipeService.findRecipeToSave(123L).orElseThrow());
+    }
+
+    @Test
+    void shouldFindTwoRecipesByType() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Buraczkowa");
+        recipe2.setType(type);
+
+        LocalDateTime now2 = LocalDateTime.now();
+        recipe.setCreationDate(now2);
+
+        List<Recipe> recipeList = Arrays.asList(recipe, recipe2);
+        Page<Recipe> recipePage = new PageImpl<>(recipeList);
+
+        Mockito.when(recipeRepositoryMock.findAllByType_NameIgnoreCase(Mockito.eq("Zupa"), Mockito.any(Pageable.class))).thenReturn(recipePage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+
+        //when
+        Page<RecipeMainInfoDto> pageRecipesByType = recipeService.findRecipesByType("Zupa", pageNumber, pageSize);
+
+        //then
+        assertThat(pageRecipesByType.getContent().get(0).getType(), is("Zupa"));
+        assertThat(pageRecipesByType.getContent().get(0).getName(), is("Pomidorowa"));
+        assertThat(pageRecipesByType.getContent().get(1).getName(), is("Buraczkowa"));
+        assertThat(pageRecipesByType.getContent().get(0).getCreationDate(), is(now));
+        assertThat(pageRecipesByType.getContent().get(1).getCreationDate(), is(now2));
+        assertThat(pageRecipesByType.getTotalElements(), is(2));
     }
 
     @Test
