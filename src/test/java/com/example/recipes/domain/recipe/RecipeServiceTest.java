@@ -103,6 +103,41 @@ class RecipeServiceTest {
 
     @Test
     void findRecipeToSave() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+        recipe.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
+        recipe.setPreparationTime(15);
+        recipe.setCookingTime(20);
+        recipe.setServing(5);
+        recipe.setDifficultyLevel(difficultyLevel);
+        recipe.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        Mockito.when(recipeRepositoryMock.findById(11L)).thenReturn(Optional.of(recipe));
+
+        //when
+        RecipeSaveDto recipeSaveDto = recipeService.findRecipeToSave(11L).orElseThrow();
+
+        //then
+        assertEquals("Pomidorowa", recipeSaveDto.getName());
+        assertEquals("Trudne", recipeSaveDto.getDifficultyLevel());
+        assertEquals(15, recipeSaveDto.getPreparationTime());
+        assertTrue(recipeSaveDto.getIngredients().contains("kurczak"));
+        assertEquals(20, recipeSaveDto.getCookingTime());
+        assertEquals(5, recipeSaveDto.getServing());
     }
 
     @Test
@@ -173,11 +208,11 @@ class RecipeServiceTest {
    }
 
     @Test
-    void findRecipesByText() {
+    void findFavouriteRecipesForUser() {
     }
 
     @Test
-    void findFavouriteRecipesForUser() {
+    void findRecipesByText() {
     }
 
     @Test
