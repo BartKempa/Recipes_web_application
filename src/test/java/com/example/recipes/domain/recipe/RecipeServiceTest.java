@@ -18,10 +18,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -321,9 +318,113 @@ class RecipeServiceTest {
     void findFavouriteRecipesForUser() {
     }
 
+
     @Test
-    void findRecipesByText() {
+    void shouldFindTwoRecipesByText() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+        recipe.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
+        recipe.setPreparationTime(15);
+        recipe.setCookingTime(20);
+        recipe.setServing(5);
+        recipe.setDifficultyLevel(difficultyLevel);
+        recipe.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
+        recipe2.setPreparationTime(10);
+        recipe2.setCookingTime(10);
+        recipe2.setServing(10);
+        recipe2.setDifficultyLevel(difficultyLevel);
+        recipe2.setIngredients("curry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe2.setDirections("Podsmaż cebulę i czosnek.\\nDodaj curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        LocalDateTime now2 = LocalDateTime.now();
+        recipe2.setCreationDate(now2);
+
+        List<Recipe> recipeList = Arrays.asList(recipe, recipe2);
+        Page<Recipe> pageRecipes = new PageImpl<>(recipeList);
+
+
+        Mockito.when(recipeRepositoryMock.findRecipesBySearchText(Mockito.eq("kotlety"), Mockito.any(Pageable.class))).thenReturn(pageRecipes);
+
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "name";
+
+        //when
+        Page<RecipeMainInfoDto> mainInfoDtoPage = recipeService.findRecipesByText("kotlety", pageNumber, pageSize, sortField);
+
+        //then
+        assertThat(mainInfoDtoPage.getContent().size(), is(2));
     }
+
+    @Test
+    void shouldFindTwoRecipesByTextAndSortResultByCreationDate() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Pomidorowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now().minusDays(1));
+        recipe1.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe1.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now());
+        recipe2.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe2.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+
+        List<Recipe> sortedRecipeList = Arrays.asList(recipe2, recipe1);
+        Page<Recipe> sortedRecipesPage = new PageImpl<>(sortedRecipeList);
+
+        Mockito.when(recipeRepositoryMock.findRecipesBySearchText(Mockito.eq("kurczak"), Mockito.any(Pageable.class)))
+                .thenReturn(sortedRecipesPage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "creationDate";
+
+        //when
+        Page<RecipeMainInfoDto> mainInfoDtoPage = recipeService.findRecipesByText("kurczak", pageNumber, pageSize, sortField);
+
+        //then
+        assertThat(mainInfoDtoPage.getContent().size(), is(2));
+        assertThat(mainInfoDtoPage.getContent().get(0).getName(), is("Burczkowa"));
+        assertThat(mainInfoDtoPage.getContent().get(1).getName(), is("Pomidorowa"));
+    }
+
+
+
+
+
 
     @Test
     void countFavouriteUserRecipes() {
