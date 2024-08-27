@@ -216,6 +216,45 @@ class RecipeServiceTest {
     }
 
     @Test
+    void shouldFindRecipesWhenIgnoreCase() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Buraczkowa");
+        recipe2.setType(type);
+
+        LocalDateTime now2 = LocalDateTime.now();
+        recipe.setCreationDate(now2);
+
+        List<Recipe> recipeList = Arrays.asList(recipe, recipe2);
+        Page<Recipe> recipePage = new PageImpl<>(recipeList);
+
+        Mockito.when(recipeRepositoryMock.findAllByType_NameIgnoreCase(Mockito.eq("zupa"), Mockito.any(Pageable.class)))
+                .thenReturn(recipePage);
+
+        // when
+        Page<RecipeMainInfoDto> pageRecipesByType = recipeService.findRecipesByType("zupa", 1, 4);
+
+        // then
+        assertFalse(pageRecipesByType.isEmpty());
+        assertThat(pageRecipesByType.getContent().get(0).getType(), is("Zupa"));
+    }
+
+    @Test
     void shouldAddNewRecipe() {
         //given
         RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
