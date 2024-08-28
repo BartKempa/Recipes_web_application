@@ -526,7 +526,7 @@ class RecipeServiceTest {
         assertThat(mainInfoDtoPage.getContent().get(0).getName(), is("Burczkowa"));
         assertThat(mainInfoDtoPage.getContent().get(1).getName(), is("Agrestowa"));
     }
-    
+
     @Test
     void shouldReturnCorrectCountWhenUserHasTwoFavouriteRecipes() {
         //given
@@ -555,7 +555,17 @@ class RecipeServiceTest {
         assertEquals(2, countFavouriteUserRecipes);
     }
 
+    @Test
+    void shouldReturnZeroWhenUserHasNoFavouriteRecipes() {
+        //given
+        Mockito.when(recipeRepositoryMock.findAllFavouritesRecipesForUser("john@mail.com")).thenReturn(Collections.emptyList());
 
+        //when
+        long countFavouriteUserRecipes = recipeService.countFavouriteUserRecipes("john@mail.com");
+
+        //then
+        assertEquals(0, countFavouriteUserRecipes);
+    }
 
     @Test
     void findRatedRecipesByUser() {
