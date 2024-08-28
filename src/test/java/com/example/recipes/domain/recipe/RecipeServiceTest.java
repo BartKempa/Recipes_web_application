@@ -3,6 +3,7 @@ package com.example.recipes.domain.recipe;
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevel;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelRepository;
+import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
@@ -568,7 +569,55 @@ class RecipeServiceTest {
     }
 
     @Test
-    void findRatedRecipesByUser() {
+    void shouldReturnCorrectCountAndSortWhenUserHasTwoRatedRecipes() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now().minusDays(1));
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now());
+
+        User user = new User();
+        user.setEmail("john@mail.com");
+
+        Rating rating1 = new Rating();
+        rating1.setUser(user);
+        rating1.setRecipe(recipe1);
+
+        Rating rating2 = new Rating();
+        rating2.setUser(user);
+        rating2.setRecipe(recipe2);
+
+        List<Recipe> ratedRecipeList = Arrays.asList(recipe2, recipe1);
+
+        Page<Recipe> recipePage = new PageImpl<>(ratedRecipeList);
+
+        Mockito.when(recipeRepositoryMock.findAllRatedRecipesByUser(Mockito.eq("john@mail.com"), Mockito.any(Pageable.class))).thenReturn(recipePage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "name";
+
+        //when
+        Page<RecipeMainInfoDto> ratedRecipesForUser = recipeService.findRatedRecipesByUser("john@mail.com", pageNumber, pageSize, sortField);
+
+        //then
+        assertNotNull(ratedRecipesForUser);
+        assertThat(ratedRecipesForUser.getTotalElements(), is(2L));
+        assertThat(ratedRecipesForUser.getContent().get(0).getName(), is("Burczkowa"));
+        assertThat(ratedRecipesForUser.getContent().get(1).getName(), is("Agrestowa"));
     }
 
     @Test
