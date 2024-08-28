@@ -24,6 +24,7 @@ import org.springframework.data.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,7 +49,42 @@ class RecipeServiceTest {
     }
 
     @Test
-    void findPaginated() {
+    void shouldFindTwoPaginatedRecipesSortedDescByName() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now());
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now().minusDays(1));
+
+        List<Recipe> recipeList = Arrays.asList(recipe2, recipe1);
+        Page<Recipe> recipePage = new PageImpl<>(recipeList);
+
+        Mockito.when(recipeRepositoryMock.findAll(Mockito.any(Pageable.class))).thenReturn(recipePage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "name";
+
+        //when
+        Page<RecipeMainInfoDto> recipeMainInfoDtoPage = recipeService.findPaginated(pageNumber, pageSize, sortField);
+
+        //then
+        assertEquals(2, recipeMainInfoDtoPage.getTotalElements());
+        assertEquals("Burczkowa", recipeMainInfoDtoPage.getContent().get(0).getName());
+        assertEquals("Agrestowa", recipeMainInfoDtoPage.getContent().get(1).getName());
     }
 
     @Test
@@ -559,6 +595,9 @@ class RecipeServiceTest {
     @Test
     void shouldReturnZeroWhenUserHasNoFavouriteRecipes() {
         //given
+        User user = new User();
+        user.setEmail("john@mail.com");
+
         Mockito.when(recipeRepositoryMock.findAllFavouritesRecipesForUser("john@mail.com")).thenReturn(Collections.emptyList());
 
         //when
@@ -569,7 +608,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void shouldReturnCorrectCountAndSortWhenUserHasTwoRatedRecipes() {
+    void shouldFindTwoRatedRecipesForUserSortingByName() {
         //given
         Type type = new Type();
         type.setId(11L);
@@ -621,7 +660,49 @@ class RecipeServiceTest {
     }
 
     @Test
-    void countRatedRecipeByUser() {
+    void shouldReturnCorrectCountWhenUserHasTwoRatedRecipes() {
+        //given
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+
+        User user = new User();
+        user.setEmail("john@mail.com");
+
+        Rating rating1 = new Rating();
+        rating1.setUser(user);
+        rating1.setRecipe(recipe1);
+
+        Rating rating2 = new Rating();
+        rating2.setUser(user);
+        rating2.setRecipe(recipe2);
+
+        List<Recipe> ratedRecipeList = Arrays.asList(recipe2, recipe1);
+
+        Mockito.when(recipeRepositoryMock.findAllRatedRecipesByUser("john@mail.com")).thenReturn(ratedRecipeList);
+
+        //when
+        long ratedRecipeByUser = recipeService.countRatedRecipeByUser("john@mail.com");
+
+        //then
+        assertEquals(2, ratedRecipeByUser);
+    }
+
+    @Test
+    void shouldReturnCorrectCountWhenUserHasNoRatedRecipes() {
+        //given
+        User user = new User();
+        user.setEmail("john@mail.com");
+
+        Mockito.when(recipeRepositoryMock.findAllRatedRecipesByUser("john@mail.com")).thenReturn(Collections.emptyList());
+
+        //when
+        long ratedRecipeByUser = recipeService.countRatedRecipeByUser("john@mail.com");
+
+        //then
+        assertEquals(0, ratedRecipeByUser);
     }
 
     @Test
