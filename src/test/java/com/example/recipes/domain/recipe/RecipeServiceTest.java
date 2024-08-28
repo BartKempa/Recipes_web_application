@@ -10,6 +10,7 @@ import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.Type;
 import com.example.recipes.domain.type.TypeRepository;
 import com.example.recipes.domain.type.dto.TypeDto;
+import com.example.recipes.domain.user.User;
 import com.example.recipes.storage.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -315,9 +313,53 @@ class RecipeServiceTest {
    }
 
     @Test
-    void findFavouriteRecipesForUser() {
-    }
+    void shouldFindTwoFavouriteRecipesForUserSortingByName() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
 
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now().minusDays(1));
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now());
+
+        Set<Recipe> favoriteRecipes = new HashSet<>();
+        favoriteRecipes.add(recipe1);
+        favoriteRecipes.add(recipe2);
+
+        User user = new User();
+        user.setEmail("john@mail.com");
+        user.setFavoriteRecipes(favoriteRecipes);
+
+        List<Recipe> favouriteRecipeList = Arrays.asList(recipe2, recipe1);
+        Page<Recipe> recipePage = new PageImpl<>(favouriteRecipeList);
+
+        Mockito.when(recipeRepositoryMock.findAllFavouritesRecipesForUser(Mockito.eq("john@mail.com"), Mockito.any(Pageable.class))).thenReturn(recipePage);
+
+        int pageNumber = 1;
+        int pageSize = 4;
+        String sortField = "name";
+
+        //when
+        Page<RecipeMainInfoDto> favouriteRecipesForUser = recipeService.findFavouriteRecipesForUser("john@mail.com", pageNumber, pageSize, sortField);
+
+        //then
+        assertNotNull(favouriteRecipesForUser);
+        assertThat(favouriteRecipesForUser.getSize(), is(2));
+        assertThat(favouriteRecipesForUser.getTotalElements(), is(2L));
+        assertThat(favouriteRecipesForUser.getContent().get(0).getName(), is("Burczkowa"));
+        assertThat(favouriteRecipesForUser.getContent().get(1).getName(), is("Agrestowa"));
+    }
 
     @Test
     void shouldFindTwoRecipesByText() {
@@ -484,10 +526,36 @@ class RecipeServiceTest {
         assertThat(mainInfoDtoPage.getContent().get(0).getName(), is("Burczkowa"));
         assertThat(mainInfoDtoPage.getContent().get(1).getName(), is("Agrestowa"));
     }
-
+    
     @Test
-    void countFavouriteUserRecipes() {
+    void shouldReturnCorrectCountWhenUserHasTwoFavouriteRecipes() {
+        //given
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+
+        Set<Recipe> favoriteRecipes = new HashSet<>();
+        favoriteRecipes.add(recipe1);
+        favoriteRecipes.add(recipe2);
+
+        User user = new User();
+        user.setEmail("john@mail.com");
+        user.setFavoriteRecipes(favoriteRecipes);
+
+        List<Recipe> favouriteRecipeList = Arrays.asList(recipe2, recipe1);
+
+        Mockito.when(recipeRepositoryMock.findAllFavouritesRecipesForUser("john@mail.com")).thenReturn(favouriteRecipeList);
+
+        //when
+        long countFavouriteUserRecipes = recipeService.countFavouriteUserRecipes("john@mail.com");
+
+        //then
+        assertEquals(2, countFavouriteUserRecipes);
     }
+
+
 
     @Test
     void findRatedRecipesByUser() {
