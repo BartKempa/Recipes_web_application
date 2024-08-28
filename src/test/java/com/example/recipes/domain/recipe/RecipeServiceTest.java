@@ -136,6 +136,54 @@ class RecipeServiceTest {
         assertEquals("Agrestowa", paginatedRecipesList.getContent().get(1).getName());
     }
 
+    @Test
+    void shouldFindPaginatedRecipesListSortingByNameDesc() {
+        //given
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
+
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setName("Agrestowa");
+        recipe1.setType(type);
+        recipe1.setCreationDate(LocalDateTime.now());
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setName("Burczkowa");
+        recipe2.setType(type);
+        recipe2.setCreationDate(LocalDateTime.now().minusDays(1));
+
+        List<Recipe> recipeList = Arrays.asList(recipe1, recipe2);
+
+        Mockito.when(recipeRepositoryMock.findAll(Mockito.any(Pageable.class))).thenAnswer(invocationOnMock -> {
+            Pageable pageable = invocationOnMock.getArgument(0);
+            List<Recipe> sortedList = recipeList.stream().sorted((r1, r2) -> {
+                if (pageable.getSort().getOrderFor("name") != null && pageable.getSort().getOrderFor("name").isAscending()) {
+                    return r1.getName().compareTo(r2.getName());
+                } else {
+                    return r2.getName().compareTo(r1.getName());
+                }
+            }).toList();
+            return new PageImpl<>(sortedList, pageable, sortedList.size());
+        });
+
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "name";
+        String sortDirection = "desc";
+
+        //when
+        Page<RecipeMainInfoDto> paginatedRecipesList = recipeService.findPaginatedRecipesList(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertEquals(2, paginatedRecipesList.getTotalElements());
+        assertEquals("Burczkowa", paginatedRecipesList.getContent().get(0).getName());
+        assertEquals("Agrestowa", paginatedRecipesList.getContent().get(1).getName());
+    }
 
     @Test
     void shouldFindRecipeById() {
