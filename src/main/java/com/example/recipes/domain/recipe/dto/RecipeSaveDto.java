@@ -1,19 +1,39 @@
 package com.example.recipes.domain.recipe.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 public class RecipeSaveDto {
     private Long id;
+    @NotBlank
+    @Max(100)
     private String name;
+    @NotNull
     private String type;
+    @NotBlank
+    @Max(10000)
     private String description;
+    @NotBlank
+    @Min(1)
     private Integer preparationTime;
+    @NotBlank
+    @Min(0)
     private Integer cookingTime;
+    @NotBlank
+    @Min(1)
     private Integer serving;
+    @NotNull
     private String difficultyLevel;
+    @NotBlank
+    @Max(10000)
     private String ingredients;
+    @NotBlank
+    @Max(10000)
     private String directionsSteps;
     private MultipartFile image;
     private LocalDateTime creationDate;

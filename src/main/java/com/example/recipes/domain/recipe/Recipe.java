@@ -6,6 +6,10 @@ import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.type.Type;
 import com.example.recipes.domain.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -16,25 +20,39 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
+    @Max(100)
     private String name;
     @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
     @OneToMany(mappedBy = "recipe")
     private Set<Rating> ratings = new HashSet<>();
+    @NotBlank
+    @Max(10000)
     private String description;
+    @NotBlank
+    @Min(0)
     private Integer preparationTime;
+    @NotBlank
+    @Min(0)
     private Integer cookingTime;
+    @NotBlank
+    @Min(1)
     private Integer serving;
     @ManyToOne
     @JoinColumn(name = "difficultyLevel_id", referencedColumnName = "id")
     private DifficultyLevel difficultyLevel;
+    @NotBlank
+    @Max(10000)
     private String ingredients;
+    @NotBlank
+    @Max(10000)
     private String directions;
+    @Max(100)
     private String image;
     @OneToMany(mappedBy = "recipe")
     private Set<Comment> comments = new HashSet<>();
-
     private LocalDateTime creationDate;
     @ManyToMany(mappedBy = "favoriteRecipes")
     private Set<User> favourites = new HashSet<>();
