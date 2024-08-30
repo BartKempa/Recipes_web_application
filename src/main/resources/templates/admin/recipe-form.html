@@ -13,7 +13,10 @@
         <form action="#" th:action="@{/admin/dodaj-przepis}" method="post" enctype="multipart/form-data" class="kb-form" th:object="${recipe}">
 
             <label for="name">Nazwa przepisu</label>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-validation">Błędy związane z imieniem</span>
             <input id="name" type="text" placeholder="np. Żurek" th:field="*{name}">
+
+
 
             <label for="type">Typ posiłku:</label>
             <select id="type" th:field="*{type}" required>
@@ -21,17 +24,22 @@
                 <option th:each="type: ${types}" th:value="${type.name}" th:text="${type.name}"></option>
             </select>
 
+
             <label for="description">Krótki opis potrawy</label>
             <textarea id="description" rows="8" th:field="*{description}" placeholder="Krótki opis przepisu"></textarea>
+            <p th:errors="*{description}" class="error-validation">Błędy związane z opisem posiłku</p>
 
             <label for="preparationTime">Czas przygotwania posiłku w minutach</label>
             <input id="preparationTime" type="number" th:field="*{preparationTime}" placeholder="14">
+            <p th:errors="*{preparationTime}" class="error-validation">Błędy związane z czasem przygotowania posiłku</p>
 
             <label for="cookingTime">Czas obróbki cieplnej</label>
             <input id="cookingTime" type="number" th:field="*{cookingTime}" placeholder="12">
+            <p th:errors="*{cookingTime}" class="error-validation">Błędy związane z czasem obróbki cieplnej posiłku</p>
 
             <label for="serving">Liczba porcji - w sztukach</label>
             <input id="serving" type="number" th:field="*{serving}" placeholder="5">
+            <p th:errors="*{serving}" class="error-validation">Błędy związane z liczbą porcji</p>
 
             <label for="difficultyLevel">Poziom trudności</label>
             <select id="difficultyLevel" th:field="*{difficultyLevel}" required>
@@ -39,15 +47,17 @@
                 <option th:each="level: ${allDifficultyLevelDto}" th:value="${level.name}" th:text="${level.name}"></option>
             </select>
 
+
             <label for="ingredients">Lista składników</label>
             <textarea id="ingredients" rows="15" th:field="*{ingredients}" placeholder="Podaj listę skłądników, każdy nowy składnik zacznij od nowej linii"></textarea>
+            <p th:errors="*{ingredients}" class="error-validation">Błędy związane z listą składników</p>
 
             <label for="directions">Opis przygotowania potrway</label>
             <textarea id="directions" rows="25" th:field="*{directionsSteps}" placeholder="Podaj kolejne kroki przygotowania potrawy, każdy kolejny krok zacznij od nowej linii"></textarea>
+            <p th:errors="*{directionsSteps}" class="error-validation">Błędy związane opisem przyogotowania posiłku</p>
 
             <label for="image">Zdjęcie potrawy</label>
             <input id="image" type="file" th:field="*{image}" accept="image/jpeg, image/png">
-
 
             <button type="submit">Dodaj</button>
         </form>

@@ -8,10 +8,13 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,12 +55,24 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/dodaj-przepis")
-    public String addRecipe(RecipeSaveDto recipe, RedirectAttributes redirectAttributes){
-        recipeService.addRecipe(recipe);
-        redirectAttributes.addFlashAttribute(
-                AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
-                "Przepis %s został zapisany".formatted(recipe.getName()));
-        return "redirect:/admin";
+    public String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()){
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors) {
+                System.out.println(fieldError);
+            }
+
+            model.addAttribute("recipe", recipe);
+            model.addAttribute("types", typeService.findAllTypes());
+            model.addAttribute("allDifficultyLevelDto", difficultyLevelService.findAllDifficultyLevelDto());
+            return "admin/recipe-form";
+        } else {
+            recipeService.addRecipe(recipe);
+            redirectAttributes.addFlashAttribute(
+                    AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                    "Przepis %s został zapisany".formatted(recipe.getName()));
+            return "redirect:/admin";
+        }
     }
 
     @GetMapping("/admin/lista-przepisow/{pageNo}")

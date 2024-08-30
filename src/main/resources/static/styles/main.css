@@ -400,6 +400,13 @@ li::marker {
     font-weight: 500;
 }
 
+.error-validation {
+    font-size: 18px;
+    color: red;
+    padding: 8px;
+    font-weight: 500;
+}
+
 .kb-form > button,
 .kb-form > a {
     margin-top: 10px;
