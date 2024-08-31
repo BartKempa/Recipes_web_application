@@ -33,10 +33,8 @@ public class TypeManagementController {
     @PostMapping("/admin/dodaj-typ")
     public String addType(@Valid @ModelAttribute("type") TypeDto type,
                           BindingResult bindingResult,
-                          Model model,
                           RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
-            model.addAttribute("type", type);
             return "admin/type-form";
         } else {
             typeService.addType(type);
@@ -86,11 +84,16 @@ public class TypeManagementController {
 
     @PostMapping("/admin/aktualizuj-typ")
     public String updateType(
-            TypeDto type,
+            @Valid @ModelAttribute("type") TypeDto type,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes){
-        typeService.updateType(type);
-        redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
-                "Zaktualizowano typ posiłku - %s".formatted(type.getName()));
-        return "redirect:/admin";
+        if (bindingResult.hasErrors()){
+            return "admin/update-type";
+        } else {
+            typeService.updateType(type);
+            redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                    "Zaktualizowano typ posiłku - %s".formatted(type.getName()));
+            return "redirect:/admin";
+        }
     }
 }

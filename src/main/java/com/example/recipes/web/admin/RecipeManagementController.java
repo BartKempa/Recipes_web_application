@@ -107,8 +107,12 @@ public class RecipeManagementController {
     @PostMapping("/admin/aktualizuj-przepis")
     public String updateRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
                                BindingResult bindingResult,
+                               Model model,
                                RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
+            model.addAttribute("recipe", recipe);
+            model.addAttribute("types", typeService.findAllTypes());
+            model.addAttribute("allDifficultyLevelDto", difficultyLevelService.findAllDifficultyLevelDto());
             return "admin/recipe-update-form";
         } else {
             recipeService.updateRecipe(recipe);
