@@ -123,6 +123,7 @@
                     <input type="hidden" name="recipeId" th:value="${recipe.id}">
                     <label for="recipe-comment">Twój komentarz:</label>
                     <textarea id="recipe-comment" th:field="*{text}" rows="6" placeholder="Co sądzisz o danym przepisie? (Komentarz zostanie dodany po zatwierdzeniu przez administartora)"></textarea>
+                    <p th:errors="*{text}" class="error-validation">Błędy dotyczące komentarza</p>
                     <button type="submit">Dodaj komentarz</button>
                 </form>
                 <p sec:authorize="!isAuthenticated()">

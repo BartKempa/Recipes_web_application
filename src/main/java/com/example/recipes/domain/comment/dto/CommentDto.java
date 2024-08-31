@@ -1,10 +1,15 @@
 package com.example.recipes.domain.comment.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
 public class CommentDto {
     private Long id;
     private boolean approved;
+    @NotBlank
+    @Size(min = 2, max = 2000)
     private String text;
     private LocalDateTime creationDate;
     private String userEmail;
