@@ -32,6 +32,7 @@ public class RecipeSaveDto {
     @NotBlank
     @Size(max = 10000)
     private String directionsSteps;
+    @NotNull
     private MultipartFile image;
     private LocalDateTime creationDate;
 
