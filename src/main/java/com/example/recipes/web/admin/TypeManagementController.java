@@ -3,9 +3,11 @@ package com.example.recipes.web.admin;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,12 +31,20 @@ public class TypeManagementController {
     }
 
     @PostMapping("/admin/dodaj-typ")
-    public String addType(TypeDto type, RedirectAttributes redirectAttributes){
-        typeService.addType(type);
-        redirectAttributes.addFlashAttribute(
-                AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
-                ("Typ posiłku %s został zapisany").formatted(type.getName()));
-        return "redirect:/admin";
+    public String addType(@Valid @ModelAttribute("type") TypeDto type,
+                          BindingResult bindingResult,
+                          Model model,
+                          RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("type", type);
+            return "admin/type-form";
+        } else {
+            typeService.addType(type);
+            redirectAttributes.addFlashAttribute(
+                    AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                    ("Typ posiłku %s został zapisany").formatted(type.getName()));
+            return "redirect:/admin";
+        }
     }
 
     @GetMapping("/admin/lista-typow/{pageNo}")

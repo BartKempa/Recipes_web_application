@@ -13,6 +13,7 @@
         <form action="#" th:action="@{/admin/dodaj-typ}" method="post" class="kb-form" th:object="${type}">
             <label for="typeName">Nazwa</label>
             <input id="typeName" type="text" placeholder="np. Zupa" th:field="*{name}">
+            <p th:errors="*{name}" class="error-validation">Błędy związane z nazwą typu posiłku</p>
             <button type="submit">Dodaj</button>
         </form>
     </main>

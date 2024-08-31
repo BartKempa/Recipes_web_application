@@ -14,7 +14,7 @@
 
             <label for="name">Nazwa przepisu</label>
             <input id="name" type="text" placeholder="np. Żurek" th:field="*{name}">
-            <p th:errors="*{name}" class="error-validation">Błędy związane z imieniem</p>
+            <p th:errors="*{name}" class="error-validation">Błędy związane z nazwą posiłku</p>
 
             <label for="type">Typ posiłku:</label>
             <select id="type" th:field="*{type}" required>
