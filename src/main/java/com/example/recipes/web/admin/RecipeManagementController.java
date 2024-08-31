@@ -3,7 +3,6 @@ package com.example.recipes.web.admin;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
 import com.example.recipes.domain.recipe.RecipeService;
-import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -55,13 +53,11 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/dodaj-przepis")
-    public String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+    public String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
+                            BindingResult bindingResult,
+                            Model model,
+                            RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors) {
-                System.out.println(fieldError);
-            }
-
             model.addAttribute("recipe", recipe);
             model.addAttribute("types", typeService.findAllTypes());
             model.addAttribute("allDifficultyLevelDto", difficultyLevelService.findAllDifficultyLevelDto());
@@ -109,12 +105,17 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/aktualizuj-przepis")
-    public String updateRecipe(RecipeSaveDto recipe,
+    public String updateRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
+                               BindingResult bindingResult,
                                RedirectAttributes redirectAttributes){
-        recipeService.updateRecipe(recipe);
-        redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
-                "Przepis %s został pomyślnie zaktualizowany".formatted(recipe.getName()));
-        return "redirect:/admin";
+        if (bindingResult.hasErrors()){
+            return "admin/recipe-update-form";
+        } else {
+            recipeService.updateRecipe(recipe);
+            redirectAttributes.addFlashAttribute(AdminController.ADMIN_NOTIFICATION_ATTRIBUTE,
+                    "Przepis %s został pomyślnie zaktualizowany".formatted(recipe.getName()));
+            return "redirect:/admin";
+        }
     }
     
     @PostMapping("/admin/usun-przepis")

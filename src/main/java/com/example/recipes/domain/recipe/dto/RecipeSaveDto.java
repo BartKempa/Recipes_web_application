@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class RecipeSaveDto {
     private Long id;
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 2, max = 100)
     private String name;
     @NotNull
     private String type;
