@@ -12,15 +12,18 @@
         <h2 class="list-heading">Zaktualizuj dane </h2>
         <form action="#" th:action="@{/uzytkownik/aktualizacja}" method="post" class="kb-form" th:object="${user}">
             <input type="hidden" th:field="*{id}">
-            <input type="hidden" th:field="*{email}">
             <label for="firstName">Imię</label>
             <input id="firstName" name="firstName" th:field="*{firstName}">
+            <p th:errors="*{firstName}" class="error-validation">Błędy dotyczące imienia</p>
             <label for="lastName">Nazwisko</label>
             <input id="lastName" name="lastName" th:field="*{lastName}">
+            <p th:errors="*{lastName}" class="error-validation">Błędy dotyczące nazwiska</p>
             <label for="nickName">Nick</label>
             <input id="nickName" name="nickName" th:field="*{nickName}">
+            <p th:errors="*{nickName}" class="error-validation">Błędy dotyczące nicka</p>
             <label for="age">Wiek</label>
             <input id="age" name="age" th:field="*{age}">
+            <p th:errors="*{age}" class="error-validation">Błędy dotyczące wieku użytkownika</p>
             <input type="hidden" th:field="*{password}">
             <button type="submit">Zaktualizuj</button>
         </form>

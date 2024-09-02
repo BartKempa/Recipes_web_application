@@ -9,6 +9,7 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,20 +88,25 @@ public class UserService {
                 .map(UserRegistrationDtoMapper::map);
     }
 
+    public Optional<UserUpdateDto> findUserToUpdateById(long userId) {
+        return userRepository.findById(userId)
+                .map(UserUpdateDtoMapper::map);
+    }
+
     @Transactional
-    public void updateUserData(UserRegistrationDto userRegistrationDto) {
-        User user = userRepository.findById(userRegistrationDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        user.setFirstName(userRegistrationDto.getFirstName());
-        user.setLastName(userRegistrationDto.getLastName());
-        user.setNickName(userRegistrationDto.getNickName());
-        user.setAge(userRegistrationDto.getAge());
+    public void updateUserData(UserUpdateDto userUpdateDto) {
+        User user = userRepository.findById(userUpdateDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setFirstName(userUpdateDto.getFirstName());
+        user.setLastName(userUpdateDto.getLastName());
+        user.setNickName(userUpdateDto.getNickName());
+        user.setAge(userUpdateDto.getAge());
         userRepository.save(user);
     }
 
     @Transactional
-    public void updateUserPassword(UserRegistrationDto userRegistrationDto) {
-        User user = userRepository.findById(userRegistrationDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+    public void updateUserPassword(UserUpdateDto userUpdateDto) {
+        User user = userRepository.findById(userUpdateDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(userUpdateDto.getPassword()));
         userRepository.save(user);
     }
 

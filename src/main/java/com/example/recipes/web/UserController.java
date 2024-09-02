@@ -4,11 +4,14 @@ import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserUpdateDto;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,36 +42,48 @@ public class UserController {
     @GetMapping("/uzytkownik/aktualizacja/{userId}")
     public String getUpdateUserForm(@PathVariable(value = "userId") long userId,
                                     Model model){
-        UserRegistrationDto user = userService.findUserById(userId)
+        UserUpdateDto user = userService.findUserToUpdateById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-update-form";
     }
 
     @PostMapping("/uzytkownik/aktualizacja")
-    public String updateDataUser(UserRegistrationDto user,
-                                 RedirectAttributes redirectAttributes){
-        userService.updateUserData(user);
-        redirectAttributes.addFlashAttribute(
-                USER_NOTIFICATION_ATTRIBUTE,
-                "Dane użytkownika %s zostały zaktualizowane".formatted(user.getNickName())
-        );
-        return "redirect:/uzytkownik";
+    public String updateDataUser(@Valid @ModelAttribute("user") UserUpdateDto user,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes,
+                                 Model model){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("user", user);
+            return "user-update-form";
+        } else {
+            userService.updateUserData(user);
+            redirectAttributes.addFlashAttribute(
+                    USER_NOTIFICATION_ATTRIBUTE,
+                    "Dane użytkownika %s zostały zaktualizowane".formatted(user.getNickName())
+            );
+            return "redirect:/uzytkownik";
+        }
     }
 
     @GetMapping("/uzytkownik/aktualizacja-do-logowania/{userId}")
     public String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId,
                                             Model model){
-        UserRegistrationDto user = userService.findUserById(userId)
+        UserUpdateDto user = userService.findUserToUpdateById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-update-login-data-form";
     }
 
     @PostMapping("/uzytkownik/aktualizacja-logowanie")
-    public String updateUserDataLogin(UserRegistrationDto user){
-        userService.updateUserPassword(user);
-        return "redirect:/logout";
+    public String updateUserDataLogin(@Valid @ModelAttribute("user") UserUpdateDto user,
+                                      BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "user-update-login-data-form";
+        } else {
+            userService.updateUserPassword(user);
+            return "redirect:/logout";
+        }
     }
 
     @GetMapping("/uzytkownik/usuwanie-konta/{userId}")
