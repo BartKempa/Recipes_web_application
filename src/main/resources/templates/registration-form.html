@@ -13,16 +13,28 @@
         <form action="#" th:action="@{/rejestracja}" method="post" class="kb-form" th:object="${user}">
             <label for="email">Adres email</label>
             <input id="email" name="email" placeholder="nazwa użytkownika" th:field="*{email}">
+            <p th:errors="*{email}" class="error-validation">Błędy dotyczące adresu email</p>
+
             <label for="firstName">Imię</label>
             <input id="firstName" name="firstName" placeholder="imie użytkownika" th:field="*{firstName}">
+            <p th:errors="*{firstName}" class="error-validation">Błędy dotyczące imienia</p>
+
             <label for="lastName">Nazwisko</label>
             <input id="lastName" name="lastName" placeholder="nazwisko użytkownika" th:field="*{lastName}">
+            <p th:errors="*{lastName}" class="error-validation">Błędy dotyczące nazwiska</p>
+
             <label for="nickName">Nick</label>
             <input id="nickName" name="nickName" placeholder="pseudonim użytkownika" th:field="*{nickName}">
+            <p th:errors="*{nickName}" class="error-validation">Błędy dotyczące nicku</p>
+
             <label for="age">Wiek</label>
             <input id="age" name="age" placeholder="wiek użytkownika" th:field="*{age}">
+            <p th:errors="*{age}" class="error-validation">Błędy dotyczące wieku użytkownika</p>
+
             <label for="password">Hasło</label>
             <input id="password" name="password" type="password" placeholder="hasło" th:field="*{password}">
+            <p th:errors="*{password}" class="error-validation">Błędy dotyczące hasła</p>
+
             <button type="submit">Zarejestruj się</button>
         </form>
     </main>

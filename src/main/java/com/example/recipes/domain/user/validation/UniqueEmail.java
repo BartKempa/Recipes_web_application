@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 public @interface UniqueEmail {
-    String message() default "Konto o podanym mailu już istnieje w bazie, muszę podać innym email";
+    String message() default "Konto o danym adresie email już istnieje, musisz podać inny adres email";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
