@@ -1,5 +1,6 @@
 package com.example.recipes.domain.user.dto;
 
+import com.example.recipes.domain.user.validation.PasswordCriteria;
 import com.example.recipes.domain.user.validation.UniqueEmail;
 import jakarta.validation.constraints.*;
 
@@ -12,7 +13,7 @@ public class UserRegistrationDto {
     @UniqueEmail
     private String email;
     @NotBlank
-    @Size(min = 5, max = 200)
+    @PasswordCriteria
     private String password;
     @NotBlank
     @Size(min = 2, max = 100)
