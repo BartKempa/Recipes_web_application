@@ -4,17 +4,16 @@ import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
+import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.management.relation.Role;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -29,15 +28,15 @@ class UserServiceTest {
 
     @Mock private UserRepository userRepositoryMock;
     @Mock private UserRoleRepository userRoleRepositoryMock;
-    @Mock private PasswordEncoder passwordEncoder;
-    @Mock RecipeRepository recipeRepositoryMock;
-    @Mock CommentRepository commentRepositoryMock;
-    @Mock RatingRepository ratingRepositoryMock;
+    @Mock private PasswordEncoder passwordEncoderMock;
+    @Mock private RecipeRepository recipeRepositoryMock;
+    @Mock private CommentRepository commentRepositoryMock;
+    @Mock private RatingRepository ratingRepositoryMock;
     private UserService userService;
 
     @BeforeEach
     void init(){
-        userService = new UserService(userRepositoryMock, userRoleRepositoryMock, passwordEncoder, recipeRepositoryMock, commentRepositoryMock, ratingRepositoryMock);
+        userService = new UserService(userRepositoryMock, userRoleRepositoryMock, passwordEncoderMock, recipeRepositoryMock, commentRepositoryMock, ratingRepositoryMock);
     }
 
     @Test
@@ -79,13 +78,46 @@ class UserServiceTest {
 
     @Test
     void shouldThrowExceptionWhenEmailIsNull() {
+        //given
         //when
         //then
         assertThrows(IllegalArgumentException.class, () -> userService.findCredentialsByEmail(null).orElseThrow());
     }
 
     @Test
-    void registerUserWithDefaultRole() {
+    void shouldRegisterNewUserWithDefaultRole() {
+        //given
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+        userRegistrationDto.setEmail("example@mail.com");
+        userRegistrationDto.setPassword("hardpass");
+        userRegistrationDto.setFirstName("Bartek");
+        userRegistrationDto.setLastName("Kowalski");
+        userRegistrationDto.setNickName("Barti");
+        userRegistrationDto.setAge(40);
+
+        UserRole userRole = new UserRole();
+        userRole.setId(21L);
+        userRole.setName("USER");
+
+        Mockito.when(userRoleRepositoryMock.findByName("USER")).thenReturn(Optional.of(userRole));
+        Mockito.when(passwordEncoderMock.encode(userRegistrationDto.getPassword())).thenReturn("encodedHardpass");
+
+        //when
+        userService.registerUserWithDefaultRole(userRegistrationDto);
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
+
+        User userCaptorValue = userArgumentCaptor.getValue();
+        assertThat(userCaptorValue.getEmail(), is("example@mail.com"));
+        assertThat(userCaptorValue.getPassword(), is("encodedHardpass"));
+        assertThat(userCaptorValue.getFirstName(), is("Bartek"));
+        assertThat(userCaptorValue.getLastName(), is("Kowalski"));
+        assertThat(userCaptorValue.getNickName(), is("Barti"));
+        assertThat(userCaptorValue.getAge(), is(40));
+        assertThat(userCaptorValue.getRoles().size(), is(1));
+        assertThat(userCaptorValue.getRoles().iterator().next().getName(), is("USER"));
     }
 
     @Test
