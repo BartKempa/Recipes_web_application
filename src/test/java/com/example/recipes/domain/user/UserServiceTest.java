@@ -2,6 +2,7 @@ package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.rating.RatingRepository;
+import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
@@ -121,8 +122,43 @@ class UserServiceTest {
     }
 
     @Test
-    void addOrUpdateFavoriteRecipe() {
+    void shouldAddRecipeToFavouritesWhenNotAlreadyPresent() {
+        //given
+        final long RECIPE_ID = 1L;
+        final String USER_EMAIL = "example@mail.com";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("hardpass");
+
+        Recipe recipe = new Recipe();
+        recipe.setId(RECIPE_ID);
+        recipe.setName("Buraczkowa");
+
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        Mockito.when(recipeRepositoryMock.findById(RECIPE_ID)).thenReturn(Optional.of(recipe));
+
+        //before add
+        assertThat(user.getFavoriteRecipes().size(), is(0));
+
+        //when
+        userService.addOrUpdateFavoriteRecipe(USER_EMAIL, RECIPE_ID);
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
+
+        User userCaptorValue = userArgumentCaptor.getValue();
+        assertThat(userCaptorValue.getFavoriteRecipes().size(), is(1));
+        assertThat(userCaptorValue.getFavoriteRecipes().iterator().next().getId(), is(RECIPE_ID));
     }
+
+
 
     @Test
     void favoritesCount() {
