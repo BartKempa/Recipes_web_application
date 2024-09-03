@@ -297,16 +297,14 @@ class RecipeServiceTest {
         Recipe recipe = new Recipe();
         recipe.setName("Pomidorowa");
         recipe.setType(type);
-
         LocalDateTime now = LocalDateTime.now();
         recipe.setCreationDate(now);
 
         Recipe recipe2 = new Recipe();
         recipe2.setName("Buraczkowa");
         recipe2.setType(type);
-
         LocalDateTime now2 = LocalDateTime.now();
-        recipe.setCreationDate(now2);
+        recipe2.setCreationDate(now2);
 
         List<Recipe> recipeList = Arrays.asList(recipe, recipe2);
         Page<Recipe> recipePage = new PageImpl<>(recipeList);
@@ -324,8 +322,8 @@ class RecipeServiceTest {
         assertThat(pageRecipesByType.getContent().get(0).getName(), is("Pomidorowa"));
         assertThat(pageRecipesByType.getContent().get(1).getName(), is("Buraczkowa"));
         assertThat(pageRecipesByType.getContent().get(0).getCreationDate(), is(now));
+        assertThat(pageRecipesByType.getTotalElements(), is(2L));
         assertThat(pageRecipesByType.getContent().get(1).getCreationDate(), is(now2));
-        assertThat(pageRecipesByType.getTotalElements(), is(2));
     }
 
     @Test
