@@ -211,6 +211,19 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldReturnZeroWhenRecipeIsNotFavoritedByAnyUser() {
+        //given
+        final long RECIPE_ID = 111L;
+        Mockito.when(userRepositoryMock.countUsersByFavouriteRecipe(RECIPE_ID)).thenReturn(0);
+
+        //when
+        int favoritesCount = userService.favoritesCount(RECIPE_ID);
+
+        //then
+        assertThat(favoritesCount, is(0));
+    }
+
+    @Test
     void findUserById() {
     }
 
