@@ -43,6 +43,9 @@ public class UserService {
     }
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
+        if (email == null || email.isBlank()){
+            throw new IllegalArgumentException("Email cannot be null");
+        }
         return userRepository.findByEmail(email)
                 .map(UserCredentialsDtoMapper::map);
     }

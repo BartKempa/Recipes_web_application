@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class RatingServiceTest {
-    private RatingService ratingService;
     @Mock private RatingRepository ratingRepositoryMock;
     @Mock private RecipeRepository recipeRepositoryMock;
     @Mock private UserRepository userRepositoryMock;
+    private RatingService ratingService;
 
     @BeforeEach
     void init(){
