@@ -68,6 +68,18 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenEmailDoesNotExist() {
+        //given
+        Mockito.when(userRepositoryMock.findByEmail("doesNotExist@mail.com")).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> userService.findCredentialsByEmail("doesNotExist@mail.com").orElseThrow());
+    }
+
+
+
+    @Test
     void registerUserWithDefaultRole() {
     }
 
