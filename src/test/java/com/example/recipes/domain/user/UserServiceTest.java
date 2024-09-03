@@ -88,8 +88,9 @@ class UserServiceTest {
     @Test
     void shouldRegisterNewUserWithDefaultRole() {
         //given
+        final String USER_EMAIL = "example@mail.com";
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-        userRegistrationDto.setEmail("example@mail.com");
+        userRegistrationDto.setEmail(USER_EMAIL);
         userRegistrationDto.setPassword("hardpass");
         userRegistrationDto.setFirstName("Bartek");
         userRegistrationDto.setLastName("Kowalski");
@@ -111,7 +112,7 @@ class UserServiceTest {
         Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
 
         User userCaptorValue = userArgumentCaptor.getValue();
-        assertThat(userCaptorValue.getEmail(), is("example@mail.com"));
+        assertThat(userCaptorValue.getEmail(), is(USER_EMAIL));
         assertThat(userCaptorValue.getPassword(), is("encodedHardpass"));
         assertThat(userCaptorValue.getFirstName(), is("Bartek"));
         assertThat(userCaptorValue.getLastName(), is("Kowalski"));
@@ -196,9 +197,17 @@ class UserServiceTest {
         assertThat(userCaptorValue.getFavoriteRecipes().size(), is(0));
     }
 
-
     @Test
-    void favoritesCount() {
+    void shouldReturnTwoWhenRecipeIsFavoritedByTwoUsers() {
+        //given
+        final long RECIPE_ID = 1L;
+        Mockito.when(userRepositoryMock.countUsersByFavouriteRecipe(RECIPE_ID)).thenReturn(2);
+
+        //when
+        int favoritesCount = userService.favoritesCount(RECIPE_ID);
+
+        //then
+        assertThat(favoritesCount, is(2));
     }
 
     @Test

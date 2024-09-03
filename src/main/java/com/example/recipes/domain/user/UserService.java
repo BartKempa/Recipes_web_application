@@ -68,7 +68,6 @@ public class UserService {
     public void addOrUpdateFavoriteRecipe(String userEmail, long recipeId) {
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
-        boolean isRecipeFavourite = user.getFavoriteRecipes().stream().anyMatch(r -> r.getId() == recipeId);
         if (user.getFavoriteRecipes().contains(recipe)) {
             user.getFavoriteRecipes().remove(recipe);
         } else {
