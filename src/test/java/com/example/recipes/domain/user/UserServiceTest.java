@@ -158,6 +158,43 @@ class UserServiceTest {
         assertThat(userCaptorValue.getFavoriteRecipes().iterator().next().getId(), is(RECIPE_ID));
     }
 
+    @Test
+    void shouldRemoveRecipeFromFavouritesWhenAlreadyPresent() {
+        //given
+        final long RECIPE_ID = 1L;
+        final String USER_EMAIL = "example@mail.com";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("hardpass");
+
+        Recipe recipe = new Recipe();
+        recipe.setId(RECIPE_ID);
+        recipe.setName("Buraczkowa");
+        user.setFavoriteRecipes(Set.of(recipe));
+
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+        Mockito.when(recipeRepositoryMock.findById(RECIPE_ID)).thenReturn(Optional.of(recipe));
+
+        //before remove
+        assertThat(user.getFavoriteRecipes().size(), is(1));
+        assertThat(user.getFavoriteRecipes().iterator().next().getId(), is(RECIPE_ID));
+
+        //when
+        userService.addOrUpdateFavoriteRecipe(USER_EMAIL, RECIPE_ID);
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
+
+        User userCaptorValue = userArgumentCaptor.getValue();
+        assertThat(userCaptorValue.getFavoriteRecipes().size(), is(0));
+    }
 
 
     @Test
