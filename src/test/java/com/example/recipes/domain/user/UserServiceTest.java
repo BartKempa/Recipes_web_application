@@ -77,7 +77,12 @@ class UserServiceTest {
         assertThrows(NoSuchElementException.class, () -> userService.findCredentialsByEmail("doesNotExist@mail.com").orElseThrow());
     }
 
-
+    @Test
+    void shouldThrowExceptionWhenEmailIsNull() {
+        //when
+        //then
+        assertThrows(IllegalArgumentException.class, () -> userService.findCredentialsByEmail(null).orElseThrow());
+    }
 
     @Test
     void registerUserWithDefaultRole() {
