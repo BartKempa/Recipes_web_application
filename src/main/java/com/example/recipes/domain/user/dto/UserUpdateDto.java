@@ -33,6 +33,9 @@ public class UserUpdateDto {
         this.age = age;
     }
 
+    public UserUpdateDto() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -330,11 +330,36 @@ class UserServiceTest {
     }
 
     @Test
-    void findUserToUpdateById() {
-    }
+    void shouldUpdateUserDataWhenTryChangeFirstName() {
+        //given
+        final long USER_ID = 11L;
+        User user = new User();
+        user.setAge(40);
+        user.setFirstName("Bartek");
+        user.setLastName("Kowalski");
+        user.setNickName("Barti");
 
-    @Test
-    void updateUserData() {
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setId(USER_ID);
+        userUpdateDto.setFirstName("P");
+        userUpdateDto.setLastName("Mickiewicz");
+        userUpdateDto.setNickName("Pita");
+        userUpdateDto.setAge(38);
+
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        //when
+        userService.updateUserData(userUpdateDto);
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
+
+        User argumentCaptorValue = userArgumentCaptor.getValue();
+        assertThat(argumentCaptorValue.getFirstName(), is("P"));
+        assertThat(argumentCaptorValue.getLastName(), is("Mickiewicz"));
+        assertThat(argumentCaptorValue.getNickName(), is("Pita"));
+        assertThat(argumentCaptorValue.getAge(), is(38));
     }
 
     @Test
