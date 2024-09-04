@@ -129,7 +129,7 @@ public class UserController {
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
     public String getEditCommentForm(@PathVariable(value = "id") Long id,
                                      Model model){
-        CommentDto comment = userService.findUsersCommentById(id)
+        CommentDto comment = commentService.findCommentById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("comment", comment);
         return "user-update-comment";

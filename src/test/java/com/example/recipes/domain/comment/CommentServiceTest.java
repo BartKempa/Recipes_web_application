@@ -390,7 +390,6 @@ class CommentServiceTest {
 
     @Test
     void shouldThrowResponseStatusExceptionWhenTryDeleteNotExistsComment() {
-
         //given
         Mockito.when(commentRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
@@ -562,4 +561,35 @@ class CommentServiceTest {
 
         assertThat(exception.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
+
+    @Test
+    void shouldFindCommentById(){
+        //given
+        final  long COMMENT_ID = 10L;
+        final String USER_EMAIL = "user@example.com";
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Comment comment = new Comment();
+        comment.setId(COMMENT_ID);
+        comment.setCreationDate(now);
+        comment.setApproved(true);
+        comment.setText("example comment");
+        comment.setUser(user);
+
+        Mockito.when(commentRepositoryMock.findById(COMMENT_ID)).thenReturn(Optional.of(comment));
+
+        //when
+        CommentDto commentDto = commentService.findCommentById(COMMENT_ID).orElseThrow();
+
+        //then
+        assertThat(commentDto.getId(), is(COMMENT_ID));
+        assertThat(commentDto.getText(), is("example comment"));
+        assertThat(commentDto.getCreationDate(), is(now));
+        assertThat(commentDto.getUserEmail(), is(USER_EMAIL));
+        assertThat(commentDto.isApproved(), is(true));
+    }
+
 }

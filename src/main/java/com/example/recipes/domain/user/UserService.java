@@ -122,10 +122,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public Optional<CommentDto> findUsersCommentById(long commentId) {
-        return commentRepository.findById(commentId).map(CommentDtoMapper::map);
-    }
-
     @Transactional
     public void updateUsersComment(CommentDto commentDto){
         Comment comment = commentRepository.findById(commentDto.getId())

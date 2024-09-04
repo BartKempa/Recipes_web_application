@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,5 +87,9 @@ public class CommentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         comment.setApproved(true);
         commentRepository.save(comment);
+    }
+
+    public Optional<CommentDto> findCommentById(long commentId) {
+        return commentRepository.findById(commentId).map(CommentDtoMapper::map);
     }
 }

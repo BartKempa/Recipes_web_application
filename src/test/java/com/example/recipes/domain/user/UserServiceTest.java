@@ -398,14 +398,10 @@ class UserServiceTest {
     }
 
 
-
     @Test
     void deleteUser() {
     }
 
-    @Test
-    void findUsersCommentById() {
-    }
 
     @Test
     void updateUsersComment() {
