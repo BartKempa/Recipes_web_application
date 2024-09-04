@@ -330,21 +330,12 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldUpdateUserDataWhenTryChangeFirstName() {
+    void shouldUpdateUserDataWhenTryChangeIt() {
         //given
         final long USER_ID = 11L;
-        User user = new User();
-        user.setAge(40);
-        user.setFirstName("Bartek");
-        user.setLastName("Kowalski");
-        user.setNickName("Barti");
+        User user = createUser();
 
-        UserUpdateDto userUpdateDto = new UserUpdateDto();
-        userUpdateDto.setId(USER_ID);
-        userUpdateDto.setFirstName("P");
-        userUpdateDto.setLastName("Mickiewicz");
-        userUpdateDto.setNickName("Pita");
-        userUpdateDto.setAge(38);
+        UserUpdateDto userUpdateDto = createUserUpdateDto(USER_ID);
 
         Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.of(user));
 
@@ -356,15 +347,57 @@ class UserServiceTest {
         Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
 
         User argumentCaptorValue = userArgumentCaptor.getValue();
-        assertThat(argumentCaptorValue.getFirstName(), is("P"));
+        assertThat(argumentCaptorValue.getFirstName(), is("Pawel"));
         assertThat(argumentCaptorValue.getLastName(), is("Mickiewicz"));
         assertThat(argumentCaptorValue.getNickName(), is("Pita"));
         assertThat(argumentCaptorValue.getAge(), is(38));
     }
 
-    @Test
-    void updateUserPassword() {
+    private static UserUpdateDto createUserUpdateDto(long USER_ID) {
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setId(USER_ID);
+        userUpdateDto.setFirstName("Pawel");
+        userUpdateDto.setLastName("Mickiewicz");
+        userUpdateDto.setNickName("Pita");
+        userUpdateDto.setAge(38);
+        return userUpdateDto;
     }
+
+    private static User createUser() {
+        User user = new User();
+        user.setAge(40);
+        user.setFirstName("Bartek");
+        user.setLastName("Kowalski");
+        user.setNickName("Barti");
+        user.setPassword("hardpass");
+        return user;
+    }
+
+    @Test
+    void shouldUpdateUserDataWhenTryChangePassword() {
+        //given
+        final long USER_ID = 11L;
+        User user = createUser();
+
+        UserUpdateDto userUpdateDto = createUserUpdateDto(USER_ID);
+        userUpdateDto.setPassword("newpass");
+
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoderMock.encode(userUpdateDto.getPassword())).thenReturn("encodedNewPass");
+
+        //when
+        userService.updateUserPassword(userUpdateDto);
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userRepositoryMock).save(userArgumentCaptor.capture());
+
+        User updatedUser = userArgumentCaptor.getValue();
+        assertThat(updatedUser.getPassword(), is("encodedNewPass"));
+        Mockito.verify(passwordEncoderMock, Mockito.times(1)).encode("newpass");
+    }
+
+
 
     @Test
     void deleteUser() {
