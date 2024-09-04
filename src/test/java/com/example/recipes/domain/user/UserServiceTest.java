@@ -294,10 +294,6 @@ class UserServiceTest {
         assertThrows(NoSuchElementException.class, () -> userService.findUserByName(USER_EMAIL).orElseThrow());
     }
 
-
-
-
-
     @Test
     void shouldReturnUserUpdateDtoWhenLookingByIdAndUserExists() {
         // given
@@ -321,8 +317,17 @@ class UserServiceTest {
         assertThat(userUpdateDto.getNickName(), is("Barti"));
     }
 
+    @Test
+    void shouldThrowExceptionWhenLookingUserUpdateDtoByIdAndUserNotExists() {
+        // given
+        final long USER_ID = 11L;
 
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.empty());
 
+        // when
+        // then
+        assertThrows(NoSuchElementException.class, () -> userService.findUserToUpdateById(USER_ID).orElseThrow());
+    }
 
     @Test
     void findUserToUpdateById() {
