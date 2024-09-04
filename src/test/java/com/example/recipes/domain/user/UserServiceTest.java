@@ -6,6 +6,7 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -224,7 +225,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldReturnUserRegistrationDtoWhenUserExists() {
+    void shouldReturnUserRegistrationDtoWhenLookingByIdAndUserExists() {
         // given
         final long USER_ID = 11L;
         final String USER_EMAIL = "example@mail.com";
@@ -248,7 +249,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUserDoesNotExist() {
+    void shouldThrowExceptionWhenLookingByIdAndUserNotExists() {
         // given
         final long USER_ID = 11L;
 
@@ -260,8 +261,68 @@ class UserServiceTest {
     }
 
     @Test
-    void findUserByName() {
+    void shouldReturnUserRegistrationDtoWhenLookingByNameAndUserExists() {
+        // given
+        final String USER_EMAIL = "example@mail.com";
+
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setFirstName("Bartek");
+        user.setLastName("Kowalski");
+        user.setNickName("Barti");
+
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+
+        // when
+        UserRegistrationDto userRegistrationDto = userService.findUserByName(USER_EMAIL).orElseThrow();
+
+        // then
+        assertThat(userRegistrationDto.getEmail(), is(USER_EMAIL));
+        assertThat(userRegistrationDto.getFirstName(), is("Bartek"));
+        assertThat(userRegistrationDto.getLastName(), is("Kowalski"));
+        assertThat(userRegistrationDto.getNickName(), is("Barti"));
     }
+
+    @Test
+    void shouldThrowExceptionWhenLookingByNameAndUserNotExists() {
+        // given
+        final String USER_EMAIL = "example@mail.com";
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(NoSuchElementException.class, () -> userService.findUserByName(USER_EMAIL).orElseThrow());
+    }
+
+
+
+
+
+    @Test
+    void shouldReturnUserUpdateDtoWhenLookingByIdAndUserExists() {
+        // given
+        final long USER_ID = 11L;
+
+        User user = new User();
+        user.setAge(40);
+        user.setFirstName("Bartek");
+        user.setLastName("Kowalski");
+        user.setNickName("Barti");
+
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        // when
+        UserUpdateDto userUpdateDto = userService.findUserToUpdateById(USER_ID).orElseThrow();
+
+        // then
+        assertThat(userUpdateDto.getAge(), is(40));
+        assertThat(userUpdateDto.getFirstName(), is("Bartek"));
+        assertThat(userUpdateDto.getLastName(), is("Kowalski"));
+        assertThat(userUpdateDto.getNickName(), is("Barti"));
+    }
+
+
+
 
     @Test
     void findUserToUpdateById() {
