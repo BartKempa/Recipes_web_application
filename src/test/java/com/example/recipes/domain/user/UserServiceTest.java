@@ -224,8 +224,30 @@ class UserServiceTest {
     }
 
     @Test
-    void findUserById() {
+    void shouldReturnUserRegistrationDtoWhenUserExists() {
+        // given
+        final long USER_ID = 11L;
+        final String USER_EMAIL = "example@mail.com";
+
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setFirstName("Bartek");
+        user.setLastName("Kowalski");
+        user.setNickName("Barti");
+
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        // when
+        UserRegistrationDto userRegistrationDto = userService.findUserById(USER_ID).orElseThrow();
+
+        // then
+        assertThat(userRegistrationDto.getEmail(), is(USER_EMAIL));
+        assertThat(userRegistrationDto.getFirstName(), is("Bartek"));
+        assertThat(userRegistrationDto.getLastName(), is("Kowalski"));
+        assertThat(userRegistrationDto.getNickName(), is("Barti"));
     }
+
+
 
     @Test
     void findUserByName() {
