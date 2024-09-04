@@ -122,15 +122,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    @Transactional
-    public void updateUsersComment(CommentDto commentDto){
-        Comment comment = commentRepository.findById(commentDto.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        comment.setText(commentDto.getText());
-        comment.setApproved(false);
-        commentRepository.save(comment);
-    }
-
     public Page<UserRegistrationDto> findAllUsers(int pageNumber, int pageSize, String sortField, String sortDirection){
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, sort);

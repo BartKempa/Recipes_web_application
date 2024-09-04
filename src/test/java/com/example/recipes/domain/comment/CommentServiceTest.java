@@ -592,4 +592,9 @@ class CommentServiceTest {
         assertThat(commentDto.isApproved(), is(true));
     }
 
+    @Test
+    void updateComment(){
+
+    }
+
 }

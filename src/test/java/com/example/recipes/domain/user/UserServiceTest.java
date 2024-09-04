@@ -397,15 +397,10 @@ class UserServiceTest {
         Mockito.verify(passwordEncoderMock, Mockito.times(1)).encode("newpass");
     }
 
-
     @Test
     void deleteUser() {
     }
 
-
-    @Test
-    void updateUsersComment() {
-    }
 
     @Test
     void findAllUsers() {

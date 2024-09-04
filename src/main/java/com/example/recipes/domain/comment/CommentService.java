@@ -92,4 +92,12 @@ public class CommentService {
     public Optional<CommentDto> findCommentById(long commentId) {
         return commentRepository.findById(commentId).map(CommentDtoMapper::map);
     }
+    @Transactional
+    public void updateComment(CommentDto commentDto){
+        Comment comment = commentRepository.findById(commentDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        comment.setText(commentDto.getText());
+        comment.setApproved(false);
+        commentRepository.save(comment);
+    }
 }

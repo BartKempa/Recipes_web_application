@@ -137,7 +137,7 @@ public class UserController {
 
     @PostMapping("/uzytkownik/komentarze/edytuj")
     public String editComment(CommentDto comment){
-        userService.updateUsersComment(comment);
+        commentService.updateComment(comment);
         return "redirect:/uzytkownik/komentarze/1";
     }
 }
