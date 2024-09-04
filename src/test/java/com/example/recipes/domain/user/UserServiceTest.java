@@ -247,7 +247,17 @@ class UserServiceTest {
         assertThat(userRegistrationDto.getNickName(), is("Barti"));
     }
 
+    @Test
+    void shouldThrowExceptionWhenUserDoesNotExist() {
+        // given
+        final long USER_ID = 11L;
 
+        Mockito.when(userRepositoryMock.findById(USER_ID)).thenReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(NoSuchElementException.class, () -> userService.findUserById(USER_ID).orElseThrow());
+    }
 
     @Test
     void findUserByName() {
