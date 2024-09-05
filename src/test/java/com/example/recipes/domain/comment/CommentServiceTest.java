@@ -593,7 +593,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void updateComment(){
+    void shouldUpdateComment(){
         //given
         final  long COMMENT_ID = 10L;
 
@@ -620,4 +620,16 @@ class CommentServiceTest {
         assertFalse(commentArgumentCaptorValue.isApproved());
     }
 
+    @Test
+    void shouldThrowExceptionIfCommentNotFound() {
+        //given
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(999L);
+
+        Mockito.when(commentRepositoryMock.findById(commentDto.getId())).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(ResponseStatusException.class, () -> commentService.updateComment(commentDto));
+    }
 }
