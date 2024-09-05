@@ -798,9 +798,78 @@ class RecipeServiceTest {
     }
 
     @Test
-    void updateRecipe() {
-    }
+    void shouldUpdateRecipe() {
+        //given
+        final long RECIPE_ID = 1L;
+        Type type = new Type();
+        type.setId(11L);
+        type.setName("Zupa");
 
+        DifficultyLevel difficultyLevel = new DifficultyLevel();
+        difficultyLevel.setId(21L);
+        difficultyLevel.setName("Trudne");
+
+        Recipe recipe = new Recipe();
+        recipe.setId(RECIPE_ID);
+        recipe.setName("Pomidorowa");
+        recipe.setType(type);
+        recipe.setDescription("Soczyste kotlety z mielonej wołowiny a do tego pyszne i kolorowe warzywa i świeża bułka. Zapraszam po mój szybki i sprawdzony przepis na idealne, burgery wołowe o doskonałym smaku i kompozycji. Są rewelacyjne!");
+        recipe.setPreparationTime(15);
+        recipe.setCookingTime(20);
+        recipe.setServing(5);
+        recipe.setDifficultyLevel(difficultyLevel);
+        recipe.setIngredients("kurczak\\ncurry\\ncebula\\\\nmleko kokosowe\\nprzyprawy");
+        recipe.setDirections("Podsmaż cebulę i czosnek.\\nDodaj kurczaka i curry.\\nWlej mleko kokosowe.\\nGotuj na wolnym ogniu.");
+
+        LocalDateTime now = LocalDateTime.now();
+        recipe.setCreationDate(now);
+
+        RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
+        recipeSaveDto.setId(RECIPE_ID);
+        recipeSaveDto.setName("Herbata");
+        recipeSaveDto.setType("Napoje");
+        recipeSaveDto.setDescription("Super smaczna herbatka");
+        recipeSaveDto.setPreparationTime(10);
+        recipeSaveDto.setCookingTime(18);
+        recipeSaveDto.setServing(2);
+        recipeSaveDto.setDifficultyLevel("Bardzo trudne");
+        recipeSaveDto.setIngredients("woda\\herbata\\cukier");
+        recipeSaveDto.setDirectionsSteps("Wstaw wodę na gaz.\\nZalej herbatę.");
+        recipeSaveDto.setImage(null);
+
+        LocalDateTime now2 = LocalDateTime.now();
+
+        recipeSaveDto.setCreationDate(now2);
+
+        Type type2 = new Type();
+        type2.setId(12L);
+        type2.setName("Napoje");
+
+        DifficultyLevel difficultyLevel2 = new DifficultyLevel();
+        difficultyLevel2.setId(22L);
+        difficultyLevel2.setName("Bardzo trudne");
+
+        Mockito.when(recipeRepositoryMock.findById(1L)).thenReturn(Optional.of(recipe));
+        Mockito.when(typeRepositoryMock.findByNameIgnoreCase(recipeSaveDto.getType())).thenReturn(Optional.of(type2));
+        Mockito.when(difficultyLevelRepositoryMock.findByName(recipeSaveDto.getDifficultyLevel())).thenReturn(Optional.of(difficultyLevel2));
+
+        //when
+        recipeService.updateRecipe(recipeSaveDto);
+
+        //then
+        ArgumentCaptor<Recipe> recipeArgumentCaptor = ArgumentCaptor.forClass(Recipe.class);
+        Mockito.verify(recipeRepositoryMock).save(recipeArgumentCaptor.capture());
+
+        Recipe recipeArgumentCaptorValue = recipeArgumentCaptor.getValue();
+        assertThat(recipeArgumentCaptorValue.getId(), is(RECIPE_ID));
+        assertThat(recipeArgumentCaptorValue.getPreparationTime(), is(10));
+        assertThat(recipeArgumentCaptorValue.getDifficultyLevel().getName(), is("Bardzo trudne"));
+        assertThat(recipeArgumentCaptorValue.getType().getName(), is("Napoje"));
+        assertThat(recipeArgumentCaptorValue.getDescription(), is("Super smaczna herbatka"));
+        assertThat(recipeArgumentCaptorValue.getIngredients(), is("woda\\herbata\\cukier"));
+        assertThat(recipeArgumentCaptorValue.getDirections(), is("Wstaw wodę na gaz.\\nZalej herbatę."));
+    }
+    
     @Test
     void deleteRecipe() {
     }
