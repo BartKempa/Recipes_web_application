@@ -594,7 +594,30 @@ class CommentServiceTest {
 
     @Test
     void updateComment(){
+        //given
+        final  long COMMENT_ID = 10L;
 
+        Comment comment = new Comment();
+        comment.setId(COMMENT_ID);
+        comment.setApproved(true);
+        comment.setText("example comment");
+
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(COMMENT_ID);
+        commentDto.setText("update example comment");
+
+        Mockito.when(commentRepositoryMock.findById(commentDto.getId())).thenReturn(Optional.of(comment));
+
+        //when
+        commentService.updateComment(commentDto);
+
+        //then
+        ArgumentCaptor<Comment> commentArgumentCaptor = ArgumentCaptor.forClass(Comment.class);
+        Mockito.verify(commentRepositoryMock).save(commentArgumentCaptor.capture());
+
+        Comment commentArgumentCaptorValue = commentArgumentCaptor.getValue();
+        assertThat(commentArgumentCaptorValue.getText(), is("update example comment"));
+        assertFalse(commentArgumentCaptorValue.isApproved());
     }
 
 }
