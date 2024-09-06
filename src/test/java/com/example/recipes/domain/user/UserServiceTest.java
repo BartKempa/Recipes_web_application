@@ -398,10 +398,6 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUser() {
-    }
-
-    @Test
     void shouldFindAllUsersSortedByFirstNameAsc() {
         User user1 = new User();
         user1.setId(1L);
@@ -444,4 +440,51 @@ class UserServiceTest {
         assertThat(paginatedUserList.getContent().get(1).getFirstName(), is("Darek"));
     }
 
+    @Test
+    void shouldFindAllUsersSortedByAgeDesc() {
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setAge(40);
+        user1.setFirstName("Bartek");
+        user1.setLastName("Kowalski");
+        user1.setNickName("Barti");
+
+        User user2 = new User();
+        user2.setId(1L);
+        user2.setAge(30);
+        user2.setFirstName("Darek");
+        user2.setLastName("Darkowski");
+        user2.setNickName("Darunia");
+
+        List<User> userList = List.of(user1, user2);
+
+        Mockito.when(userRepositoryMock.findAll(Mockito.any(Pageable.class))).thenAnswer(invocationOnMock -> {
+            Pageable pageable = invocationOnMock.getArgument(0);
+            List<User> sortedList = userList.stream().sorted((u1, u2) -> {
+                if (pageable.getSort().getOrderFor("age") != null && pageable.getSort().getOrderFor("age").isAscending()) {
+                    return Integer.compare(u1.getAge(), u2.getAge());
+                } else {
+                    return Integer.compare(u2.getAge(), u1.getAge());
+                }
+            }).toList();
+            return new PageImpl<>(sortedList, pageable, sortedList.size());
+        });
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "age";
+        String sortDirection = "desc";
+
+        //when
+        Page<UserRegistrationDto> paginatedUserList = userService.findAllUsers(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertThat(paginatedUserList.getTotalElements(), is(2L));
+        assertThat(paginatedUserList.getContent().get(0).getFirstName(), is("Bartek"));
+        assertThat(paginatedUserList.getContent().get(1).getFirstName(), is("Darek"));
+    }
+
+
+    @Test
+    void deleteUser() {
+    }
 }
