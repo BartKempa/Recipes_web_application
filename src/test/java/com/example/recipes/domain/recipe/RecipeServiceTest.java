@@ -869,8 +869,9 @@ class RecipeServiceTest {
         assertThat(recipeArgumentCaptorValue.getIngredients(), is("woda\\herbata\\cukier"));
         assertThat(recipeArgumentCaptorValue.getDirections(), is("Wstaw wodę na gaz.\\nZalej herbatę."));
     }
-    
+
     @Test
     void deleteRecipe() {
+
     }
 }

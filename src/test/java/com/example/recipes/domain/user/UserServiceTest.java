@@ -14,12 +14,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -402,6 +402,46 @@ class UserServiceTest {
     }
 
     @Test
-    void findAllUsers() {
+    void shouldFindAllUsersSortedByFirstNameAsc() {
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setAge(40);
+        user1.setFirstName("Bartek");
+        user1.setLastName("Kowalski");
+        user1.setNickName("Barti");
+
+        User user2 = new User();
+        user2.setId(1L);
+        user2.setAge(30);
+        user2.setFirstName("Darek");
+        user2.setLastName("Darkowski");
+        user2.setNickName("Darunia");
+
+        List<User> userList = List.of(user2, user1);
+
+        Mockito.when(userRepositoryMock.findAll(Mockito.any(Pageable.class))).thenAnswer(invocationOnMock -> {
+            Pageable pageable = invocationOnMock.getArgument(0);
+            List<User> sortedList = userList.stream().sorted((u1, u2) -> {
+                if (pageable.getSort().getOrderFor("firstName") != null && pageable.getSort().getOrderFor("firstName").isAscending()) {
+                    return u1.getFirstName().compareTo(u2.getFirstName());
+                } else {
+                    return u2.getFirstName().compareTo(u1.getFirstName());
+                }
+            }).toList();
+            return new PageImpl<>(sortedList, pageable, sortedList.size());
+        });
+        int pageNumber = 1;
+        int pageSize = 3;
+        String sortField = "firstName";
+        String sortDirection = "asc";
+
+        //when
+        Page<UserRegistrationDto> paginatedUserList = userService.findAllUsers(pageNumber, pageSize, sortField, sortDirection);
+
+        //then
+        assertThat(paginatedUserList.getTotalElements(), is(2L));
+        assertThat(paginatedUserList.getContent().get(0).getFirstName(), is("Bartek"));
+        assertThat(paginatedUserList.getContent().get(1).getFirstName(), is("Darek"));
     }
+
 }
