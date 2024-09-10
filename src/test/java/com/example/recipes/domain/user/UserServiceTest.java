@@ -1,12 +1,16 @@
 package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.comment.CommentRepository;
+import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -483,8 +487,44 @@ class UserServiceTest {
         assertThat(paginatedUserList.getContent().get(1).getFirstName(), is("Darek"));
     }
 
-
     @Test
-    void deleteUser() {
+    void shouldDeleteUserAndAssociatedCommentsRatingsRolesAndFavourites() {
+        //given
+        final long RECIPE_ID = 1L;
+        final String USER_EMAIL = "example@mail.com";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("hardpass");
+
+        Recipe recipe = new Recipe();
+        recipe.setId(RECIPE_ID);
+        recipe.setName("Buraczkowa");
+
+        Set<Recipe> favoriteRecipes = new HashSet<>();
+        favoriteRecipes.add(recipe);
+        user.setFavoriteRecipes(favoriteRecipes);
+
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(userRole);
+        user.setRoles(roles);
+
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+
+        //when
+        userService.deleteUser(USER_EMAIL);
+
+        //then
+        Mockito.verify(commentRepositoryMock, Mockito.times(1)).deleteAll(Mockito.anySet());
+        Mockito.verify(ratingRepositoryMock, Mockito.times(1)).deleteAll(Mockito.anySet());
+        Mockito.verify(userRepositoryMock, Mockito.times(1)).findByEmail(USER_EMAIL);
+        Mockito.verify(userRepositoryMock).delete(user);
+        assertTrue(favoriteRecipes.isEmpty());
+        assertTrue(roles.isEmpty());
     }
 }

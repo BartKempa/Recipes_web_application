@@ -4,4 +4,9 @@ spring:
       ddl-auto: validate
 
 
+  mvc:
+    validation:
+      enable: true
+
+
 
