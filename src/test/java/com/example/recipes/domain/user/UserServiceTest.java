@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -547,5 +548,17 @@ class UserServiceTest {
         Mockito.verify(ratingRepositoryMock, Mockito.times(1)).deleteAll(Mockito.anySet());
         Mockito.verify(userRepositoryMock).delete(user);
     }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        //given
+        final String USER_EMAIL = "example@mail.com";
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(ResponseStatusException.class, () -> userService.deleteUser(USER_EMAIL));
+    }
+
 
 }
