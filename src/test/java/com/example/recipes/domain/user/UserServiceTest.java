@@ -527,4 +527,25 @@ class UserServiceTest {
         assertTrue(favoriteRecipes.isEmpty());
         assertTrue(roles.isEmpty());
     }
+
+    @Test
+    void shouldDeleteUserWithoutCommentsRatingsFavoritesAndRoles() {
+        //given
+        final String USER_EMAIL = "example@mail.com";
+        User user = new User();
+        user.setEmail(USER_EMAIL);
+        user.setRoles(new HashSet<>());
+        user.setFavoriteRecipes(new HashSet<>());
+
+        Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
+
+        //when
+        userService.deleteUser(USER_EMAIL);
+
+        //then
+        Mockito.verify(commentRepositoryMock, Mockito.times(1)).deleteAll(Mockito.anySet());
+        Mockito.verify(ratingRepositoryMock, Mockito.times(1)).deleteAll(Mockito.anySet());
+        Mockito.verify(userRepositoryMock).delete(user);
+    }
+
 }
