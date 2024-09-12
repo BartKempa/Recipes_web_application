@@ -16,7 +16,7 @@
                              referencedTableName="type"
                              referencedColumnNames="id"/>
             </column>
-            <column name="description" type="VARCHAR(10000)"/>
+            <column name="description" type="VARCHAR(3000)"/>
             <column name="preparation_time" type="INT"/>
             <column name="cooking_time" type="INT"/>
             <column name="serving" type="INT"/>
@@ -27,10 +27,10 @@
                              referencedColumnNames="id"
                 />
             </column>
-            <column name="ingredients" type="VARCHAR(10000)"/>
-            <column name="directions" type="VARCHAR(10000)"/>
+            <column name="ingredients" type="VARCHAR(3000)"/>
+            <column name="directions" type="VARCHAR(3000)"/>
             <column name="image" type="VARCHAR(100)"/>
-            <column name="creation_date" type="DATETIME(fsp)"/>
+            <column name="creation_date" type="DATETIME"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

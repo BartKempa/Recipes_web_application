@@ -2,11 +2,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-
-
-  mvc:
-    validation:
-      enable: true
-
-
-
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
