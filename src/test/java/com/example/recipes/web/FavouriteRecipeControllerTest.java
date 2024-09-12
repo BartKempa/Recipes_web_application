@@ -80,4 +80,40 @@ class FavouriteRecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldEraseRecipeFromFavouritesWhenTryAddAlreadyAddedToFavoriteRecipe() throws Exception {
+        //given
+        long recipeId = 1L;
+        String referer = "/some-page";
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+
+        assertFalse(user.getFavoriteRecipes().contains(recipe));
+
+        //when1
+        mockMvc.perform(post("/dodaj-do-ulubione")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then1
+        user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        assertTrue(user.getFavoriteRecipes().contains(recipe));
+
+        //when2
+        mockMvc.perform(post("/dodaj-do-ulubione")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then2
+        user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        assertFalse(user.getFavoriteRecipes().contains(recipe));
+    }
 }
