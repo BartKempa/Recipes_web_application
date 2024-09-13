@@ -25,21 +25,21 @@ public class TypeController {
         this.typeService = typeService;
     }
 
-    @GetMapping("/typ/{name}/strona/{pageNo}")
-    public String getType(@PathVariable String name,
-                          @PathVariable Optional<Integer> pageNo,
-                          Model model){
+    @GetMapping("/typ/{typeName}/strona/{pageNo}")
+    public String getRecipesByType(@PathVariable String typeName,
+                                   @PathVariable Optional<Integer> pageNo,
+                                   Model model){
         int pageNumber = pageNo.orElse(1);
-        TypeDto typeDto = typeService.findTypeByName(name)
+        TypeDto typeDto = typeService.findTypeByName(typeName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByType(name, pageNumber, RecipeController.PAGE_SIZE);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByType(typeName, pageNumber, RecipeController.PAGE_SIZE);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         int totalPages = recipePage.getTotalPages();
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("heading", typeDto.getName());
         model.addAttribute("recipes", recipes);
-        model.addAttribute("baseUrl", "/typ/" + name + "/strona");
+        model.addAttribute("baseUrl", "/typ/" + typeName + "/strona");
         return "recipe-listing";
     }
 }
