@@ -43,7 +43,6 @@ class TypeControllerIntegrationTest {
         int pageSize = 6;
         TypeDto typeDto = typeService.findTypeByName(typeName).orElseThrow();
         Page<RecipeMainInfoDto> recipesByType = recipeService.findRecipesByType(typeName, pageNo, pageSize);
-        List<RecipeMainInfoDto> recipes = recipesByType.getContent();
         int totalPages = recipesByType.getTotalPages();
 
         //when

@@ -51,6 +51,7 @@ public class CommentService {
         commentToSave.setApproved(false);
         commentToSave.setText(commentDto.getText());
         commentToSave.setRecipe(recipe);
+        recipe.getComments().add(commentToSave);
         commentToSave.setUser(user);
         commentRepository.save(commentToSave);
     }
