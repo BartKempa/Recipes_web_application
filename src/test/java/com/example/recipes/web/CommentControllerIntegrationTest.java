@@ -63,5 +63,21 @@ class CommentControllerIntegrationTest {
         assertTrue(recipe.getComments().stream().anyMatch(c -> c.getText().equals(comment.getText())));
         assertEquals(commentsSize + 1, recipe.getComments().size());
     }
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldRejectCommentWithEmptyText() throws Exception {
+        //given
+        long recipeId = 1L;
+
+        //when
+        mockMvc.perform(post("/dodaj-komentarz")
+                        .param("text", "")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("comment", "text"))
+                .andExpect(view().name("recipe"));
+    }
 }
 
