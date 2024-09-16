@@ -59,5 +59,32 @@ class RatingControllerTest {
         assertEquals(ratingSize + 1, recipe.getRatings().size());
     }
 
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldUpdateRecipeRating() throws Exception {
+        //given
+        long recipeId = 4L;
+        int rating1 = 1;
+        int rating2 = 1;
+        String referer = "/some-page";
 
+
+        ratingService.addOrUpdateRating("user@mail.com", recipeId, rating1);
+
+        //when
+        mockMvc.perform(post("/ocen-przepis")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .param("rating", String.valueOf(rating2))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        Rating updatedRating = recipe.getRatings().stream().filter(r -> r.getUser().getEmail().equals("user@mail.com"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(rating2, updatedRating.getRating());
+    }
 }
