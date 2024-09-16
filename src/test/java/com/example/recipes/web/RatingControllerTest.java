@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -33,7 +32,6 @@ class RatingControllerTest {
 
     @Autowired
     private RatingService ratingService;
-
 
     @Test
     @WithMockUser(username = "user@mail.com", roles = "USER")
@@ -86,5 +84,20 @@ class RatingControllerTest {
                 .findFirst()
                 .orElseThrow();
         assertEquals(rating2, updatedRating.getRating());
+    }
+
+    @Test
+    void shouldNotAllowUnauthenticatedUserAddRecipeRating() throws Exception {
+        //given
+        long recipeId = 4L;
+        int rating = 3;
+
+        //when
+        mockMvc.perform(post("/ocen-przepis")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .param("rating", String.valueOf(rating))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
     }
 }
