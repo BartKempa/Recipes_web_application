@@ -32,6 +32,8 @@ public class RatingService {
         ratingToSaveOrUpdate.setUser(user);
         ratingToSaveOrUpdate.setRecipe(recipe);
         ratingToSaveOrUpdate.setRating(rating);
+        recipe.getRatings().add(ratingToSaveOrUpdate);
+        user.getRatings().add(ratingToSaveOrUpdate);
         ratingRepository.save(ratingToSaveOrUpdate);
     }
 
