@@ -79,5 +79,44 @@ class CommentControllerIntegrationTest {
                 .andExpect(model().attributeHasFieldErrors("comment", "text"))
                 .andExpect(view().name("recipe"));
     }
+
+    @Test
+    void shouldRedirectToLoginWhenUserIsNotAuthenticated() throws Exception {
+        //given
+        long recipeId = 1L;
+
+        //when
+        mockMvc.perform(post("/dodaj-komentarz")
+                        .param("text", "Testowy komentarz")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldAllowAddingMultipleCommentsBySameUser() throws Exception {
+        //given
+        long recipeId = 1L;
+
+        //when
+        mockMvc.perform(post("/dodaj-komentarz")
+                        .param("text", "Komentarz 1")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        mockMvc.perform(post("/dodaj-komentarz")
+                        .param("text", "Komentarz 2")
+                        .param("recipeId", String.valueOf(recipeId))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        //then
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        assertTrue(recipe.getComments().stream().anyMatch(c -> c.getText().equals("Komentarz 1")));
+        assertTrue(recipe.getComments().stream().anyMatch(c -> c.getText().equals("Komentarz 2")));
+    }
 }
 
