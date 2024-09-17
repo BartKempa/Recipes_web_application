@@ -79,4 +79,41 @@ class RegistrationControllerTest {
                 .andExpect(view().name("registration-form"));
     }
 
+    @Test
+    void shouldReturnToRegistrationFormWhenEmailAlreadyExists() throws Exception {
+        //given
+        final String existingEmail = "user@mail.com";
+        assertTrue(userRepository.findByEmail(existingEmail).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/rejestracja")
+                        .param("email", existingEmail)
+                        .param("password", "hardPass123!@#")
+                        .param("firstName", "Bart")
+                        .param("lastName", "Bartkowski")
+                        .param("nickName", "Barti")
+                        .param("age", String.valueOf(40))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(view().name("registration-form"));
+    }
+
+    @Test
+    void shouldFailWithoutCsrf() throws Exception {
+        //given
+        final String userMail = "testUser@mail.com";
+
+        //when
+        //then
+        mockMvc.perform(post("/rejestracja")
+                        .param("email", userMail)
+                        .param("password", "hardPass123!@#")
+                        .param("firstName", "Bart")
+                        .param("lastName", "Bartkowski")
+                        .param("nickName", "Barti")
+                        .param("age", String.valueOf(40)))
+                .andExpect(status().isForbidden());
+    }
 }
