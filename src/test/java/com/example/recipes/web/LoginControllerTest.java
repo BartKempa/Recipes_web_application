@@ -15,13 +15,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class LoginControllerIntegrationTest {
+class LoginControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void loginForm() throws Exception {
+    void shouldLoginForm() throws Exception {
         mockMvc.perform(get("/login")
                 .with(csrf()))
                 .andExpect(status().isOk())

@@ -1,16 +1,8 @@
 package com.example.recipes.web;
 
-import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
-import com.example.recipes.domain.recipe.RecipeService;
-import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
-import com.example.recipes.domain.user.User;
-import com.example.recipes.domain.user.UserRepository;
-import com.example.recipes.domain.user.UserService;
-import com.example.recipes.domain.user.dto.UserRegistrationDto;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,8 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-class CommentControllerIntegrationTest {
+class CommentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
