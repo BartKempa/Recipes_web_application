@@ -41,6 +41,17 @@ class UserControllerTest {
     }
 
     @Test
+    void shouldRedirectToLoginPageWhenUserNotAuthenticated() throws Exception {
+        //given
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
     void getUpdateUserForm() {
     }
 
