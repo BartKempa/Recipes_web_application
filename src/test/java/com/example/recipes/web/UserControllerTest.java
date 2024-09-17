@@ -68,7 +68,18 @@ class UserControllerTest {
                 .andExpect(model().attribute("user", Matchers.instanceOf(UserUpdateDto.class)));
     }
 
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldReturnNotFoundForNonExistingUserId() throws Exception {
+        //given
+        final long userId = 111L;
 
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/aktualizacja/{userId}", userId)
+                        .with(csrf()))
+                .andExpect(status().is4xxClientError());
+    }
 
     @Test
     void updateDataUser() {
