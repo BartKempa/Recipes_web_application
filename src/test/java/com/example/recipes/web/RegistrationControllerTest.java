@@ -63,4 +63,20 @@ class RegistrationControllerTest {
         //then
         assertTrue(userRepository.findByEmail(userMail).isPresent());
     }
+
+    @Test
+    void shouldReturnToRegistrationFormWhenValidationFails() throws Exception {
+        mockMvc.perform(post("/rejestracja")
+                        .param("email", "")
+                        .param("password", "pass")
+                        .param("firstName", "a")
+                        .param("lastName", " ")
+                        .param("nickName", "Barti")
+                        .param("age", String.valueOf(10))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "email", "password", "firstName", "lastName", "age"))
+                .andExpect(view().name("registration-form"));
+    }
+
 }
