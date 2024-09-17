@@ -1,6 +1,7 @@
 package com.example.recipes.web;
 
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,22 @@ class UserControllerTest {
     }
 
     @Test
-    void getUpdateUserForm() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetUpdateUserForm() throws Exception {
+        //given
+        final long userId = 1L;
+
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/aktualizacja/{userId}", userId)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user-update-form"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", Matchers.instanceOf(UserUpdateDto.class)));
     }
+
+
 
     @Test
     void updateDataUser() {

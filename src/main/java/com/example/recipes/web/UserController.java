@@ -41,6 +41,7 @@ public class UserController {
 
     @GetMapping("/uzytkownik/aktualizacja/{userId}")
     public String getUpdateUserForm(@PathVariable(value = "userId") long userId,
+                                    Authentication authentication,
                                     Model model){
         UserUpdateDto user = userService.findUserToUpdateById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
