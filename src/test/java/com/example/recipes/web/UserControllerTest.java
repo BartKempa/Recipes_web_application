@@ -1,5 +1,6 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.user.UserRepository;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.hamcrest.Matchers;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +28,12 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @WithMockUser(username = "user@mail.com", roles = "USER")
@@ -82,7 +90,36 @@ class UserControllerTest {
     }
 
     @Test
-    void updateDataUser() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldUpdateDataUser() throws Exception {
+        //given
+        final long userId = 2L;
+        UserUpdateDto user = new UserUpdateDto();
+        user.setId(userId);
+        user.setFirstName("Janek");
+        user.setLastName("Kowalski");
+        user.setNickName("Janeczek");
+        user.setAge(66);
+        user.setPassword("Hardpass123!@#");
+        assertTrue(userRepository.existsById(userId));
+
+        //when
+        mockMvc.perform(post("/uzytkownik/aktualizacja")
+                        .param("id", String.valueOf(user.getId()))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("nickName", user.getNickName())
+                        .param("age", String.valueOf(user.getAge()))
+                        .param("password", user.getPassword())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/uzytkownik"));
+
+        //then
+        assertEquals("Janek", userRepository.findById(userId).orElseThrow().getFirstName());
+        assertEquals("Kowalski", userRepository.findById(userId).orElseThrow().getLastName());
+        assertEquals("Janeczek", userRepository.findById(userId).orElseThrow().getNickName());
+        assertEquals(66, userRepository.findById(userId).orElseThrow().getAge());
     }
 
     @Test
