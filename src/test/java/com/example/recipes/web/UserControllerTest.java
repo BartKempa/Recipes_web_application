@@ -315,7 +315,21 @@ class UserControllerTest {
         assertFalse(commentRepository.existsById(commentId));
     }
 
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetStatusNotFoundWhenCommentNotExists() throws Exception {
+        //given
+        final long notExistsCommentId = 111L;
+        final String referer = "/some-page";
+        assertFalse(commentRepository.findById(notExistsCommentId).isPresent());
 
+        //when
+        mockMvc.perform(post("/uzytkownik/komentarze")
+                        .param("commentId", String.valueOf(notExistsCommentId))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void getEditCommentForm() {
