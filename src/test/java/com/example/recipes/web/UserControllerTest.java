@@ -179,8 +179,23 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUserDataLogin() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetUpdateUserPasswordForm() throws Exception {
+        //given
+        final long userId = 2L;
+
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", userId)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user-update-login-data-form"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", Matchers.instanceOf(UserUpdateDto.class)))
+                .andExpect(model().attribute("user", Matchers.hasProperty("id",Matchers.equalTo(userId))));
     }
+
+
 
     @Test
     void deleteUserForm() {
