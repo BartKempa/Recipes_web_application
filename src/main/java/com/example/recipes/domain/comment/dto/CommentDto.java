@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class CommentDto {
     private Long id;
@@ -63,5 +64,17 @@ public class CommentDto {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommentDto that)) return false;
+        return approved == that.approved && Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(creationDate, that.creationDate) && Objects.equals(userEmail, that.userEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, approved, text, creationDate, userEmail);
     }
 }

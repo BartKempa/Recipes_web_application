@@ -1,5 +1,7 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.comment.CommentService;
+import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
@@ -9,11 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -35,6 +40,9 @@ class UserControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CommentService commentService;
 
     @Test
     @WithMockUser(username = "user@mail.com", roles = "USER")
@@ -242,7 +250,7 @@ class UserControllerTest {
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldDeleteUser() throws Exception {
         //given
-        String email = "user@mail.com";
+        final String email = "user@mail.com";
         User user = userRepository.findByEmail(email).orElseThrow();
         assertTrue(userRepository.existsById(user.getId()));
 
@@ -257,7 +265,30 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserComments() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetUserComments() throws Exception {
+        //given
+        final int pageNo = 1;
+        final int pageSize = 6;
+        final String commentSortField = "creationDate";
+        final String email = "user@mail.com";
+
+        Page<CommentDto> allUserComments = commentService.findAllUserComments(email, pageNo, pageSize, commentSortField);
+        List<CommentDto> comments = allUserComments.getContent();
+        int totalPages = allUserComments.getTotalPages();
+
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/komentarze/{pageNo}", pageNo)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user-comments"))
+                .andExpect(model().attribute("totalPages", totalPages))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/komentarze"))
+                .andExpect(model().attribute("heading", "Twoje komentarze"))
+                .andExpect(model().attribute("comments", Matchers.hasSize(comments.size())))
+                .andExpect(model().attribute("comments", comments));
     }
 
     @Test
