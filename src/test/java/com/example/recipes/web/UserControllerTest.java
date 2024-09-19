@@ -1,5 +1,6 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.user.User;
@@ -43,6 +44,9 @@ class UserControllerTest {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     @WithMockUser(username = "user@mail.com", roles = "USER")
@@ -292,8 +296,26 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteComment() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldDeleteComment() throws Exception {
+        //given
+        final long commentId = 1L;
+        final String referer = "/some-page";
+        assertTrue(commentRepository.existsById(commentId));
+
+        //when
+        mockMvc.perform(post("/uzytkownik/komentarze")
+                .param("commentId", String.valueOf(commentId))
+                .header("referer", referer)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then
+        assertFalse(commentRepository.existsById(commentId));
     }
+
+
 
     @Test
     void getEditCommentForm() {

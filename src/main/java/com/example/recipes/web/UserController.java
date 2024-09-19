@@ -120,16 +120,16 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/komentarze")
-    public String deleteComment(@RequestParam(value = "id") Long id,
+    public String deleteComment(@RequestParam(value = "commentId") Long commentId,
                                 @RequestHeader String referer){
-        commentService.deleteComment(id);
+        commentService.deleteComment(commentId);
         return "redirect:" + referer;
     }
 
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
-    public String getEditCommentForm(@PathVariable(value = "id") Long id,
+    public String getEditCommentForm(@PathVariable(value = "id") Long commentId,
                                      Model model){
-        CommentDto comment = commentService.findCommentById(id)
+        CommentDto comment = commentService.findCommentById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("comment", comment);
         return "user-update-comment";
