@@ -195,7 +195,18 @@ class UserControllerTest {
                 .andExpect(model().attribute("user", Matchers.hasProperty("id",Matchers.equalTo(userId))));
     }
 
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldReturnNotFoundForNonExistingUserIdWhenTryUpdatePassword() throws Exception {
+        //given
+        final long userId = 222L;
 
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", userId)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void deleteUserForm() {
