@@ -226,6 +226,19 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldReturnNotFoundWhenUserDoesNotExist() throws Exception {
+        //given
+        final long nonExistingUserId = 222L;
+
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/usuwanie-konta/{userId}", nonExistingUserId)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void deleteUser() {
     }
 
