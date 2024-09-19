@@ -1,5 +1,6 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
@@ -123,8 +124,37 @@ class UserControllerTest {
     }
 
     @Test
-    void getUpdateUserPasswordForm() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldUpdateUserPassword() throws Exception {
+        //given
+        final long userId = 2L;
+        UserUpdateDto user = new UserUpdateDto();
+        user.setId(userId);
+        user.setFirstName("Janek");
+        user.setLastName("Janecki");
+        user.setNickName("BigJohn");
+        user.setAge(28);
+        user.setPassword("Newpass123!@#");
+        assertTrue(userRepository.existsById(userId));
+
+        //when
+        mockMvc.perform(post("/uzytkownik/aktualizacja-logowanie")
+                        .param("id", String.valueOf(user.getId()))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("nickName", user.getNickName())
+                        .param("age", String.valueOf(user.getAge()))
+                        .param("password", user.getPassword())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/logout"));
+
+        //then
+        User updatedUser = userRepository.findById(userId).orElseThrow();
+        assertTrue(passwordEncoder.matches("Newpass123!@#", updatedUser.getPassword()));
     }
+
+   
 
     @Test
     void updateUserDataLogin() {
