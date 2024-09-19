@@ -81,11 +81,11 @@ class UserControllerTest {
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldReturnNotFoundForNonExistingUserId() throws Exception {
         //given
-        final long userId = 111L;
+        final long nonExistingUserId = 111L;
 
         //when
         //then
-        mockMvc.perform(get("/uzytkownik/aktualizacja/{userId}", userId)
+        mockMvc.perform(get("/uzytkownik/aktualizacja/{userId}", nonExistingUserId)
                         .with(csrf()))
                 .andExpect(status().is4xxClientError());
     }
@@ -199,11 +199,11 @@ class UserControllerTest {
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldReturnNotFoundForNonExistingUserIdWhenTryUpdatePassword() throws Exception {
         //given
-        final long userId = 222L;
+        final long nonExistingUserId = 222L;
 
         //when
         //then
-        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", userId)
+        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", nonExistingUserId)
                         .with(csrf()))
                 .andExpect(status().isNotFound());
     }
@@ -239,7 +239,21 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldDeleteUser() throws Exception {
+        //given
+        String email = "user@mail.com";
+        User user = userRepository.findByEmail(email).orElseThrow();
+        assertTrue(userRepository.existsById(user.getId()));
+
+        //when
+        mockMvc.perform(post("/uzytkownik/usuwanie-konta")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/logout"));
+
+        //then
+        assertFalse(userRepository.findByEmail(email).isPresent());
     }
 
     @Test
