@@ -154,7 +154,29 @@ class UserControllerTest {
         assertTrue(passwordEncoder.matches("Newpass123!@#", updatedUser.getPassword()));
     }
 
-   
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldReturnToUpdatePasswordFormWhenValidationFail() throws Exception {
+        //given
+        final long userId = 2L;
+        User userBeforeUpdate = userRepository.findById(userId).orElseThrow();
+        UserUpdateDto user = new UserUpdateDto();
+        user.setId(userId);
+        user.setPassword("wrongPass");
+        assertTrue(userRepository.existsById(userId));
+
+        //when
+        mockMvc.perform(post("/uzytkownik/aktualizacja-logowanie")
+                        .param("password", user.getPassword())
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(view().name("user-update-login-data-form"));
+
+        //then
+        User userAfterUpdate = userRepository.findById(userId).orElseThrow();
+        assertEquals(userBeforeUpdate.getPassword(), userAfterUpdate.getPassword());
+    }
 
     @Test
     void updateUserDataLogin() {
