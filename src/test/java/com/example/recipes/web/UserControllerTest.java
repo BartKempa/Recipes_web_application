@@ -209,7 +209,20 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUserForm() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetDeleteUserForm() throws Exception {
+        //given
+        final long userId = 2L;
+
+        //when
+        //then
+        mockMvc.perform(get("/uzytkownik/usuwanie-konta/{userId}", userId)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", Matchers.instanceOf(UserRegistrationDto.class)))
+                .andExpect(model().attribute("user", Matchers.hasProperty("id", Matchers.equalTo(userId))))
+                .andExpect(view().name("user-delete-account"));
     }
 
     @Test
