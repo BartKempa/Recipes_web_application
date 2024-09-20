@@ -1,5 +1,6 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.comment.Comment;
 import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
@@ -332,10 +333,52 @@ class UserControllerTest {
     }
 
     @Test
-    void getEditCommentForm() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetEditCommentForm() throws Exception {
+        //given
+        final long commentId = 1L;
+
+        //when
+        mockMvc.perform(get("/uzytkownik/komentarze/edytuj/{id}", commentId)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user-update-comment"))
+                .andExpect(model().attributeExists("comment"))
+                .andExpect(model().attribute("comment", Matchers.instanceOf(CommentDto.class)));
     }
 
     @Test
-    void editComment() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetNotFoundStatusWhenCommentNotExistsAndTryGetEditCommentForm() throws Exception {
+        //given
+        final long notExistsCommentId = 111L;
+
+        //when
+        mockMvc.perform(get("/uzytkownik/komentarze/edytuj/{id}", notExistsCommentId)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldEditComment() throws Exception {
+        //given
+        final long commentId = 1L;
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(commentId);
+        commentDto.setText("Komentarz po aktualizacji");
+
+        //when
+        mockMvc.perform(post("/uzytkownik/komentarze/edytuj")
+                        .param("id", String.valueOf(commentDto.getId()))
+                        .param("text", commentDto.getText())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/uzytkownik/komentarze/1"));
+
+        //then
+        Comment updatedComment = commentRepository.findById(commentId).orElseThrow();
+        assertEquals(commentDto.getText(), updatedComment.getText());
+        assertEquals(commentDto.getId(), updatedComment.getId());
     }
 }
