@@ -83,7 +83,6 @@ class RecipeControllerTest {
     void shouldGetAllRecipesPageable() throws Exception {
         //given
         int pageNo = 1;
-        String searchText = "kurczak";
         String poleSortowania = "creationDate";
         String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
         Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNo, PAGE_SIZE, sortField);
@@ -92,8 +91,8 @@ class RecipeControllerTest {
         //when
         //then
         mockMvc.perform(get("/strona/{pageNo}", pageNo)
-                .param("poleSortowania", "creationDate")
-                .with(csrf()))
+                        .param("poleSortowania", "creationDate")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe-listing"))
                 .andExpect(model().attributeExists("recipes"))
@@ -106,7 +105,29 @@ class RecipeControllerTest {
     }
 
     @Test
-    void getRecipesBySearchText() {
+    void ShouldGetRecipesBySearchText() throws Exception {
+        //given
+        int pageNo = 1;
+        String searchText = "kurczak";
+        String poleSortowania = "creationDate";
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        //then
+        mockMvc.perform(get("/strona/{pageNo}", pageNo)
+                        .param("poleSortowania", "creationDate")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Wszytskie przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/strona"));
     }
 
     @Test
