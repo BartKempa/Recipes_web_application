@@ -5,20 +5,28 @@ import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingService;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
+import static com.example.recipes.web.RecipeController.PAGE_SIZE;
+import static com.example.recipes.web.RecipeController.SORT_FIELD_MAP;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,8 +47,7 @@ class RecipeControllerTest {
     @Autowired
     private RatingService ratingService;
 
-    @Autowired
-    private RecipeController recipeController;
+
 
     @Autowired
     private UserService userService;
@@ -72,9 +79,30 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("favourites", favorites));
     }
 
-
     @Test
-    void getAllRecipesPageable() {
+    void shouldGetAllRecipesPageable() throws Exception {
+        //given
+        int pageNo = 1;
+        String searchText = "kurczak";
+        String poleSortowania = "creationDate";
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        //then
+        mockMvc.perform(get("/strona/{pageNo}", pageNo)
+                .param("poleSortowania", "creationDate")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Wszytskie przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/strona"));
     }
 
     @Test

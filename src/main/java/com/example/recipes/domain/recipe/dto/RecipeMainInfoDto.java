@@ -87,4 +87,16 @@ public class RecipeMainInfoDto {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RecipeMainInfoDto that)) return false;
+        return Double.compare(averageRating, that.averageRating) == 0 && ratingCount == that.ratingCount && approvedCommentCount == that.approvedCommentCount && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(type, that.type) && Objects.equals(image, that.image) && Objects.equals(creationDate, that.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type, image, averageRating, ratingCount, approvedCommentCount, creationDate);
+    }
 }

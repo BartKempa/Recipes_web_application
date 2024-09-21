@@ -35,7 +35,7 @@ public class RecipeController {
         this.commentService = commentService;
     }
 
-    private static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
+    public static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
     static {
         SORT_FIELD_MAP.put("dataPublikacji", "creationDate");
         SORT_FIELD_MAP.put("nazwa", "name");
@@ -79,7 +79,6 @@ public class RecipeController {
         model.addAttribute("baseUrl", "/strona");
         return "recipe-listing";
     }
-
 
     @GetMapping("/szukaj/strona/{pageNo}")
     public String getRecipesBySearchText(@RequestParam String searchText,
