@@ -1,6 +1,7 @@
 package com.example.recipes.domain.recipe.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeFullInfoDto {
     private Long id;
@@ -145,5 +146,17 @@ public class RecipeFullInfoDto {
 
     public void setApprovedCommentCount(int approvedCommentCount) {
         this.approvedCommentCount = approvedCommentCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RecipeFullInfoDto that)) return false;
+        return Double.compare(averageRating, that.averageRating) == 0 && ratingCount == that.ratingCount && approvedCommentCount == that.approvedCommentCount && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(type, that.type) && Objects.equals(description, that.description) && Objects.equals(preparationTime, that.preparationTime) && Objects.equals(cookingTime, that.cookingTime) && Objects.equals(serving, that.serving) && Objects.equals(difficultyLevel, that.difficultyLevel) && Objects.equals(ingredients, that.ingredients) && Objects.equals(directionsSteps, that.directionsSteps) && Objects.equals(image, that.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type, description, preparationTime, cookingTime, serving, difficultyLevel, ingredients, directionsSteps, image, averageRating, ratingCount, approvedCommentCount);
     }
 }

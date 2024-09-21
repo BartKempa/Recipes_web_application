@@ -17,6 +17,4 @@ public interface UserRepository extends CrudRepository<User, Long>, PagingAndSor
 
     @Query("SELECT COUNT (u) FROM User u JOIN u.favoriteRecipes r WHERE r.id = :recipeId")
     int countUsersByFavouriteRecipe(long recipeId);
-
-
 }
