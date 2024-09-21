@@ -111,13 +111,14 @@ class RecipeControllerTest {
         String searchText = "kurczak";
         String poleSortowania = "creationDate";
         String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
-        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginated(pageNo, PAGE_SIZE, sortField);
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByText(searchText, pageNo, PAGE_SIZE, sortField);
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
         //then
-        mockMvc.perform(get("/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/szukaj/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
+                        .param("searchText", searchText)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe-listing"))
@@ -125,9 +126,10 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("recipes", recipes))
                 .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
                 .andExpect(model().attribute("currentPage", pageNo))
-                .andExpect(model().attribute("heading", "Wszytskie przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
-                .andExpect(model().attribute("baseUrl", "/strona"));
+                .andExpect(model().attribute("heading", "Wyszukiwane przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/szukaj/strona"));
     }
 
     @Test
