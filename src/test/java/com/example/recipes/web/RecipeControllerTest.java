@@ -47,8 +47,6 @@ class RecipeControllerTest {
     @Autowired
     private RatingService ratingService;
 
-
-
     @Autowired
     private UserService userService;
 
@@ -104,18 +102,17 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("baseUrl", "/strona"));
     }
 
-    @Test
-    void ShouldGetRecipesBySearchText() throws Exception {
-        //given
-        int pageNo = 1;
-        String searchText = "kurczak";
-        String poleSortowania = "creationDate";
-        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
-        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByText(searchText, pageNo, PAGE_SIZE, sortField);
-        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+        @Test
+        void shouldGetRecipesBySearchText() throws Exception {
+            //given
+            int pageNo = 1;
+            String searchText = "kurczak";
+            String poleSortowania = "creationDate";
+            String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+            Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByText(searchText, pageNo, PAGE_SIZE, sortField);
+            List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
-        //when
-        //then
+            //when
         mockMvc.perform(get("/szukaj/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
                         .param("searchText", searchText)
@@ -130,10 +127,43 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("heading", "Wyszukiwane przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("baseUrl", "/szukaj/strona"));
+
+            //then
+            assertFalse(recipes.isEmpty());
+    }
+    @Test
+    void shouldGetEmptyListOfRecipesBySearchText() throws Exception {
+        //given
+        int pageNo = 1;
+        String searchText = "brakSlowaWBazie";
+        String poleSortowania = "creationDate";
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRecipesByText(searchText, pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        mockMvc.perform(get("/szukaj/strona/{pageNo}", pageNo)
+                        .param("poleSortowania", "creationDate")
+                        .param("searchText", searchText)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("heading", "Wyszukiwane przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/szukaj/strona"));
+
+        //then
+        assertEquals(0, recipes.size());
     }
 
     @Test
     void getFavouriteRecipesForUser() {
+
     }
 
     @Test
