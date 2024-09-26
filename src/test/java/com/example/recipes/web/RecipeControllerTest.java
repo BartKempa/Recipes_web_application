@@ -9,6 +9,8 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -219,7 +221,32 @@ class RecipeControllerTest {
         assertTrue(recipes.isEmpty());
     }
 
-    @Test
-    void getRatedRecipesForUser() {
+    @ParameterizedTest
+    @ValueSource(strings = {"creationDate", "name", "rating"})
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetFavouriteRecipesForUserWithDifferentSorting(String poleSortowania) throws Exception {
+        //given
+        int pageNo = 1;
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findFavouriteRecipesForUser("user@mail.com", pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        mockMvc.perform(get("/ulubione/strona/{pageNo}", pageNo)
+                        .param("poleSortowania", poleSortowania)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("heading", "Twoje ulubione przepisy"))
+                .andExpect(model().attribute("baseUrl", "/ulubione/strona"));
+
+        //then
+        assertFalse(recipes.isEmpty());
     }
+
 }
