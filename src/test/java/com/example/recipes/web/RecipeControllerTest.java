@@ -306,4 +306,31 @@ class RecipeControllerTest {
         assertTrue(recipes.isEmpty());
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"creationDate", "name", "rating"})
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetRatedRecipesForUserWithDifferentSorting(String poleSortowania) throws Exception {
+        //given
+        int pageNo = 1;
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRatedRecipesByUser("user@mail.com", pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        mockMvc.perform(get("/ocenione/strona/{pageNo}", pageNo)
+                        .param("poleSortowania", poleSortowania)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
+
+        //then
+        assertFalse(recipes.isEmpty());
+    }
 }
