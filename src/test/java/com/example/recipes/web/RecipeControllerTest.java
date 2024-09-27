@@ -278,5 +278,32 @@ class RecipeControllerTest {
         assertFalse(recipes.isEmpty());
     }
 
+    @Test
+    @WithMockUser(username = "userWithoutRatings@mail.com", roles = "USER")
+    void shouldGetEmptyListOfRatedRecipesForUser() throws Exception {
+        //given
+        int pageNo = 1;
+        String poleSortowania = "creationDate";
+        String sortField = RecipeController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findRatedRecipesByUser("userWithoutRatings@mail.com", pageNo, PAGE_SIZE, sortField);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+
+        //when
+        mockMvc.perform(get("/ocenione/strona/{pageNo}", pageNo)
+                        .param("poleSortowania", "creationDate")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe-listing"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
+
+        //then
+        assertTrue(recipes.isEmpty());
+    }
 
 }
