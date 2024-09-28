@@ -21,7 +21,8 @@ public class CommentManagementController {
         this.commentService = commentService;
     }
 
-    private final static Map<String,String> COMMENT_SORT_FIELD_MAP = new HashMap<>();
+    private final static Map<String, String> COMMENT_SORT_FIELD_MAP = new HashMap<>();
+
     static {
         COMMENT_SORT_FIELD_MAP.put("dataDodania", "creationDate");
         COMMENT_SORT_FIELD_MAP.put("zatwierdzenie", "approved");
@@ -31,7 +32,7 @@ public class CommentManagementController {
     public String getCommentsList(@PathVariable Optional<Integer> pageNo,
                                   @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                   @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
-                                  Model model){
+                                  Model model) {
         int pageNumber = pageNo.orElse(1);
         String sortFiled = COMMENT_SORT_FIELD_MAP.getOrDefault(poleSortowania, "approved");
         Page<CommentDto> commentsPage = commentService.findPaginatedCommentsList(pageNumber, PAGE_SIZE, sortFiled, sortDir);
@@ -49,14 +50,14 @@ public class CommentManagementController {
 
     @PostMapping("/admin/lista-komentarzy/zatwierdz-komentarz")
     public String approveComment(@RequestParam(value = "id") Long id,
-                                 @RequestHeader String referer){
+                                 @RequestHeader String referer) {
         commentService.approveComment(id);
         return "redirect:" + referer;
     }
 
     @PostMapping("/admin/lista-komentarzy/usun")
     public String deleteComment(@RequestParam long id,
-                                @RequestHeader String referer){
+                                @RequestHeader String referer) {
         commentService.deleteComment(id);
         return "redirect:" + referer;
     }

@@ -36,13 +36,14 @@ public class RecipeManagementController {
     }
 
     private static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
+
     static {
         SORT_FIELD_MAP.put("dataDodania", "creationDate");
         SORT_FIELD_MAP.put("nazwa", "name");
     }
 
     @GetMapping("/admin/dodaj-przepis")
-    public String addRecipeForm(Model model){
+    public String addRecipeForm(Model model) {
         RecipeSaveDto recipe = new RecipeSaveDto();
         model.addAttribute("recipe", recipe);
         List<TypeDto> types = typeService.findAllTypes();
@@ -56,8 +57,8 @@ public class RecipeManagementController {
     public String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
                             BindingResult bindingResult,
                             Model model,
-                            RedirectAttributes redirectAttributes){
-        if (bindingResult.hasErrors()){
+                            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("recipe", recipe);
             model.addAttribute("types", typeService.findAllTypes());
             model.addAttribute("allDifficultyLevelDto", difficultyLevelService.findAllDifficultyLevelDto());
@@ -75,7 +76,7 @@ public class RecipeManagementController {
     public String getRecipesList(@PathVariable Optional<Integer> pageNo,
                                  @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                  @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
-                                 Model model){
+                                 Model model) {
         int pageNumber = pageNo.orElse(1);
         String sortField = SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
         Page<RecipeMainInfoDto> recipePage = recipeService.findPaginatedRecipesList(pageNumber, PAGE_SIZE, sortField, sortDir);
@@ -93,7 +94,7 @@ public class RecipeManagementController {
 
     @GetMapping("/admin/aktualizuj-przepis/{recipeId}")
     public String updateRecipeForm(@PathVariable long recipeId,
-                                   Model model){
+                                   Model model) {
         RecipeSaveDto recipe = recipeService.findRecipeToSave(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<TypeDto> types = typeService.findAllTypes();
@@ -108,8 +109,8 @@ public class RecipeManagementController {
     public String updateRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
                                BindingResult bindingResult,
                                Model model,
-                               RedirectAttributes redirectAttributes){
-        if (bindingResult.hasErrors()){
+                               RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("recipe", recipe);
             model.addAttribute("types", typeService.findAllTypes());
             model.addAttribute("allDifficultyLevelDto", difficultyLevelService.findAllDifficultyLevelDto());
@@ -124,7 +125,7 @@ public class RecipeManagementController {
 
     @PostMapping("/admin/usun-przepis")
     public String deleteRecipe(@RequestParam(value = "id") Long id,
-                               @RequestHeader String referer){
+                               @RequestHeader String referer) {
         recipeService.deleteRecipe(id);
         return "redirect:" + referer;
     }
