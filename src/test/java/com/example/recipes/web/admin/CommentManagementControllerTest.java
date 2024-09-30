@@ -84,6 +84,37 @@ class CommentManagementControllerTest {
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"creationDate", "approved", "creationDate", "approved"})
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetCommentsListWithDifferentSortingArgument(String poleSortowania) throws Exception {
+        //given
+        int pagNo = 1;
+        String sortDir = "asc";
+        String sortFiled = CommentManagementController.COMMENT_SORT_FIELD_MAP.getOrDefault(poleSortowania, "approved");
+        Page<CommentDto> commentsPage = commentService.findPaginatedCommentsList(pagNo, PAGE_SIZE, sortFiled, sortDir);
+        List<CommentDto> comments = commentsPage.getContent();
+
+        //when
+        mockMvc.perform(get("/admin/lista-komentarzy/{pageNo}", pagNo)
+                        .param("poleSortowania", poleSortowania)
+                        .param("sortDir", sortDir)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-comment-list"))
+                .andExpect(model().attributeExists("comments"))
+                .andExpect(model().attribute("totalPages", commentsPage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pagNo))
+                .andExpect(model().attribute("heading", "Lista komnetarzy"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("sortDir", sortDir))
+                .andExpect(model().attribute("baseUrl", "/admin/lista-komentarzy"));
+
+        //then
+        assertFalse(comments.isEmpty());
+    }
+
+
 
     @Test
     void approveComment() {
