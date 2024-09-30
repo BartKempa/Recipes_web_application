@@ -67,6 +67,23 @@ class CommentManagementControllerTest {
         assertFalse(comments.isEmpty());
     }
 
+    @Test
+    void shouldNotGetCommentsListWhenUserIsNotAuthenticated() throws Exception {
+        //given
+        int pagNo = 1;
+        String poleSortowania = "approved";
+        String sortDir = "asc";
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/lista-komentarzy/{pageNo}", pagNo)
+                        .param("poleSortowania", poleSortowania)
+                        .param("sortDir", sortDir)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
 
     @Test
     void approveComment() {
