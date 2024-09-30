@@ -21,7 +21,7 @@ public class CommentManagementController {
         this.commentService = commentService;
     }
 
-    private final static Map<String, String> COMMENT_SORT_FIELD_MAP = new HashMap<>();
+    protected final static Map<String, String> COMMENT_SORT_FIELD_MAP = new HashMap<>();
 
     static {
         COMMENT_SORT_FIELD_MAP.put("dataDodania", "creationDate");
