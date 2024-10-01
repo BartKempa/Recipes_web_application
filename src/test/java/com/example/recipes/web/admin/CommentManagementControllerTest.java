@@ -143,6 +143,24 @@ class CommentManagementControllerTest {
         assertFalse(comments.isEmpty());
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldReturnEmptyCommentListWhenNoCommentsExist() throws Exception {
+        //given
+        int pagNo = 100;
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/lista-komentarzy/{pageNo}", pagNo)
+                        .param("poleSortowania", "approved")
+                        .param("sortDir", "asc")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-comment-list"))
+                .andExpect(model().attributeExists("comments"))
+                .andExpect(model().attribute("comments", Collections.emptyList()))
+                .andExpect(model().attribute("currentPage", pagNo));
+    }
 
     @Test
     void approveComment() {
