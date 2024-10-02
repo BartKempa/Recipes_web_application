@@ -19,8 +19,10 @@ import java.util.List;
 
 import static com.example.recipes.web.RecipeController.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -163,8 +165,25 @@ class CommentManagementControllerTest {
     }
 
     @Test
-    void approveComment() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldApproveComment() throws Exception {
+        //given
+        final long commentNumber = 2L;
+        final String referer = "/some-page";
+        assertFalse(commentService.findCommentById(commentNumber).orElseThrow().isApproved());
+
+        //when
+        mockMvc.perform(post("/admin/lista-komentarzy/zatwierdz-komentarz")
+                .param("id", String.valueOf(commentNumber))
+                .header("referer", referer)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then
+        assertTrue(commentService.findCommentById(commentNumber).orElseThrow().isApproved());
     }
+    
 
     @Test
     void deleteComment() {
