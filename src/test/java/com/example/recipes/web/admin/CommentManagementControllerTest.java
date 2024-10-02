@@ -183,7 +183,24 @@ class CommentManagementControllerTest {
         //then
         assertTrue(commentService.findCommentById(commentNumber).orElseThrow().isApproved());
     }
-    
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetNotFoundStatusWhenCommentNotExists() throws Exception {
+        //given
+        final long notExistsCommentNumber = 111L;
+        final String referer = "/some-page";
+        assertFalse(commentService.findCommentById(notExistsCommentNumber).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/lista-komentarzy/zatwierdz-komentarz")
+                        .param("id", String.valueOf(notExistsCommentNumber))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
 
     @Test
     void deleteComment() {
