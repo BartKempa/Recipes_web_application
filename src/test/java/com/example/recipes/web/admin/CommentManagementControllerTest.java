@@ -218,7 +218,6 @@ class CommentManagementControllerTest {
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
-
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldDeleteComment() throws Exception {
@@ -239,4 +238,20 @@ class CommentManagementControllerTest {
         assertFalse(commentService.findCommentById(commentNumber).isPresent());
     }
 
+    @Test
+    void shouldRedirectToLoginPageWhenUserIsNotAuthenticatedAndTryDeleteComment() throws Exception {
+        //given
+        final long commentNumber = 2L;
+        final String referer = "/some-page";
+        assertTrue(commentService.findCommentById(commentNumber).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/lista-komentarzy/usun")
+                        .param("id", String.valueOf(commentNumber))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
 }
