@@ -220,6 +220,23 @@ class CommentManagementControllerTest {
 
 
     @Test
-    void deleteComment() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldDeleteComment() throws Exception {
+        //given
+        final long commentNumber = 2L;
+        final String referer = "/some-page";
+        assertTrue(commentService.findCommentById(commentNumber).isPresent());
+
+        //when
+        mockMvc.perform(post("/admin/lista-komentarzy/usun")
+                .param("id", String.valueOf(commentNumber))
+                .header("referer", referer)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then
+        assertFalse(commentService.findCommentById(commentNumber).isPresent());
     }
+
 }

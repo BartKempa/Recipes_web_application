@@ -61,5 +61,4 @@ public class CommentManagementController {
         commentService.deleteComment(id);
         return "redirect:" + referer;
     }
-
 }
