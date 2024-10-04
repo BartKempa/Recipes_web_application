@@ -35,9 +35,6 @@ class CommentManagementControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CommentManagementController commentManagementController;
-
-    @Autowired
     private CommentService commentService;
 
     @Test
@@ -174,9 +171,9 @@ class CommentManagementControllerTest {
 
         //when
         mockMvc.perform(post("/admin/lista-komentarzy/zatwierdz-komentarz")
-                .param("id", String.valueOf(commentNumber))
-                .header("referer", referer)
-                .with(csrf()))
+                        .param("id", String.valueOf(commentNumber))
+                        .header("referer", referer)
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(referer));
 
@@ -228,9 +225,9 @@ class CommentManagementControllerTest {
 
         //when
         mockMvc.perform(post("/admin/lista-komentarzy/usun")
-                .param("id", String.valueOf(commentNumber))
-                .header("referer", referer)
-                .with(csrf()))
+                        .param("id", String.valueOf(commentNumber))
+                        .header("referer", referer)
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(referer));
 
