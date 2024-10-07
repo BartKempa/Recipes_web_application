@@ -12,8 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -48,7 +50,22 @@ class TypeManagementControllerTest {
     }
 
     @Test
-    void addType() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldAddType() throws Exception {
+        //given
+        final String typeName = "Pierogio";
+        TypeDto typeDto = new TypeDto();
+        typeDto.setName(typeName);
+
+        //when
+        mockMvc.perform(post("/admin/dodaj-typ")
+                .flashAttr("type", typeDto)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin"));
+
+        //then
+        assertTrue(typeService.findTypeByName(typeName).isPresent());
     }
 
     @Test
