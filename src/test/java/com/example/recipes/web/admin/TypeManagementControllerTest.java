@@ -53,7 +53,7 @@ class TypeManagementControllerTest {
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldAddType() throws Exception {
         //given
-        final String typeName = "Pierogio";
+        final String typeName = "Pierogi";
         TypeDto typeDto = new TypeDto();
         typeDto.setName(typeName);
 
@@ -67,6 +67,25 @@ class TypeManagementControllerTest {
         //then
         assertTrue(typeService.findTypeByName(typeName).isPresent());
     }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldRejectTypeWithEmptyName() throws Exception {
+        //given
+        final String typeName = "";
+        TypeDto typeDto = new TypeDto();
+        typeDto.setName(typeName);
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/dodaj-typ")
+                        .flashAttr("type", typeDto)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("type", "name"))
+                .andExpect(view().name("admin/type-form"));
+    }
+
 
     @Test
     void getTypesList() {
