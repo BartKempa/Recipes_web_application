@@ -86,6 +86,20 @@ class TypeManagementControllerTest {
                 .andExpect(view().name("admin/type-form"));
     }
 
+    @Test
+    void shouldRedirectToLoginWhenUserIsNotAuthenticated() throws Exception {
+        //given
+        final String typeName = "Pierogi";
+        TypeDto typeDto = new TypeDto();
+        typeDto.setName(typeName);
+
+        //when
+        mockMvc.perform(post("/admin/dodaj-typ")
+                        .flashAttr("type", typeDto)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
 
     @Test
     void getTypesList() {
