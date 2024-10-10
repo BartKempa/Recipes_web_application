@@ -271,7 +271,6 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("currentPage", pageNo))
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
-                .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
 
         //then

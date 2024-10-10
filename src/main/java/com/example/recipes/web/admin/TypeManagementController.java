@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 public class TypeManagementController {
-    private final static int PAGE_SIZE = 6;
+    public final static int PAGE_SIZE = 6;
     private final TypeService typeService;
 
     public TypeManagementController(TypeService typeService) {
