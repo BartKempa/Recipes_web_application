@@ -154,6 +154,23 @@ class TypeManagementControllerTest {
     }
 
     @Test
+    void shouldRedirectToLoginPageWhenTryDeleteTypeAndUserIsNotAuthenticated() throws Exception {
+        //given
+        final long typeIdToDelete = 1L;
+        final String referer = "/some-page";
+        assertTrue(typeService.findTypeById(typeIdToDelete).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/usun-typ")
+                        .param("id", String.valueOf(typeIdToDelete))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
     void updateTypeForm() {
     }
 
