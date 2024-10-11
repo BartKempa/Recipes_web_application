@@ -171,6 +171,23 @@ class TypeManagementControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetNotFoundStatusWhenDeleteNotExistsType() throws Exception {
+        //given
+        final long notExistsTypeNumber = 111L;
+        final String referer = "/some-page";
+        assertFalse(typeService.findTypeById(notExistsTypeNumber).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/usun-typ")
+                        .param("id", String.valueOf(notExistsTypeNumber))
+                        .header("referer", referer)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void updateTypeForm() {
     }
 
