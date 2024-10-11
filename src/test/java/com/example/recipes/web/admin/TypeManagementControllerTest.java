@@ -134,7 +134,23 @@ class TypeManagementControllerTest {
     }
 
     @Test
-    void deleteType() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldDeleteType() throws Exception {
+        //given
+        final long typeIdToDelete = 1L;
+        final String referer = "/some-page";
+        assertTrue(typeService.findTypeById(typeIdToDelete).isPresent());
+
+        //when
+        mockMvc.perform(post("/admin/usun-typ")
+                .param("id", String.valueOf(typeIdToDelete))
+                .header("referer", referer)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(referer));
+
+        //then
+        assertFalse(typeService.findTypeById(typeIdToDelete).isPresent());
     }
 
     @Test
