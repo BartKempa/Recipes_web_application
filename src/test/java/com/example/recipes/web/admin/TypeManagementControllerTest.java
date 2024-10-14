@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -217,6 +216,26 @@ class TypeManagementControllerTest {
     }
 
     @Test
-    void updateType() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldUpdateType() throws Exception {
+        //given
+        final long typeIdToUpdate = 1L;
+        TypeDto typeDto = new TypeDto();
+        typeDto.setId(typeIdToUpdate);
+        typeDto.setName("Pierogi");
+        assertTrue(typeService.findTypeById(typeIdToUpdate).isPresent());
+
+        //when
+        mockMvc.perform(post("/admin/aktualizuj-typ")
+                .param("id", String.valueOf(typeDto.getId()))
+                .param("name", typeDto.getName())
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin"));
+
+        //then
+        assertEquals(typeService.findTypeById(typeIdToUpdate).orElseThrow().getName(), typeDto.getName());
     }
+
+
 }
