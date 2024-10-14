@@ -188,7 +188,18 @@ class TypeManagementControllerTest {
     }
 
     @Test
-    void updateTypeForm() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUpdateTypeForm() throws Exception {
+        //given
+        final long typeIdToUpdate = 1L;
+        assertTrue(typeService.findTypeById(typeIdToUpdate).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/aktualizuj-typ/{typeId}", typeIdToUpdate)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/update-type"));
     }
 
     @Test
