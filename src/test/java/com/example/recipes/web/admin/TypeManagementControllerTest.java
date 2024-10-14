@@ -237,5 +237,27 @@ class TypeManagementControllerTest {
         assertEquals(typeService.findTypeById(typeIdToUpdate).orElseThrow().getName(), typeDto.getName());
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldReturnToUpdateFormWhenValidationFailed() throws Exception {
+        //given
+        final long typeIdToUpdate = 1L;
+        TypeDto typeDtoBeforeUpdate = typeService.findTypeById(typeIdToUpdate).orElseThrow();
+        TypeDto typeDto = new TypeDto();
+        typeDto.setId(typeIdToUpdate);
+        typeDto.setName("a");
+        assertTrue(typeService.findTypeById(typeIdToUpdate).isPresent());
 
+        //when
+        //then
+        mockMvc.perform(post("/admin/aktualizuj-typ")
+                        .param("id", String.valueOf(typeDto.getId()))
+                        .param("name", typeDto.getName())
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/update-type"));
+        //then
+        TypeDto typeDtoAfterUpdate = typeService.findTypeById(typeIdToUpdate).orElseThrow();
+        assertEquals(typeDtoBeforeUpdate.getName(), typeDtoAfterUpdate.getName());
+    }
 }
