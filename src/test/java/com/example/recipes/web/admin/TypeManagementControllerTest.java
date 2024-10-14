@@ -203,6 +203,20 @@ class TypeManagementControllerTest {
     }
 
     @Test
+    void shouldRedirectToLoginPageWhenUserNotAuthorizedAndTryGetUpdateTypeForm() throws Exception {
+        //given
+        final long typeIdToUpdate = 1L;
+        assertTrue(typeService.findTypeById(typeIdToUpdate).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/aktualizuj-typ/{typeId}", typeIdToUpdate)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
     void updateType() {
     }
 }
