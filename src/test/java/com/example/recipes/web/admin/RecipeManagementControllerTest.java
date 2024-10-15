@@ -2,6 +2,8 @@ package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
+import com.example.recipes.domain.recipe.RecipeRepository;
+import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
@@ -10,17 +12,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -34,6 +39,9 @@ class RecipeManagementControllerTest {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Autowired
     private DifficultyLevelService difficultyLevelService;
@@ -52,7 +60,41 @@ class RecipeManagementControllerTest {
     }
 
     @Test
-    void addRecipe() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldAddRecipe() throws Exception {
+        //given
+        File file = new File("src/test/resources/static/img/meal.jpg");
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "image",
+                "meal.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                Files.readAllBytes(file.toPath())
+        );
+
+        RecipeSaveDto recipe = new RecipeSaveDto();
+        recipe.setName("Zupa grzybowa");
+        recipe.setDirectionsSteps("Zagotować wodę i dodać grzyby");
+        recipe.setServing(5);
+        recipe.setDescription("Bardzo dobra zupka");
+        recipe.setCookingTime(10);
+        recipe.setPreparationTime(10);
+        recipe.setIngredients("Woda, grzyby, sól");
+        recipe.setType("Zupy");
+        recipe.setDifficultyLevel("Trudne");
+        recipe.setImage(multipartFile);
+
+        List<TypeDto> types = typeService.findAllTypes();
+        List<DifficultyLevelDto> allDifficultyLevelDto = difficultyLevelService.findAllDifficultyLevelDto();
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/dodaj-przepis")
+                .flashAttr("recipe", recipe)
+                .flashAttr("types", types)
+                .flashAttr("allDifficultyLevelDto", allDifficultyLevelDto)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin"));
     }
 
     @Test
