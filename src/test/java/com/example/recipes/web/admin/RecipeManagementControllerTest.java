@@ -128,6 +128,22 @@ class RecipeManagementControllerTest {
     }
 
     @Test
+    void shouldGetRedirectToLoginPageWhenTryGetRecipesListAndUserIsNotAuthenticated() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final String sortDir = "asc";
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo)
+                        .param("poleSortowania", "creationDate")
+                        .param("sortDir", sortDir)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
     void updateRecipeForm() {
     }
 
