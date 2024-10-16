@@ -4,6 +4,7 @@ import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.recipe.RecipeService;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -41,7 +43,7 @@ class RecipeManagementControllerTest {
     private TypeService typeService;
 
     @Autowired
-    private RecipeRepository recipeRepository;
+    private RecipeService recipeService;
 
     @Autowired
     private DifficultyLevelService difficultyLevelService;
@@ -97,8 +99,32 @@ class RecipeManagementControllerTest {
                 .andExpect(redirectedUrl("/admin"));
     }
 
+
     @Test
-    void getRecipesList() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetRecipesList() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final String poleSortowania = "creationDate";
+        final String sortDir = "asc";
+        String sortField = RecipeManagementController.SORT_FIELD_MAP.getOrDefault(poleSortowania, "creationDate");
+        Page<RecipeMainInfoDto> recipePage = recipeService.findPaginatedRecipesList(pageNo, RecipeManagementController.PAGE_SIZE, sortField, sortDir);
+        List<RecipeMainInfoDto> recipes = recipePage.getContent();
+        //when
+        //then
+        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo)
+                .param("poleSortowania", "creationDate")
+                .param("sortDir", sortDir)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-recipe-list"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Lista przepisów"))
+                .andExpect(model().attribute("sortField", sortField))
+                .andExpect(model().attribute("baseUrl", "/admin/lista-przepisow"));
     }
 
     @Test
