@@ -160,6 +160,19 @@ class RecipeManagementControllerTest {
                 .andExpect(view().name("admin/recipe-update-form"));
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetStatusNotFoundWhenRecipeNotExistsAndTryGetUpdateRecipeForm() throws Exception {
+        //given
+        final long notExistsRecipeId = 111L;
+        assertFalse(recipeService.findRecipeById(notExistsRecipeId).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", notExistsRecipeId)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
 
 
     @Test
