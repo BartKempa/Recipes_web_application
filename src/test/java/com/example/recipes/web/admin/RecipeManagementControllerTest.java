@@ -22,9 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -144,14 +146,24 @@ class RecipeManagementControllerTest {
     }
 
     @Test
-    void updateRecipeForm() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUpdateRecipeForm() throws Exception {
+        //given
+        final long recipeIdToUpdate = 1L;
+        assertTrue(recipeService.findRecipeById(recipeIdToUpdate).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", recipeIdToUpdate)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/recipe-update-form"));
     }
 
-    @Test
-    void updateRecipe() {
-    }
+
 
     @Test
     void deleteRecipe() {
+
     }
 }
