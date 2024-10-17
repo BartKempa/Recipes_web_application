@@ -174,6 +174,47 @@ class RecipeManagementControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldUpdateRecipe() throws Exception {
+        //given
+        final long recipeIdToUpdate = 1L;
+        File file = new File("src/test/resources/static/img/meal.jpg");
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "image",
+                "meal.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                Files.readAllBytes(file.toPath())
+        );
+
+        String name = "Zupa grzybowa";
+        String directionsSteps = "Zagotować wodę i dodać grzyby";
+        String description = "Bardzo dobra zupka";
+        Integer serving = 5;
+        Integer cookingTime = 10;
+        Integer preparationTime = 10;
+        String ingredients = "Woda, grzyby, sól";
+        String type = "Zupy";
+        String difficultyLevel = "Trudne";
+
+        //when
+        mockMvc.perform(multipart("/admin/aktualizuj-przepis")
+                .file(multipartFile)
+                .param("id", String.valueOf(recipeIdToUpdate))
+                .param("name", name)
+                .param("directionsSteps", directionsSteps)
+                .param("serving", serving.toString())
+                .param("description", description)
+                .param("cookingTime", cookingTime.toString())
+                .param("preparationTime", preparationTime.toString())
+                .param("ingredients", ingredients)
+                .param("type", type)
+                .param("difficultyLevel", difficultyLevel)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin"));
+    }
+
 
     @Test
     void deleteRecipe() {
