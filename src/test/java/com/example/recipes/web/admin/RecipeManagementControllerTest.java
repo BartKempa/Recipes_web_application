@@ -215,6 +215,46 @@ class RecipeManagementControllerTest {
                 .andExpect(redirectedUrl("/admin"));
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldReturnToUpdateRecipeFormWHenValidationFailed() throws Exception {
+        //given
+        final long recipeIdToUpdate = 1L;
+        File file = new File("src/test/resources/static/img/meal.jpg");
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "image",
+                "meal.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                Files.readAllBytes(file.toPath())
+        );
+
+        String name = "Z";
+        String directionsSteps = "";
+        String description = "";
+        Integer serving = -5;
+        Integer cookingTime = -10;
+        Integer preparationTime = -10;
+        String ingredients = "";
+        String type = "Zupy";
+        String difficultyLevel = "Trudne";
+
+        //when
+        mockMvc.perform(multipart("/admin/aktualizuj-przepis")
+                        .file(multipartFile)
+                        .param("id", String.valueOf(recipeIdToUpdate))
+                        .param("name", name)
+                        .param("directionsSteps", directionsSteps)
+                        .param("serving", serving.toString())
+                        .param("description", description)
+                        .param("cookingTime", cookingTime.toString())
+                        .param("preparationTime", preparationTime.toString())
+                        .param("ingredients", ingredients)
+                        .param("type", type)
+                        .param("difficultyLevel", difficultyLevel)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/recipe-update-form"));
+    }
 
     @Test
     void deleteRecipe() {
