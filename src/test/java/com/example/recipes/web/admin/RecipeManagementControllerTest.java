@@ -1,7 +1,9 @@
 package com.example.recipes.web.admin;
 
+import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
+import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
@@ -53,14 +55,7 @@ class RecipeManagementControllerTest {
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldGetAddRecipeForm() throws Exception {
-        mockMvc.perform(get("/admin/dodaj-przepis")
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/recipe-form"))
-                .andExpect(model().attributeExists("recipe"))
-                .andExpect(model().attribute("recipe", Matchers.instanceOf(RecipeSaveDto.class)))
-                .andExpect(model().attributeExists("types"))
-                .andExpect(model().attributeExists("allDifficultyLevelDto"));
+        mockMvc.perform(get("/admin/dodaj-przepis").with(csrf())).andExpect(status().isOk()).andExpect(view().name("admin/recipe-form")).andExpect(model().attributeExists("recipe")).andExpect(model().attribute("recipe", Matchers.instanceOf(RecipeSaveDto.class))).andExpect(model().attributeExists("types")).andExpect(model().attributeExists("allDifficultyLevelDto"));
     }
 
     @Test
@@ -68,12 +63,7 @@ class RecipeManagementControllerTest {
     void shouldAddRecipe() throws Exception {
         //given
         File file = new File("src/test/resources/static/img/meal.jpg");
-        MockMultipartFile multipartFile = new MockMultipartFile(
-                "image",
-                "meal.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                Files.readAllBytes(file.toPath())
-        );
+        MockMultipartFile multipartFile = new MockMultipartFile("image", "meal.jpg", MediaType.IMAGE_JPEG_VALUE, Files.readAllBytes(file.toPath()));
 
         RecipeSaveDto recipe = new RecipeSaveDto();
         recipe.setName("Zupa grzybowa");
@@ -92,13 +82,7 @@ class RecipeManagementControllerTest {
 
         //when
         //then
-        mockMvc.perform(post("/admin/dodaj-przepis")
-                .flashAttr("recipe", recipe)
-                .flashAttr("types", types)
-                .flashAttr("allDifficultyLevelDto", allDifficultyLevelDto)
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin"));
+        mockMvc.perform(post("/admin/dodaj-przepis").flashAttr("recipe", recipe).flashAttr("types", types).flashAttr("allDifficultyLevelDto", allDifficultyLevelDto).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/admin"));
     }
 
 
@@ -114,20 +98,9 @@ class RecipeManagementControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
         //when
         //then
-        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo)
-                .param("poleSortowania", "creationDate")
-                .param("sortDir", sortDir)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/admin-recipe-list"))
-                .andExpect(model().attributeExists("recipes"))
-                .andExpect(model().attribute("recipes", recipes))
-                .andExpect(model().attribute("totalPages", recipePage.getTotalPages()))
-                .andExpect(model().attribute("currentPage", pageNo))
-                .andExpect(model().attribute("heading", "Lista przepisów"))
-                .andExpect(model().attribute("sortField", sortField))
-                .andExpect(model().attribute("baseUrl", "/admin/lista-przepisow"));
+        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo).param("poleSortowania", "creationDate").param("sortDir", sortDir).with(csrf())).andExpect(status().isOk()).andExpect(view().name("admin/admin-recipe-list")).andExpect(model().attributeExists("recipes")).andExpect(model().attribute("recipes", recipes)).andExpect(model().attribute("totalPages", recipePage.getTotalPages())).andExpect(model().attribute("currentPage", pageNo)).andExpect(model().attribute("heading", "Lista przepisów")).andExpect(model().attribute("sortField", sortField)).andExpect(model().attribute("baseUrl", "/admin/lista-przepisow"));
     }
+
 
     @Test
     void shouldGetRedirectToLoginPageWhenTryGetRecipesListAndUserIsNotAuthenticated() throws Exception {
@@ -137,13 +110,9 @@ class RecipeManagementControllerTest {
 
         //when
         //then
-        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo)
-                        .param("poleSortowania", "creationDate")
-                        .param("sortDir", sortDir)
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/login"));
+        mockMvc.perform(get("/admin/lista-przepisow/{pageNo}", pageNo).param("poleSortowania", "creationDate").param("sortDir", sortDir).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("http://localhost/login"));
     }
+
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -154,11 +123,9 @@ class RecipeManagementControllerTest {
 
         //when
         //then
-        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", recipeIdToUpdate)
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/recipe-update-form"));
+        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", recipeIdToUpdate).with(csrf())).andExpect(status().isOk()).andExpect(view().name("admin/recipe-update-form"));
     }
+
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -169,10 +136,9 @@ class RecipeManagementControllerTest {
 
         //when
         //then
-        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", notExistsRecipeId)
-                        .with(csrf()))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/admin/aktualizuj-przepis/{recipeId}", notExistsRecipeId).with(csrf())).andExpect(status().isNotFound());
     }
+
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -180,12 +146,7 @@ class RecipeManagementControllerTest {
         //given
         final long recipeIdToUpdate = 1L;
         File file = new File("src/test/resources/static/img/meal.jpg");
-        MockMultipartFile multipartFile = new MockMultipartFile(
-                "image",
-                "meal.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                Files.readAllBytes(file.toPath())
-        );
+        MockMultipartFile multipartFile = new MockMultipartFile("image", "meal.jpg", MediaType.IMAGE_JPEG_VALUE, Files.readAllBytes(file.toPath()));
 
         String name = "Zupa grzybowa";
         String directionsSteps = "Zagotować wodę i dodać grzyby";
@@ -198,22 +159,9 @@ class RecipeManagementControllerTest {
         String difficultyLevel = "Trudne";
 
         //when
-        mockMvc.perform(multipart("/admin/aktualizuj-przepis")
-                .file(multipartFile)
-                .param("id", String.valueOf(recipeIdToUpdate))
-                .param("name", name)
-                .param("directionsSteps", directionsSteps)
-                .param("serving", serving.toString())
-                .param("description", description)
-                .param("cookingTime", cookingTime.toString())
-                .param("preparationTime", preparationTime.toString())
-                .param("ingredients", ingredients)
-                .param("type", type)
-                .param("difficultyLevel", difficultyLevel)
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin"));
+        mockMvc.perform(multipart("/admin/aktualizuj-przepis").file(multipartFile).param("id", String.valueOf(recipeIdToUpdate)).param("name", name).param("directionsSteps", directionsSteps).param("serving", serving.toString()).param("description", description).param("cookingTime", cookingTime.toString()).param("preparationTime", preparationTime.toString()).param("ingredients", ingredients).param("type", type).param("difficultyLevel", difficultyLevel).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/admin"));
     }
+
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -221,12 +169,7 @@ class RecipeManagementControllerTest {
         //given
         final long recipeIdToUpdate = 1L;
         File file = new File("src/test/resources/static/img/meal.jpg");
-        MockMultipartFile multipartFile = new MockMultipartFile(
-                "image",
-                "meal.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                Files.readAllBytes(file.toPath())
-        );
+        MockMultipartFile multipartFile = new MockMultipartFile("image", "meal.jpg", MediaType.IMAGE_JPEG_VALUE, Files.readAllBytes(file.toPath()));
 
         String name = "Z";
         String directionsSteps = "";
@@ -239,25 +182,7 @@ class RecipeManagementControllerTest {
         String difficultyLevel = "Trudne";
 
         //when
-        mockMvc.perform(multipart("/admin/aktualizuj-przepis")
-                        .file(multipartFile)
-                        .param("id", String.valueOf(recipeIdToUpdate))
-                        .param("name", name)
-                        .param("directionsSteps", directionsSteps)
-                        .param("serving", serving.toString())
-                        .param("description", description)
-                        .param("cookingTime", cookingTime.toString())
-                        .param("preparationTime", preparationTime.toString())
-                        .param("ingredients", ingredients)
-                        .param("type", type)
-                        .param("difficultyLevel", difficultyLevel)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/recipe-update-form"));
+        mockMvc.perform(multipart("/admin/aktualizuj-przepis").file(multipartFile).param("id", String.valueOf(recipeIdToUpdate)).param("name", name).param("directionsSteps", directionsSteps).param("serving", serving.toString()).param("description", description).param("cookingTime", cookingTime.toString()).param("preparationTime", preparationTime.toString()).param("ingredients", ingredients).param("type", type).param("difficultyLevel", difficultyLevel).with(csrf())).andExpect(status().isOk()).andExpect(view().name("admin/recipe-update-form"));
     }
-
-    @Test
-    void deleteRecipe() {
-
-    }
+    
 }
