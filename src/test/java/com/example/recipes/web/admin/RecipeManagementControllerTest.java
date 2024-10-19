@@ -184,5 +184,20 @@ class RecipeManagementControllerTest {
         //when
         mockMvc.perform(multipart("/admin/aktualizuj-przepis").file(multipartFile).param("id", String.valueOf(recipeIdToUpdate)).param("name", name).param("directionsSteps", directionsSteps).param("serving", serving.toString()).param("description", description).param("cookingTime", cookingTime.toString()).param("preparationTime", preparationTime.toString()).param("ingredients", ingredients).param("type", type).param("difficultyLevel", difficultyLevel).with(csrf())).andExpect(status().isOk()).andExpect(view().name("admin/recipe-update-form"));
     }
-    
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldDeleteExistsRecipe() throws Exception {
+        //given
+        final long recipeIdToDelete = 1L;
+        final String referer = "/some-page";
+        assertTrue(recipeService.findRecipeById(recipeIdToDelete).isPresent());
+
+        //when
+        mockMvc.perform(post("/admin/usun-przepis").param("id", String.valueOf(recipeIdToDelete)).header("referer", referer).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl(referer));
+
+        //then
+        assertFalse(recipeService.findRecipeById(recipeIdToDelete).isPresent());
+    }
+
 }
