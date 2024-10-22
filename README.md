@@ -83,7 +83,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/recipes
     username: root
-    password: passwor
+    password: password
 ```
 7. The server is running on localhost:8080.
 

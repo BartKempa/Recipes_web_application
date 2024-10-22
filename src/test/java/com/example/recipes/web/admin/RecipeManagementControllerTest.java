@@ -200,5 +200,16 @@ class RecipeManagementControllerTest {
         assertFalse(recipeService.findRecipeById(recipeIdToDelete).isPresent());
     }
 
+    @Test
+    void shouldRedirectToLoginPageUnauthorizedUserWhenTryDeleteRecipe() throws Exception {
+        //given
+        final long recipeIdToDelete = 1L;
+        final String referer = "/some-page";
+        assertTrue(recipeService.findRecipeById(recipeIdToDelete).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/usun-przepis").param("id", String.valueOf(recipeIdToDelete)).header("referer", referer).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("http://localhost/login"));
+    }
 
 }
