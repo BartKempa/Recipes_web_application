@@ -212,4 +212,16 @@ class RecipeManagementControllerTest {
         mockMvc.perform(post("/admin/usun-przepis").param("id", String.valueOf(recipeIdToDelete)).header("referer", referer).with(csrf())).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("http://localhost/login"));
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetNotFoundStatusWhenTryDeleteNotExistsRecipe() throws Exception {
+        //given
+        final long notExistsRecipeIdToDelete = 111L;
+        final String referer = "/some-page";
+        assertFalse(recipeService.findRecipeById(notExistsRecipeIdToDelete).isPresent());
+
+        //when
+        //then
+        mockMvc.perform(post("/admin/usun-przepis").param("id", String.valueOf(notExistsRecipeIdToDelete)).header("referer", referer).with(csrf())).andExpect(status().isNotFound());
+    }
 }
