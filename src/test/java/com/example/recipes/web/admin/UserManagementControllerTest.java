@@ -116,7 +116,36 @@ class UserManagementControllerTest {
         assertFalse(users.isEmpty());
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"asc", "desc"})
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUsersListWithDifferentSortingDirectionArguments(String sortDir) throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final String poleSortowania = "email";
+        String sortField = USER_SORT_FIELD_MAP.getOrDefault(poleSortowania, "email");
+        Page<UserRegistrationDto> usersPage = userService.findAllUsers(pageNo, PAGE_SIZE, sortField, sortDir);
+        List<UserRegistrationDto> users = usersPage.getContent();
 
+        //when
+        mockMvc.perform(get("/admin/list-uzytkownikow/{pageNo}", pageNo)
+                        .param("poleSortowania", poleSortowania)
+                        .param("sortDir", sortDir)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-user-list"))
+                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attribute("users", users))
+                .andExpect(model().attribute("totalPages", usersPage.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Lista użytkoników"))
+                .andExpect(model().attribute("sortField", poleSortowania))
+                .andExpect(model().attribute("sortDir", sortDir))
+                .andExpect(model().attribute("baseUrl", "/admin/list-uzytkownikow"));
+
+        //then
+        assertFalse(users.isEmpty());
+    }
 
     @Test
     void getUserDetails() {
