@@ -84,7 +84,7 @@ class CommentManagementControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"creationDate", "approved", "creationDate", "approved"})
+    @ValueSource(strings = {"creationDate", "approved"})
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldGetCommentsListWithDifferentSortingArgument(String poleSortowania) throws Exception {
         //given

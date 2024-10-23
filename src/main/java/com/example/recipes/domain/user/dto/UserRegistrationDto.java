@@ -4,6 +4,7 @@ import com.example.recipes.domain.user.validation.PasswordCriteria;
 import com.example.recipes.domain.user.validation.UniqueEmail;
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class UserRegistrationDto {
@@ -95,5 +96,17 @@ public class UserRegistrationDto {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserRegistrationDto that)) return false;
+        return age == that.age && Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(nickName, that.nickName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, firstName, lastName, nickName, age);
     }
 }

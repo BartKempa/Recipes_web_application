@@ -24,7 +24,7 @@ import java.util.Optional;
 @Controller
 public class UserManagementController {
     private final static String SORT_FILED = "creationDate";
-    private final static int PAGE_SIZE = 6;
+    public final static int PAGE_SIZE = 6;
     private final UserService userService;
     private final CommentService commentService;
     private final RecipeService recipeService;
@@ -37,7 +37,7 @@ public class UserManagementController {
         this.ratingService = ratingService;
     }
 
-    private final static Map<String, String> USER_SORT_FIELD_MAP = new HashMap<>();
+    public final static Map<String, String> USER_SORT_FIELD_MAP = new HashMap<>();
     static {
         USER_SORT_FIELD_MAP.put("nazwaUzytkownika", "nickName");
         USER_SORT_FIELD_MAP.put("adresEmail", "email");
