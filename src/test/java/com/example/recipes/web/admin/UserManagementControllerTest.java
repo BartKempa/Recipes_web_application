@@ -69,6 +69,23 @@ class UserManagementControllerTest {
     }
 
     @Test
+    void shouldRedirectToLoginPageWhenUserIsNotAuthenticatedAndTryGetUsersList() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final String poleSortowania = "email";
+        final String sortDir = "asc";
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/list-uzytkownikow/{pageNo}", pageNo)
+                        .param("poleSortowania", poleSortowania)
+                        .param("sortDir", sortDir)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
     void getUserDetails() {
     }
 
