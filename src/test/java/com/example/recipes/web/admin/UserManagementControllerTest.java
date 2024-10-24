@@ -1,5 +1,7 @@
 package com.example.recipes.web.admin;
 
+import com.example.recipes.domain.comment.CommentService;
+import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Test;
@@ -9,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,6 +40,11 @@ class UserManagementControllerTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private RecipeService recipeService;
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -148,8 +157,28 @@ class UserManagementControllerTest {
     }
 
     @Test
-    void getUserDetails() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUserDetails() throws Exception {
+        //given
+        final long userId = 1;
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        final long commentCount = commentService.countUserComments(user.getEmail());
+        final long favouriteRecipesCount = recipeService.countFavouriteUserRecipes(user.getEmail());
+        final long ratedRecipesByUser = recipeService.countRatedRecipeByUser(user.getEmail());
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/uzytkownik/{userId}", userId)
+                .with(csrf()))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("ratedRecipesByUser", ratedRecipesByUser))
+                .andExpect(model().attribute("favouriteRecipesCount", favouriteRecipesCount))
+                .andExpect(model().attribute("commentCount", commentCount))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-user-details"));
     }
+
+  
 
     @Test
     void getUserComments() {
