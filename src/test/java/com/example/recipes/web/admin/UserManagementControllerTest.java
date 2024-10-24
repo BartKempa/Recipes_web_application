@@ -191,7 +191,18 @@ class UserManagementControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void shouldGetRedirectToLoginPageWhenUserNotAuthenticatedAndTryGetUserDetails() throws Exception {
+        //given
+        final long userId = 1;
 
+        //when
+        //then
+        mockMvc.perform(get("/admin/uzytkownik/{userId}", userId)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
 
     @Test
     void getUserComments() {
