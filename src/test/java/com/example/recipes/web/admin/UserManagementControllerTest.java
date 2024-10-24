@@ -178,7 +178,20 @@ class UserManagementControllerTest {
                 .andExpect(view().name("admin/admin-user-details"));
     }
 
-  
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetNotFoundStatusWhenUserNotExistsAndTryGetUserDetails() throws Exception {
+        //given
+        final long notExistsUserId = 111;
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/uzytkownik/{userId}", notExistsUserId)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+
 
     @Test
     void getUserComments() {
