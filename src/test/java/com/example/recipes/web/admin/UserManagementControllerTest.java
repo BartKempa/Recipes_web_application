@@ -1,6 +1,7 @@
 package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.comment.CommentService;
+import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
@@ -20,8 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static com.example.recipes.web.admin.UserManagementController.PAGE_SIZE;
-import static com.example.recipes.web.admin.UserManagementController.USER_SORT_FIELD_MAP;
+import static com.example.recipes.web.admin.UserManagementController.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -160,7 +160,7 @@ class UserManagementControllerTest {
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldGetUserDetails() throws Exception {
         //given
-        final long userId = 1;
+        final long userId = 1L;
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         final long commentCount = commentService.countUserComments(user.getEmail());
         final long favouriteRecipesCount = recipeService.countFavouriteUserRecipes(user.getEmail());
@@ -182,7 +182,7 @@ class UserManagementControllerTest {
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
     void shouldGetNotFoundStatusWhenUserNotExistsAndTryGetUserDetails() throws Exception {
         //given
-        final long notExistsUserId = 111;
+        final long notExistsUserId = 111L;
 
         //when
         //then
@@ -194,7 +194,7 @@ class UserManagementControllerTest {
     @Test
     void shouldGetRedirectToLoginPageWhenUserNotAuthenticatedAndTryGetUserDetails() throws Exception {
         //given
-        final long userId = 1;
+        final long userId = 1L;
 
         //when
         //then
@@ -205,8 +205,32 @@ class UserManagementControllerTest {
     }
 
     @Test
-    void getUserComments() {
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUserComments() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final long userId = 1L;
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<CommentDto> allUserCommentsPages = commentService.findAllUserComments(user.getEmail(), pageNo, PAGE_SIZE, SORT_FILED);
+        List<CommentDto> comments = allUserCommentsPages.getContent();
+
+        //when
+        mockMvc.perform(get("/admin/uzytkownik/{userId}/komentarze/{pageNo}", pageNo, pageNo)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-user-comments"))
+                .andExpect(model().attributeExists("comments"))
+                .andExpect(model().attribute("comments", comments))
+                .andExpect(model().attribute("totalPages", allUserCommentsPages.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Komentarze użytkownika " + user.getNickName()))
+                .andExpect(model().attribute("baseUrl", "/admin/uzytkownik/" + userId + "/komentarze"));
+
+        //then
+        assertFalse(comments.isEmpty());
     }
+
+  
 
     @Test
     void getUserFavouriteRecipes() {
@@ -214,5 +238,6 @@ class UserManagementControllerTest {
 
     @Test
     void getUserRatedRecipes() {
+
     }
 }
