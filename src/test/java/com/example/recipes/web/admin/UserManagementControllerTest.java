@@ -2,7 +2,9 @@ package com.example.recipes.web.admin;
 
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
+import com.example.recipes.domain.rating.RatingService;
 import com.example.recipes.domain.recipe.RecipeService;
+import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.example.recipes.web.admin.UserManagementController.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +48,9 @@ class UserManagementControllerTest {
 
     @Autowired
     private RecipeService recipeService;
+
+    @Autowired
+    private RatingService ratingService;
 
     @Test
     @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
@@ -230,14 +236,18 @@ class UserManagementControllerTest {
         assertFalse(comments.isEmpty());
     }
 
-  
-
     @Test
-    void getUserFavouriteRecipes() {
+    void shouldGetRedirectToLoginPageWhenUserNotAuthenticatedAndTryGetUserComments() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final long userId = 1L;
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/uzytkownik/{userId}/komentarze/{pageNo}", userId, pageNo)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
     }
 
-    @Test
-    void getUserRatedRecipes() {
-
-    }
 }
