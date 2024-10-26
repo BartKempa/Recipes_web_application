@@ -264,4 +264,42 @@ class UserManagementControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @WithMockUser(username = "admin@mail.com", roles = "ADMIN")
+    void shouldGetUserFavouriteRecipes() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final long userId = 1L;
+        UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<RecipeMainInfoDto> favouriteRecipesPagesForUser = recipeService.findFavouriteRecipesForUser(user.getEmail(), pageNo, PAGE_SIZE, SORT_FILED);
+        List<RecipeMainInfoDto> recipes = favouriteRecipesPagesForUser.getContent();
+
+        //when
+        mockMvc.perform(get("/admin/uzytkownik/{userId}/ulubione/{pageNo}", pageNo, pageNo)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/admin-user-favourites"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(model().attribute("recipes", recipes))
+                .andExpect(model().attribute("totalPages", favouriteRecipesPagesForUser.getTotalPages()))
+                .andExpect(model().attribute("currentPage", pageNo))
+                .andExpect(model().attribute("heading", "Polubione przepisy użytkownika " + user.getNickName()))
+                .andExpect(model().attribute("baseUrl", "/admin/uzytkownik/" + userId + "/ulubione"));
+
+        //then
+        assertFalse(recipes.isEmpty());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
