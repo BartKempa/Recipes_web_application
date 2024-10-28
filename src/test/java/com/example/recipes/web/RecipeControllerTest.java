@@ -174,7 +174,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ulubione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ulubione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -186,7 +186,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("heading", "Twoje ulubione przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
-                .andExpect(model().attribute("baseUrl", "/ulubione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ulubione/strona"));
 
         //then
         assertFalse(recipes.isEmpty());
@@ -203,7 +203,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ulubione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ulubione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -215,7 +215,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("heading", "Twoje ulubione przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
-                .andExpect(model().attribute("baseUrl", "/ulubione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ulubione/strona"));
 
         //then
         assertTrue(recipes.isEmpty());
@@ -232,7 +232,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ulubione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ulubione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", poleSortowania)
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -243,7 +243,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("currentPage", pageNo))
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("heading", "Twoje ulubione przepisy"))
-                .andExpect(model().attribute("baseUrl", "/ulubione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ulubione/strona"));
 
         //then
         assertFalse(recipes.isEmpty());
@@ -260,7 +260,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ocenione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ocenione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -271,7 +271,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("currentPage", pageNo))
                 .andExpect(model().attribute("sortField", poleSortowania))
                 .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
-                .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ocenione/strona"));
 
         //then
         assertFalse(recipes.isEmpty());
@@ -288,7 +288,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ocenione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ocenione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", "creationDate")
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -299,7 +299,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("currentPage", pageNo))
                 .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
-                .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ocenione/strona"));
 
         //then
         assertTrue(recipes.isEmpty());
@@ -316,7 +316,7 @@ class RecipeControllerTest {
         List<RecipeMainInfoDto> recipes = recipePage.getContent();
 
         //when
-        mockMvc.perform(get("/ocenione/strona/{pageNo}", pageNo)
+        mockMvc.perform(get("/uzytkownik/ocenione/strona/{pageNo}", pageNo)
                         .param("poleSortowania", poleSortowania)
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -327,7 +327,7 @@ class RecipeControllerTest {
                 .andExpect(model().attribute("currentPage", pageNo))
                 .andExpect(model().attribute("heading", "Twoje oceninone przepisy"))
                 .andExpect(model().attribute("sortField", poleSortowania))
-                .andExpect(model().attribute("baseUrl", "/ocenione/strona"));
+                .andExpect(model().attribute("baseUrl", "/uzytkownik/ocenione/strona"));
 
         //then
         assertFalse(recipes.isEmpty());

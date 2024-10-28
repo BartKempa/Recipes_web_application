@@ -101,7 +101,7 @@ public class RecipeController {
     }
 
 
-    @GetMapping("/ulubione/strona/{pageNo}")
+    @GetMapping("/uzytkownik/ulubione/strona/{pageNo}")
     public String getFavouriteRecipesForUser(@PathVariable Optional<Integer> pageNo,
                                              @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                              Authentication authentication,
@@ -116,12 +116,12 @@ public class RecipeController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("sortField", poleSortowania);
-        model.addAttribute("baseUrl", "/ulubione/strona");
+        model.addAttribute("baseUrl", "/uzytkownik/ulubione/strona");
         model.addAttribute("heading", "Twoje ulubione przepisy");
         return "recipe-listing";
     }
 
-    @GetMapping("/ocenione/strona/{pageNo}")
+    @GetMapping("/uzytkownik/ocenione/strona/{pageNo}")
     public String getRatedRecipesForUser(@PathVariable Optional<Integer> pageNo,
                                          @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                          Authentication authentication,
@@ -136,7 +136,7 @@ public class RecipeController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("sortField", poleSortowania);
-        model.addAttribute("baseUrl", "/ocenione/strona");
+        model.addAttribute("baseUrl", "/uzytkownik/ocenione/strona");
         model.addAttribute("heading", "Twoje oceninone przepisy");
         return "recipe-listing";
     }

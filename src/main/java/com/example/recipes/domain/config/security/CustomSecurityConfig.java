@@ -19,7 +19,6 @@ import java.util.Base64;
 public class CustomSecurityConfig {
     private static final String USER_ROLE = "USER";
     private static final String ADMIN_ROLE = "ADMIN";
-    private static final String EDITOR_ROLE = "EDITOR";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,8 +27,8 @@ public class CustomSecurityConfig {
                         .requestMatchers("/dodaj-komentarz").authenticated()
                         .requestMatchers("/ocen-przepis").authenticated()
                         .requestMatchers("/dodaj-do-ulubione").authenticated()
-                        .requestMatchers("/uzytkownik/**").authenticated()
-                        .requestMatchers("/admin/**").hasAnyRole(ADMIN_ROLE, EDITOR_ROLE)
+                        .requestMatchers("/uzytkownik/**").hasRole(USER_ROLE)
+                        .requestMatchers("/admin/**").hasRole(ADMIN_ROLE)
                         .anyRequest().permitAll()
 
         )
@@ -59,8 +58,6 @@ public class CustomSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
 }
