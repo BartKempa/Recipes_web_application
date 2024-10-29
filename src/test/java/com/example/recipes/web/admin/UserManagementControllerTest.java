@@ -290,6 +290,20 @@ class UserManagementControllerTest {
         assertFalse(recipes.isEmpty());
     }
 
+    @Test
+    void shouldGetRedirectToLoginPageWhenUserNotAuthenticatedAndTryGetFavouriteRecipes() throws Exception {
+        //given
+        final Integer pageNo = 1;
+        final long userId = 1L;
+
+        //when
+        //then
+        mockMvc.perform(get("/admin/uzytkownik/{userId}/ulubione/{pageNo}", userId, pageNo)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
 
 
 
