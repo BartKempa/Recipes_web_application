@@ -28,7 +28,7 @@ public class TypeService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public TypeService(TypeRepository typeRepository, RecipeRepository recipeRepository, RatingRepository ratingRepository, CommentRepository commentRepository, UserRepository userRepository) {
+    TypeService(TypeRepository typeRepository, RecipeRepository recipeRepository, RatingRepository ratingRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.typeRepository = typeRepository;
         this.recipeRepository = recipeRepository;
         this.ratingRepository = ratingRepository;

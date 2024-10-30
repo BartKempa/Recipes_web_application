@@ -3,7 +3,7 @@ package com.example.recipes.domain.user.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordCriteriaValidator implements ConstraintValidator<PasswordCriteria, String> {
+class PasswordCriteriaValidator implements ConstraintValidator<PasswordCriteria, String> {
     @Override
     public void initialize(PasswordCriteria constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

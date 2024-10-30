@@ -4,10 +4,10 @@ import com.example.recipes.domain.user.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
+class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
     private final UserRepository userRepository;
 
-    public UniqueEmailValidator(UserRepository userRepository) {
+    UniqueEmailValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
