@@ -28,7 +28,7 @@ public class RecipeService {
     private final CommentRepository commentRepository;
     private final RecipeDateTimeProvider recipeDateTimeProvider;
 
-    public RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService, RatingRepository ratingRepository, CommentRepository commentRepository, RecipeDateTimeProvider recipeDateTimeProvider) {
+    RecipeService(RecipeRepository recipeRepository, TypeRepository typeRepository, DifficultyLevelRepository difficultyLevelRepository, FileStorageService fileStorageService, RatingRepository ratingRepository, CommentRepository commentRepository, RecipeDateTimeProvider recipeDateTimeProvider) {
         this.recipeRepository = recipeRepository;
         this.typeRepository = typeRepository;
         this.difficultyLevelRepository = difficultyLevelRepository;
@@ -39,15 +39,23 @@ public class RecipeService {
     }
 
      public Page<RecipeMainInfoDto> findPaginated(int pageNumber, int pageSize, String sortField){
-         Sort sort = Sort.by(sortField).descending();
-         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+         Sort sort = getSort(sortField);
+         Pageable pageable = getPageable(pageNumber, pageSize, sort);
          return recipeRepository.findAll(pageable)
                  .map(RecipeDtoMapper::mapMainInfo);
      }
 
+    private Pageable getPageable(int pageNumber, int pageSize, Sort sort) {
+        return PageRequest.of(pageNumber - 1, pageSize, sort);
+    }
+
+    private Sort getSort(String sortField) {
+        return Sort.by(sortField).descending();
+    }
+
     public Page<RecipeMainInfoDto> findPaginatedRecipesList(int pageNumber, int pageSize, String sortField, String sortDirection){
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending() ;
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return recipeRepository.findAll(pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
@@ -91,15 +99,15 @@ public class RecipeService {
     }
 
     public Page<RecipeMainInfoDto> findRecipesByText(String searchText, int pageNumber, int pageSize, String sortField){
-        Sort sort = Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Sort sort = getSort(sortField);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return recipeRepository.findRecipesBySearchText(searchText, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
 
     public Page<RecipeMainInfoDto> findFavouriteRecipesForUser(String email, int pageNumber, int pageSize, String sortField){
-        Sort sort = Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Sort sort = getSort(sortField);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return recipeRepository.findAllFavouritesRecipesForUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
@@ -110,8 +118,8 @@ public class RecipeService {
     }
 
     public Page<RecipeMainInfoDto> findRatedRecipesByUser(String email, int pageNumber, int pageSize, String sortField) {
-        Sort sort = Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Sort sort = getSort(sortField);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return recipeRepository.findAllRatedRecipesByUser(email, pageable)
                 .map(RecipeDtoMapper::mapMainInfo);
     }
