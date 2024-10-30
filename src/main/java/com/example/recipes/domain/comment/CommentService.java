@@ -26,22 +26,22 @@ public class CommentService {
     private final RecipeRepository recipeRepository;
     private final CommentDateTimeProvider dateTimeProvider;
 
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, RecipeRepository recipeRepository, CommentDateTimeProvider dateTimeProvider) {
+    CommentService(CommentRepository commentRepository, UserRepository userRepository, RecipeRepository recipeRepository, CommentDateTimeProvider dateTimeProvider) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.recipeRepository = recipeRepository;
         this.dateTimeProvider = dateTimeProvider;
     }
 
-    public List<CommentDto> getActiveCommentsForRecipe(long id){
-         return commentRepository.findAllByRecipeId(id).stream()
-                 .map(CommentDtoMapper::map)
-                 .filter(CommentDto::isApproved)
-                 .collect(Collectors.toList());
+    public List<CommentDto> getActiveCommentsForRecipe(long id) {
+        return commentRepository.findAllByRecipeId(id).stream()
+                .map(CommentDtoMapper::map)
+                .filter(CommentDto::isApproved)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public void addComment(CommentDto commentDto, long recipeId, String userName){
+    public void addComment(CommentDto commentDto, long recipeId, String userName) {
         Comment commentToSave = new Comment();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         User user = userRepository.findByEmail(userName).orElseThrow();
@@ -56,34 +56,37 @@ public class CommentService {
         commentRepository.save(commentToSave);
     }
 
-    public Page<CommentDto> findAllUserComments(String email, int pageNumber, int pageSize, String sortField){
+    public Page<CommentDto> findAllUserComments(String email, int pageNumber, int pageSize, String sortField) {
         Sort sort = Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return commentRepository.findAllUserComments(email, pageable)
                 .map(CommentDtoMapper::map);
     }
 
-    public long countUserComments(String email){
+    private Pageable getPageable(int pageNumber, int pageSize, Sort sort) {
+        return PageRequest.of(pageNumber - 1, pageSize, sort);
+    }
+
+    public long countUserComments(String email) {
         List<Comment> allUserComments = commentRepository.findAllUserComments(email);
         return allUserComments.size();
     }
 
     @Transactional
-    public void deleteComment(long commentId){
+    public void deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         commentRepository.delete(comment);
     }
 
-    public Page<CommentDto> findPaginatedCommentsList(int pageNumber, int pageSize, String sortField, String sortDirection){
+    public Page<CommentDto> findPaginatedCommentsList(int pageNumber, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        System.out.println("Sort: " + sort);
-        Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
+        Pageable pageable = getPageable(pageNumber, pageSize, sort);
         return commentRepository.findAll(pageable)
                 .map(CommentDtoMapper::map);
     }
 
     @Transactional
-    public void approveComment(long commentId){
+    public void approveComment(long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         comment.setApproved(true);
@@ -93,8 +96,9 @@ public class CommentService {
     public Optional<CommentDto> findCommentById(long commentId) {
         return commentRepository.findById(commentId).map(CommentDtoMapper::map);
     }
+
     @Transactional
-    public void updateComment(CommentDto commentDto){
+    public void updateComment(CommentDto commentDto) {
         Comment comment = commentRepository.findById(commentDto.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         comment.setText(commentDto.getText());
