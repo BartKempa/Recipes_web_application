@@ -42,7 +42,6 @@ public class Recipe {
     @ManyToMany(mappedBy = "favoriteRecipes")
     private Set<User> favourites = new HashSet<>();
 
-
     public Long getId() {
         return id;
     }
