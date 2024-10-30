@@ -2,7 +2,7 @@ package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.user.dto.UserUpdateDto;
 
-public class UserUpdateDtoMapper {
+class UserUpdateDtoMapper {
     static UserUpdateDto map(User user){
         return new UserUpdateDto(
                 user.getId(),

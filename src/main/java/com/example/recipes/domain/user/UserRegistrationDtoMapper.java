@@ -2,7 +2,7 @@ package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 
-public class UserRegistrationDtoMapper {
+class UserRegistrationDtoMapper {
     static UserRegistrationDto map(User user){
         return new UserRegistrationDto(
                 user.getId(),
@@ -14,5 +14,4 @@ public class UserRegistrationDtoMapper {
                 user.getAge()
         );
     }
-
 }

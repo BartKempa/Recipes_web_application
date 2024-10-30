@@ -1,9 +1,6 @@
 package com.example.recipes.domain.user;
 
-import com.example.recipes.domain.comment.Comment;
-import com.example.recipes.domain.comment.CommentDtoMapper;
 import com.example.recipes.domain.comment.CommentRepository;
-import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
@@ -33,7 +30,7 @@ public class UserService {
     private final RatingRepository ratingRepository;
 
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
+    UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
