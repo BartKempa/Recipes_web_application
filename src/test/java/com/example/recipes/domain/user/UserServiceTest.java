@@ -1,16 +1,12 @@
 package com.example.recipes.domain.user;
 
 import com.example.recipes.domain.comment.CommentRepository;
-import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.rating.RatingRepository;
 import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,16 +29,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Mock private UserRepository userRepositoryMock;
-    @Mock private UserRoleRepository userRoleRepositoryMock;
-    @Mock private PasswordEncoder passwordEncoderMock;
-    @Mock private RecipeRepository recipeRepositoryMock;
-    @Mock private CommentRepository commentRepositoryMock;
-    @Mock private RatingRepository ratingRepositoryMock;
+    @Mock
+    private UserRepository userRepositoryMock;
+    @Mock
+    private UserRoleRepository userRoleRepositoryMock;
+    @Mock
+    private PasswordEncoder passwordEncoderMock;
+    @Mock
+    private RecipeRepository recipeRepositoryMock;
+    @Mock
+    private CommentRepository commentRepositoryMock;
+    @Mock
+    private RatingRepository ratingRepositoryMock;
     private UserService userService;
 
     @BeforeEach
-    void init(){
+    void init() {
         userService = new UserService(userRepositoryMock, userRoleRepositoryMock, passwordEncoderMock, recipeRepositoryMock, commentRepositoryMock, ratingRepositoryMock);
     }
 
@@ -559,6 +561,4 @@ class UserServiceTest {
         //then
         assertThrows(ResponseStatusException.class, () -> userService.deleteUser(USER_EMAIL));
     }
-
-
 }

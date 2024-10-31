@@ -19,16 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class DifficultyLevelServiceTest {
-    @Mock private DifficultyLevelRepository difficultyLevelRepositoryMock;
+    @Mock
+    private DifficultyLevelRepository difficultyLevelRepositoryMock;
     private DifficultyLevelService difficultyLevelService;
 
     @BeforeEach
-    void init(){
+    void init() {
         difficultyLevelService = new DifficultyLevelService(difficultyLevelRepositoryMock);
     }
 
     @Test
-    void shouldFindAllDifficultyLevelDto(){
+    void shouldFindAllDifficultyLevelDto() {
         //given
         DifficultyLevel difficultyLevel1 = new DifficultyLevel();
         difficultyLevel1.setId(1L);

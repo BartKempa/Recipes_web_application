@@ -28,14 +28,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
-    @Mock private CommentRepository commentRepositoryMock;
-    @Mock private UserRepository userRepositoryMock;
-    @Mock private RecipeRepository recipeRepositoryMock;
-    @Mock private CommentDateTimeProvider dateTimeProvider;
+    @Mock
+    private CommentRepository commentRepositoryMock;
+    @Mock
+    private UserRepository userRepositoryMock;
+    @Mock
+    private RecipeRepository recipeRepositoryMock;
+    @Mock
+    private CommentDateTimeProvider dateTimeProvider;
     private CommentService commentService;
 
     @BeforeEach
-    void init(){
+    void init() {
         commentService = new CommentService(commentRepositoryMock, userRepositoryMock, recipeRepositoryMock, dateTimeProvider);
     }
 
@@ -302,7 +306,7 @@ class CommentServiceTest {
         Mockito.verify(commentRepositoryMock).findAllUserComments(Mockito.eq("user@example.com"), pageableCaptor.capture());
 
         Pageable captorValue = pageableCaptor.getValue();
-        assertEquals(pageNumber -1, captorValue.getPageNumber());
+        assertEquals(pageNumber - 1, captorValue.getPageNumber());
         assertEquals(pageSize, captorValue.getPageSize());
         assertEquals(Sort.by(sortField).descending(), captorValue.getSort());
     }
@@ -563,9 +567,9 @@ class CommentServiceTest {
     }
 
     @Test
-    void shouldFindCommentById(){
+    void shouldFindCommentById() {
         //given
-        final  long COMMENT_ID = 10L;
+        final long COMMENT_ID = 10L;
         final String USER_EMAIL = "user@example.com";
         User user = new User();
         user.setEmail(USER_EMAIL);
@@ -593,9 +597,9 @@ class CommentServiceTest {
     }
 
     @Test
-    void shouldUpdateComment(){
+    void shouldUpdateComment() {
         //given
-        final  long COMMENT_ID = 10L;
+        final long COMMENT_ID = 10L;
 
         Comment comment = new Comment();
         comment.setId(COMMENT_ID);

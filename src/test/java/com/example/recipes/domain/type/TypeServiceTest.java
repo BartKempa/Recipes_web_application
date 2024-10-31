@@ -30,15 +30,20 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TypeServiceTest {
-    @Mock private RecipeRepository recipeRepositoryMock;
-    @Mock private TypeRepository typeRepositoryMock;
-    @Mock private UserRepository userRepositoryMock;
-    @Mock private RatingRepository ratingRepositoryMock;
-    @Mock private CommentRepository commentRepositoryMock;
+    @Mock
+    private RecipeRepository recipeRepositoryMock;
+    @Mock
+    private TypeRepository typeRepositoryMock;
+    @Mock
+    private UserRepository userRepositoryMock;
+    @Mock
+    private RatingRepository ratingRepositoryMock;
+    @Mock
+    private CommentRepository commentRepositoryMock;
     private TypeService typeService;
 
     @BeforeEach
-    void init(){
+    void init() {
         MockitoAnnotations.openMocks(this);
         typeService = new TypeService(typeRepositoryMock, recipeRepositoryMock, ratingRepositoryMock, commentRepositoryMock, userRepositoryMock);
     }
@@ -46,7 +51,7 @@ class TypeServiceTest {
     @Test
     void shouldAddNewType() {
         //given
-        TypeDto typeDto = new TypeDto(null, "Zupy" );
+        TypeDto typeDto = new TypeDto(null, "Zupy");
 
         //when
         typeService.addType(typeDto);
@@ -69,7 +74,7 @@ class TypeServiceTest {
         Mockito.when(typeRepositoryMock.findByNameIgnoreCase("ZUPA")).thenReturn(Optional.of(type));
 
         //when
-        Optional<TypeDto> result = typeService.findTypeByName("ZUPA" );
+        Optional<TypeDto> result = typeService.findTypeByName("ZUPA");
 
         //then
         assertTrue(result.isPresent());
@@ -122,7 +127,7 @@ class TypeServiceTest {
         List<Type> typeList = new ArrayList<>();
         for (int i = 0; i < 150; i++) {
             Type type = new Type();
-            type.setId((long)i);
+            type.setId((long) i);
             type.setName("meal nr " + i);
             typeList.add(type);
         }
@@ -162,7 +167,7 @@ class TypeServiceTest {
         int pageSize = 3;
         String sortField = "name";
         String sortDirection = "ASC";
-        
+
         //when
         Page<TypeDto> paginatedTypes = typeService.findPaginatedTypesList(pageNumber, pageSize, sortField, sortDirection);
 
@@ -174,7 +179,7 @@ class TypeServiceTest {
         ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
         Mockito.verify(typeRepositoryMock).findAll(pageableCaptor.capture());
 
-        Pageable capturedPageable  = pageableCaptor.getValue();
+        Pageable capturedPageable = pageableCaptor.getValue();
         assertEquals(pageNumber - 1, capturedPageable.getPageNumber());
         assertEquals(pageSize, capturedPageable.getPageSize());
         assertEquals(Sort.by(Sort.Direction.ASC, sortField), capturedPageable.getSort());
@@ -270,7 +275,7 @@ class TypeServiceTest {
     }
 
     @Test
-    void shouldPropagateExceptionFromRepository(){
+    void shouldPropagateExceptionFromRepository() {
         //given
         Type type = new Type();
         type.setId(1L);
@@ -286,7 +291,7 @@ class TypeServiceTest {
     }
 
     @Test
-    void shouldHandleExceptionWhenRepositoryThrowsError(){
+    void shouldHandleExceptionWhenRepositoryThrowsError() {
         //given
         Mockito.when(typeRepositoryMock.findAll()).thenThrow(new RuntimeException("Database error"));
 
@@ -357,10 +362,10 @@ class TypeServiceTest {
     }
 
     @Test
-    void shouldReturnEmptyOptionalWhenTypeNotFound(){
+    void shouldReturnEmptyOptionalWhenTypeNotFound() {
         //given
         long notExistedId = 5L;
-        
+
         Mockito.when(typeRepositoryMock.findById(notExistedId)).thenReturn(Optional.empty());
 
         //when

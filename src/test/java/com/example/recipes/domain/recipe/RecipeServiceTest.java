@@ -10,7 +10,6 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.Type;
 import com.example.recipes.domain.type.TypeRepository;
-import com.example.recipes.domain.type.dto.TypeDto;
 import com.example.recipes.domain.user.User;
 import com.example.recipes.storage.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,27 +19,33 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
-import java.io.ByteArrayInputStream;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeServiceTest {
-    @Mock private RecipeRepository recipeRepositoryMock;
-    @Mock private TypeRepository typeRepositoryMock;
-    @Mock DifficultyLevelRepository difficultyLevelRepositoryMock;
-    @Mock FileStorageService fileStorageServiceMock;
-    @Mock RatingRepository ratingRepositoryMock;
-    @Mock private CommentRepository commentRepositoryMock;
-    @Mock private RecipeDateTimeProvider recipeDateTimeProviderMock;
+    @Mock
+    private RecipeRepository recipeRepositoryMock;
+    @Mock
+    private TypeRepository typeRepositoryMock;
+    @Mock
+    DifficultyLevelRepository difficultyLevelRepositoryMock;
+    @Mock
+    FileStorageService fileStorageServiceMock;
+    @Mock
+    RatingRepository ratingRepositoryMock;
+    @Mock
+    private CommentRepository commentRepositoryMock;
+    @Mock
+    private RecipeDateTimeProvider recipeDateTimeProviderMock;
     private RecipeService recipeService;
 
     @BeforeEach
@@ -119,7 +124,7 @@ class RecipeServiceTest {
                     return r2.getCreationDate().compareTo(r1.getCreationDate());
                 }
             }).toList();
-         return new PageImpl<>(sortedList, pageable, sortedList.size());
+            return new PageImpl<>(sortedList, pageable, sortedList.size());
         });
 
         int pageNumber = 1;
@@ -225,7 +230,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenRecipeNotExists(){
+    void shouldThrowExceptionWhenRecipeNotExists() {
         //given
         Mockito.when(recipeRepositoryMock.findById(2L)).thenReturn(Optional.empty());
 
@@ -274,7 +279,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenTryFindNotExistsRecipeToSave(){
+    void shouldThrowExceptionWhenTryFindNotExistsRecipeToSave() {
         //given
         Mockito.when(recipeRepositoryMock.findById(123L)).thenReturn(Optional.empty());
 
@@ -427,19 +432,19 @@ class RecipeServiceTest {
         assertEquals(now, recipeCaptorValue.getCreationDate());
     }
 
-   @Test
-   void shouldThrowExceptionWhenAddRecipeWithNotExistingType(){
+    @Test
+    void shouldThrowExceptionWhenAddRecipeWithNotExistingType() {
         //give
-       RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
-       recipeSaveDto.setName("Pomidorowa");
-       recipeSaveDto.setType("NieistniejącyTyp");
+        RecipeSaveDto recipeSaveDto = new RecipeSaveDto();
+        recipeSaveDto.setName("Pomidorowa");
+        recipeSaveDto.setType("NieistniejącyTyp");
 
-       Mockito.when(typeRepositoryMock.findByNameIgnoreCase("NieistniejącyTyp")).thenReturn(Optional.empty());
+        Mockito.when(typeRepositoryMock.findByNameIgnoreCase("NieistniejącyTyp")).thenReturn(Optional.empty());
 
-       //when
-       //then
-       assertThrows(NoSuchElementException.class, () -> recipeService.addRecipe(recipeSaveDto));
-   }
+        //when
+        //then
+        assertThrows(NoSuchElementException.class, () -> recipeService.addRecipe(recipeSaveDto));
+    }
 
     @Test
     void shouldFindTwoFavouriteRecipesForUserSortingByName() {
