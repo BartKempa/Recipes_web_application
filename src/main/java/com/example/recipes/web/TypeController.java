@@ -16,17 +16,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class TypeController {
+class TypeController {
     private final RecipeService recipeService;
     private final TypeService typeService;
 
-    public TypeController(RecipeService recipeService, TypeService typeService) {
+    TypeController(RecipeService recipeService, TypeService typeService) {
         this.recipeService = recipeService;
         this.typeService = typeService;
     }
 
     @GetMapping("/typ/{typeName}/strona/{pageNo}")
-    public String getRecipesByType(@PathVariable String typeName,
+    String getRecipesByType(@PathVariable String typeName,
                                    @PathVariable Optional<Integer> pageNo,
                                    Model model){
         int pageNumber = pageNo.orElse(1);

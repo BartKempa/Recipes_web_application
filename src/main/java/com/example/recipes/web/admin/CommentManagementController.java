@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-public class CommentManagementController {
+class CommentManagementController {
     private final static int PAGE_SIZE = 6;
     private final CommentService commentService;
 
-    public CommentManagementController(CommentService commentService) {
+    CommentManagementController(CommentService commentService) {
         this.commentService = commentService;
     }
 
@@ -29,10 +29,10 @@ public class CommentManagementController {
     }
 
     @GetMapping("/admin/lista-komentarzy/{pageNo}")
-    public String getCommentsList(@PathVariable Optional<Integer> pageNo,
-                                  @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
-                                  @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
-                                  Model model) {
+    String getCommentsList(@PathVariable Optional<Integer> pageNo,
+                           @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
+                           @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
+                           Model model) {
         int pageNumber = pageNo.orElse(1);
         String sortFiled = COMMENT_SORT_FIELD_MAP.getOrDefault(poleSortowania, "approved");
         Page<CommentDto> commentsPage = commentService.findPaginatedCommentsList(pageNumber, PAGE_SIZE, sortFiled, sortDir);
@@ -49,14 +49,14 @@ public class CommentManagementController {
     }
 
     @PostMapping("/admin/lista-komentarzy/zatwierdz-komentarz")
-    public String approveComment(@RequestParam(value = "id") Long id,
+    String approveComment(@RequestParam(value = "id") Long id,
                                  @RequestHeader String referer) {
         commentService.approveComment(id);
         return "redirect:" + referer;
     }
 
     @PostMapping("/admin/lista-komentarzy/usun")
-    public String deleteComment(@RequestParam long id,
+    String deleteComment(@RequestParam long id,
                                 @RequestHeader String referer) {
         commentService.deleteComment(id);
         return "redirect:" + referer;

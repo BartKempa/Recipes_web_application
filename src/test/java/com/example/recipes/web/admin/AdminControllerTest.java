@@ -16,8 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
-class AdminControllerTest {
+@ActiveProfiles("test") class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

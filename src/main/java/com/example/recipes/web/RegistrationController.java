@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class RegistrationController {
+class RegistrationController {
     private final UserService userService;
 
-    public RegistrationController(UserService userService) {
+    RegistrationController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/rejestracja")
-    public String registerForm(Model model){
+    String registerForm(Model model){
         UserRegistrationDto user = new UserRegistrationDto();
         model.addAttribute("user", user);
         return "registration-form";
     }
 
     @PostMapping("/rejestracja")
-    public String register(@Valid @ModelAttribute("user") UserRegistrationDto user,
+    String register(@Valid @ModelAttribute("user") UserRegistrationDto user,
                            BindingResult bindingResult,
                            Model model){
         if (bindingResult.hasErrors()){

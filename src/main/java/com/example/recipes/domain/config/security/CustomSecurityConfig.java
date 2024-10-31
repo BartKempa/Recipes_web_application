@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -12,8 +11,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.Base64;
 
 @Configuration
 public class CustomSecurityConfig {
@@ -30,7 +27,6 @@ public class CustomSecurityConfig {
                         .requestMatchers("/uzytkownik/**").hasRole(USER_ROLE)
                         .requestMatchers("/admin/**").hasRole(ADMIN_ROLE)
                         .anyRequest().permitAll()
-
         )
                 .formLogin(login -> login
                         .loginPage("/login")

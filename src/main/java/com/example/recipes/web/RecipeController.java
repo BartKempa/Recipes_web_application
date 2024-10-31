@@ -21,28 +21,28 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-public class RecipeController {
-    public final static int PAGE_SIZE = 6;
+class RecipeController {
+    final static int PAGE_SIZE = 6;
     private final RecipeService recipeService;
     private final RatingService ratingService;
     private final UserService  userService;
     private final CommentService commentService;
 
-    public RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService, CommentService commentService) {
+    RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService, CommentService commentService) {
         this.recipeService = recipeService;
         this.ratingService = ratingService;
         this.userService = userService;
         this.commentService = commentService;
     }
 
-    public static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
+    static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
     static {
         SORT_FIELD_MAP.put("dataPublikacji", "creationDate");
         SORT_FIELD_MAP.put("nazwa", "name");
     }
 
     @GetMapping("/przepis/{id}")
-    public String getRecipe(@PathVariable long id,
+    String getRecipe(@PathVariable long id,
                             Model model,
                             Authentication authentication){
         RecipeFullInfoDto recipeFullInfoDto = recipeService.findRecipeById(id)
@@ -63,7 +63,7 @@ public class RecipeController {
     }
 
     @GetMapping("/strona/{pageNo}")
-    public String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
+    String getAllRecipesPageable(@PathVariable Optional<Integer> pageNo,
                                         @RequestParam(value ="poleSortowania", required = false) String poleSortowania,
                                         Model model){
         int pageNumber = pageNo.orElse(1);
@@ -81,7 +81,7 @@ public class RecipeController {
     }
 
     @GetMapping("/szukaj/strona/{pageNo}")
-    public String getRecipesBySearchText(@RequestParam String searchText,
+    String getRecipesBySearchText(@RequestParam String searchText,
                                          @PathVariable Optional<Integer> pageNo,
                                          @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                          Model model) {
@@ -100,9 +100,8 @@ public class RecipeController {
         return "recipe-listing";
     }
 
-
     @GetMapping("/uzytkownik/ulubione/strona/{pageNo}")
-    public String getFavouriteRecipesForUser(@PathVariable Optional<Integer> pageNo,
+    String getFavouriteRecipesForUser(@PathVariable Optional<Integer> pageNo,
                                              @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                              Authentication authentication,
                                              Model model){
@@ -122,7 +121,7 @@ public class RecipeController {
     }
 
     @GetMapping("/uzytkownik/ocenione/strona/{pageNo}")
-    public String getRatedRecipesForUser(@PathVariable Optional<Integer> pageNo,
+    String getRatedRecipesForUser(@PathVariable Optional<Integer> pageNo,
                                          @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                          Authentication authentication,
                                          Model model){

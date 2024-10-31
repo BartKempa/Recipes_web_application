@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class UserController {
+class UserController {
     private final static String USER_NOTIFICATION_ATTRIBUTE = "userNotification";
     private final static String COMMENT_SORT_FILED = "creationDate";
     private final UserService userService;
     private final CommentService commentService;
 
-    public UserController(UserService userService, CommentService commentService) {
+    UserController(UserService userService, CommentService commentService) {
         this.userService = userService;
         this.commentService = commentService;
     }
 
     @GetMapping("/uzytkownik")
-    public String getUserPanel(Model model, Authentication authentication){
+    String getUserPanel(Model model, Authentication authentication){
         String currentUserEmail = authentication.getName();
         UserRegistrationDto user = userService.findUserByName(currentUserEmail).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/aktualizacja/{userId}")
-    public String getUpdateUserForm(@PathVariable(value = "userId") long userId,
+    String getUpdateUserForm(@PathVariable(value = "userId") long userId,
                                     Model model){
         UserUpdateDto user = userService.findUserToUpdateById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/aktualizacja")
-    public String updateDataUser(@Valid @ModelAttribute("user") UserUpdateDto user,
+    String updateDataUser(@Valid @ModelAttribute("user") UserUpdateDto user,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes,
                                  Model model){
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/aktualizacja-do-logowania/{userId}")
-    public String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId,
+    String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId,
                                             Model model){
         UserUpdateDto user = userService.findUserToUpdateById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/aktualizacja-logowanie")
-    public String updateUserDataLogin(@Valid @ModelAttribute("user") UserUpdateDto user,
+    String updateUserDataLogin(@Valid @ModelAttribute("user") UserUpdateDto user,
                                       BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "user-update-login-data-form";
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/uzytkownik/usuwanie-konta/{userId}")
-    public String deleteUserForm(@PathVariable(value = "userId") long userId,
+    String deleteUserForm(@PathVariable(value = "userId") long userId,
                                  Model model){
         UserRegistrationDto user = userService.findUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -96,14 +96,14 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/usuwanie-konta")
-    public String deleteUser(Authentication authentication){
+    String deleteUser(Authentication authentication){
         String currentUserEmail = authentication.getName();
         userService.deleteUser(currentUserEmail);
         return "redirect:/logout";
     }
 
     @GetMapping("/uzytkownik/komentarze/{pageNo}")
-    public String getUserComments(@PathVariable Optional<Integer> pageNo,
+    String getUserComments(@PathVariable Optional<Integer> pageNo,
                                   Authentication authentication,
                                   Model model){
         String currentEmail = authentication.getName();
@@ -120,14 +120,14 @@ public class UserController {
     }
 
     @PostMapping("/uzytkownik/komentarze")
-    public String deleteComment(@RequestParam(value = "commentId") Long commentId,
+    String deleteComment(@RequestParam(value = "commentId") Long commentId,
                                 @RequestHeader String referer){
         commentService.deleteComment(commentId);
         return "redirect:" + referer;
     }
 
     @GetMapping("/uzytkownik/komentarze/edytuj/{id}")
-    public String getEditCommentForm(@PathVariable(value = "id") Long commentId,
+    String getEditCommentForm(@PathVariable(value = "id") Long commentId,
                                      Model model){
         CommentDto comment = commentService.findCommentById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-public class UserManagementController {
+class UserManagementController {
     final static String SORT_FILED = "creationDate";
     final static int PAGE_SIZE = 6;
     private final UserService userService;
@@ -30,7 +30,7 @@ public class UserManagementController {
     private final RecipeService recipeService;
     private final RatingService ratingService;
 
-    public UserManagementController(UserService userService, CommentService commentService, RecipeService recipeService, RatingService ratingService) {
+    UserManagementController(UserService userService, CommentService commentService, RecipeService recipeService, RatingService ratingService) {
         this.userService = userService;
         this.commentService = commentService;
         this.recipeService = recipeService;
@@ -44,7 +44,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/list-uzytkownikow/{pageNo}")
-    public String getUsersList(@PathVariable Optional<Integer> pageNo,
+    String getUsersList(@PathVariable Optional<Integer> pageNo,
                                @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                                Model model){
@@ -65,7 +65,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/uzytkownik/{userId}")
-    public String getUserDetails(@PathVariable long userId,
+    String getUserDetails(@PathVariable long userId,
                                  Model model){
         UserRegistrationDto user = userService.findUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         long commentCount = commentService.countUserComments(user.getEmail());
@@ -79,7 +79,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/uzytkownik/{userId}/komentarze/{pageNo}")
-    public String getUserComments(@PathVariable long userId,
+    String getUserComments(@PathVariable long userId,
                                   @PathVariable Optional<Integer> pageNo,
                                   Model model){
         int pageNumber = pageNo.orElse(1);
@@ -96,7 +96,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/uzytkownik/{userId}/ulubione/{pageNo}")
-    public String getUserFavouriteRecipes(@PathVariable long userId,
+    String getUserFavouriteRecipes(@PathVariable long userId,
                                           @PathVariable Optional<Integer> pageNo,
                                           Model model){
         int pageNumber = pageNo.orElse(1);
@@ -113,7 +113,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/uzytkownik/{userId}/ocenione/{pageNo}")
-    public String getUserRatedRecipes(@PathVariable long userId,
+    String getUserRatedRecipes(@PathVariable long userId,
                                       @PathVariable Optional<Integer> pageNo,
                                       Model model){
         int pageNumber = pageNo.orElse(1);

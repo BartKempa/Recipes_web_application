@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.util.List;
 
 @ControllerAdvice
-public class GlobalControllerAdvice {
+class GlobalControllerAdvice {
     private final TypeService typeService;
 
-    public GlobalControllerAdvice(TypeService typeService) {
+    GlobalControllerAdvice(TypeService typeService) {
         this.typeService = typeService;
     }
 

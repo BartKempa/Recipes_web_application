@@ -23,13 +23,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-public class RecipeManagementController {
+class RecipeManagementController {
     final static int PAGE_SIZE = 6;
     private final RecipeService recipeService;
     private final TypeService typeService;
     private final DifficultyLevelService difficultyLevelService;
 
-    public RecipeManagementController(RecipeService recipeService, TypeService typeService, DifficultyLevelService difficultyLevelService) {
+    RecipeManagementController(RecipeService recipeService, TypeService typeService, DifficultyLevelService difficultyLevelService) {
         this.recipeService = recipeService;
         this.typeService = typeService;
         this.difficultyLevelService = difficultyLevelService;
@@ -43,7 +43,7 @@ public class RecipeManagementController {
     }
 
     @GetMapping("/admin/dodaj-przepis")
-    public String addRecipeForm(Model model) {
+    String addRecipeForm(Model model) {
         RecipeSaveDto recipe = new RecipeSaveDto();
         model.addAttribute("recipe", recipe);
         List<TypeDto> types = typeService.findAllTypes();
@@ -54,7 +54,7 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/dodaj-przepis")
-    public String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
+    String addRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
                             BindingResult bindingResult,
                             Model model,
                             RedirectAttributes redirectAttributes) {
@@ -73,7 +73,7 @@ public class RecipeManagementController {
     }
 
     @GetMapping("/admin/lista-przepisow/{pageNo}")
-    public String getRecipesList(@PathVariable Optional<Integer> pageNo,
+    String getRecipesList(@PathVariable Optional<Integer> pageNo,
                                  @RequestParam(value = "poleSortowania", required = false) String poleSortowania,
                                  @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
                                  Model model) {
@@ -93,7 +93,7 @@ public class RecipeManagementController {
     }
 
     @GetMapping("/admin/aktualizuj-przepis/{recipeId}")
-    public String updateRecipeForm(@PathVariable long recipeId,
+    String updateRecipeForm(@PathVariable long recipeId,
                                    Model model) {
         RecipeSaveDto recipe = recipeService.findRecipeToSave(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -106,7 +106,7 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/aktualizuj-przepis")
-    public String updateRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
+    String updateRecipe(@Valid @ModelAttribute("recipe") RecipeSaveDto recipe,
                                BindingResult bindingResult,
                                Model model,
                                RedirectAttributes redirectAttributes) {
@@ -124,7 +124,7 @@ public class RecipeManagementController {
     }
 
     @PostMapping("/admin/usun-przepis")
-    public String deleteRecipe(@RequestParam(value = "id") Long id,
+    String deleteRecipe(@RequestParam(value = "id") Long id,
                                @RequestHeader String referer) {
         recipeService.deleteRecipe(id);
         return "redirect:" + referer;

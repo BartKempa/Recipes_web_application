@@ -1,6 +1,5 @@
 package com.example.recipes.web.admin;
 
-import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.type.TypeService;
 import com.example.recipes.domain.type.dto.TypeDto;
 import jakarta.validation.Valid;
@@ -15,23 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class TypeManagementController {
-    public final static int PAGE_SIZE = 6;
+class TypeManagementController {
+    final static int PAGE_SIZE = 6;
     private final TypeService typeService;
 
-    public TypeManagementController(TypeService typeService) {
+    TypeManagementController(TypeService typeService) {
         this.typeService = typeService;
     }
 
     @GetMapping("/admin/dodaj-typ")
-    public String addTypeForm(Model model){
+    String addTypeForm(Model model){
         TypeDto type = new TypeDto();
         model.addAttribute("type", type);
         return "admin/type-form";
     }
 
     @PostMapping("/admin/dodaj-typ")
-    public String addType(@Valid @ModelAttribute("type") TypeDto type,
+    String addType(@Valid @ModelAttribute("type") TypeDto type,
                           BindingResult bindingResult,
                           RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
@@ -46,7 +45,7 @@ public class TypeManagementController {
     }
 
     @GetMapping("/admin/lista-typow/{pageNo}")
-    public String getTypesList(
+    String getTypesList(
             @PathVariable Optional<Integer> pageNo,
             @RequestParam (value = "sortDir", defaultValue = "asc") String sortDir,
             Model model){
@@ -66,7 +65,7 @@ public class TypeManagementController {
     }
 
     @PostMapping("/admin/usun-typ")
-    public String deleteType(
+    String deleteType(
             @RequestParam(value = "id") long id,
             @RequestHeader String referer){
         typeService.deleteType(id);
@@ -74,7 +73,7 @@ public class TypeManagementController {
     }
 
     @GetMapping("/admin/aktualizuj-typ/{typeId}")
-    public String updateTypeForm(
+    String updateTypeForm(
             @PathVariable long typeId,
             Model model){
         Optional<TypeDto> type = typeService.findTypeById(typeId);
@@ -83,7 +82,7 @@ public class TypeManagementController {
     }
 
     @PostMapping("/admin/aktualizuj-typ")
-    public String updateType(
+    String updateType(
             @Valid @ModelAttribute("type") TypeDto type,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes){

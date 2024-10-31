@@ -8,16 +8,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class RatingController {
+class RatingController {
     private final RatingService ratingService;
 
-    public RatingController(RatingService ratingService) {
+    RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
     }
 
-
     @PostMapping("/ocen-przepis")
-    public String addRecipeRating(@RequestParam long recipeId,
+    String addRecipeRating(@RequestParam long recipeId,
                                   @RequestParam int rating,
                                   @RequestHeader String referer,
                                   Authentication authentication){

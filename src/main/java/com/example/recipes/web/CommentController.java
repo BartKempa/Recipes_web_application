@@ -11,23 +11,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
-public class CommentController {
+class CommentController {
     private final CommentService commentService;
     private final RecipeService recipeService;
     private final UserService userService;
 
-    public CommentController(CommentService commentService, RecipeService recipeService, UserService userService) {
+    CommentController(CommentService commentService, RecipeService recipeService, UserService userService) {
         this.commentService = commentService;
         this.recipeService = recipeService;
         this.userService = userService;
     }
 
     @PostMapping("/dodaj-komentarz")
-    public String addRecipeComment(@Valid @ModelAttribute("comment") CommentDto comment,
+    String addRecipeComment(@Valid @ModelAttribute("comment") CommentDto comment,
                                    BindingResult bindingResult,
                                    Authentication authentication,
                                    Model model,
