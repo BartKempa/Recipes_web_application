@@ -92,6 +92,11 @@ public class UserService {
                 .map(UserUpdateDtoMapper::map);
     }
 
+    public Optional<UserUpdateDto> findUserToUpdateByEmail(String userName){
+        return userRepository.findByEmail(userName)
+                .map(UserUpdateDtoMapper::map);
+    }
+
     @Transactional
     public void updateUserData(UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(userUpdateDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

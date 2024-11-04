@@ -32,17 +32,20 @@ class UserController {
     }
 
     @GetMapping("/uzytkownik")
-    String getUserPanel(Model model, Authentication authentication){
+    String getUserPanel(Model model,
+                        Authentication authentication){
         String currentUserEmail = authentication.getName();
-        UserRegistrationDto user = userService.findUserByName(currentUserEmail).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        UserRegistrationDto user = userService.findUserByName(currentUserEmail)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-panel";
     }
 
-    @GetMapping("/uzytkownik/aktualizacja/{userId}")
-    String getUpdateUserForm(@PathVariable(value = "userId") long userId,
-                                    Model model){
-        UserUpdateDto user = userService.findUserToUpdateById(userId)
+    @GetMapping("/uzytkownik/aktualizacja")
+    String getUpdateUserForm(Model model,
+                             Authentication authentication){
+        String currentUserEmail = authentication.getName();
+        UserUpdateDto user = userService.findUserToUpdateByEmail(currentUserEmail)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-update-form";
