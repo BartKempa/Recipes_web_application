@@ -78,11 +78,9 @@ class UserControllerTest {
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldGetUpdateUserForm() throws Exception {
         //given
-        final long userId = 1L;
-
         //when
         //then
-        mockMvc.perform(get("/uzytkownik/aktualizacja/{userId}", userId)
+        mockMvc.perform(get("/uzytkownik/aktualizacja")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user-update-form"))
@@ -195,46 +193,27 @@ class UserControllerTest {
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldGetUpdateUserPasswordForm() throws Exception {
         //given
-        final long userId = 2L;
-
         //when
         //then
-        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", userId)
+        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user-update-login-data-form"))
                 .andExpect(model().attributeExists("user"))
-                .andExpect(model().attribute("user", Matchers.instanceOf(UserUpdateDto.class)))
-                .andExpect(model().attribute("user", Matchers.hasProperty("id",Matchers.equalTo(userId))));
-    }
-
-    @Test
-    @WithMockUser(username = "user@mail.com", roles = "USER")
-    void shouldReturnNotFoundForNonExistingUserIdWhenTryUpdatePassword() throws Exception {
-        //given
-        final long nonExistingUserId = 222L;
-
-        //when
-        //then
-        mockMvc.perform(get("/uzytkownik/aktualizacja-do-logowania/{userId}", nonExistingUserId)
-                        .with(csrf()))
-                .andExpect(status().isNotFound());
+                .andExpect(model().attribute("user", Matchers.instanceOf(UserUpdateDto.class)));
     }
 
     @Test
     @WithMockUser(username = "user@mail.com", roles = "USER")
     void shouldGetDeleteUserForm() throws Exception {
         //given
-        final long userId = 2L;
-
         //when
         //then
-        mockMvc.perform(get("/uzytkownik/usuwanie-konta/{userId}", userId)
+        mockMvc.perform(get("/uzytkownik/usuwanie-konta")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", Matchers.instanceOf(UserRegistrationDto.class)))
-                .andExpect(model().attribute("user", Matchers.hasProperty("id", Matchers.equalTo(userId))))
                 .andExpect(view().name("user-delete-account"));
     }
 
