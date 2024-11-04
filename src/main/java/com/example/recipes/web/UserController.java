@@ -69,10 +69,11 @@ class UserController {
         }
     }
 
-    @GetMapping("/uzytkownik/aktualizacja-do-logowania/{userId}")
-    String getUpdateUserPasswordForm(@PathVariable(value = "userId") long userId,
-                                            Model model){
-        UserUpdateDto user = userService.findUserToUpdateById(userId)
+    @GetMapping("/uzytkownik/aktualizacja-do-logowania")
+    String getUpdateUserPasswordForm(Model model,
+                                     Authentication authentication){
+        String currentUserEmail = authentication.getName();
+        UserUpdateDto user = userService.findUserToUpdateByEmail(currentUserEmail)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-update-login-data-form";
