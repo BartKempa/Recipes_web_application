@@ -185,7 +185,8 @@ class UserServiceTest {
         Recipe recipe = new Recipe();
         recipe.setId(RECIPE_ID);
         recipe.setName("Buraczkowa");
-        user.setFavoriteRecipes(Set.of(recipe));
+        user.setFavoriteRecipes(new HashSet<>());
+        user.getFavoriteRecipes().add(recipe);
 
         Mockito.when(userRepositoryMock.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         Mockito.when(recipeRepositoryMock.findById(RECIPE_ID)).thenReturn(Optional.of(recipe));
