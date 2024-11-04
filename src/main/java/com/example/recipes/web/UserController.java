@@ -90,11 +90,11 @@ class UserController {
         }
     }
 
-    @GetMapping("/uzytkownik/usuwanie-konta/{userId}")
-    String deleteUserForm(@PathVariable(value = "userId") long userId,
+    @GetMapping("/uzytkownik/usuwanie-konta")
+    String deleteUserForm(Authentication authentication,
                                  Model model){
-        UserRegistrationDto user = userService.findUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        String currentUserEmail = authentication.getName();
+        UserRegistrationDto user = userService.findUserByName(currentUserEmail).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("user", user);
         return "user-delete-account";
     }
