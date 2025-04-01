@@ -2,6 +2,7 @@ package com.example.recipes.domain.config.security;
 
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

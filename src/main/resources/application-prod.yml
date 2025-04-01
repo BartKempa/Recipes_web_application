@@ -8,6 +8,7 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,file:C:/uploads/
+
 app:
   storage:
     location: C:/uploads

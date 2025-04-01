@@ -13,6 +13,13 @@ public class UserRole {
     private String name;
     private String description;
 
+    public UserRole() {
+    }
+
+    public UserRole(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

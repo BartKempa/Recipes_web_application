@@ -1,10 +1,7 @@
 package com.example.recipes.web.admin;
 
-import com.example.recipes.domain.comment.CommentRepository;
 import com.example.recipes.domain.difficultyLevel.DifficultyLevelService;
 import com.example.recipes.domain.difficultyLevel.dto.DifficultyLevelDto;
-import com.example.recipes.domain.recipe.Recipe;
-import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
@@ -24,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 

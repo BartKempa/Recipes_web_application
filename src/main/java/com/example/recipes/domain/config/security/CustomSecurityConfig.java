@@ -17,6 +17,12 @@ public class CustomSecurityConfig {
     private static final String USER_ROLE = "USER";
     private static final String ADMIN_ROLE = "ADMIN";
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public CustomSecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
@@ -32,9 +38,15 @@ public class CustomSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                 )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(customOAuth2UserService))
+                )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout/**", HttpMethod.GET.name()))
-                        .logoutSuccessUrl("/login?logout").permitAll()
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(h2ConsoleRequestMatcher))
                 .headers(config -> config.frameOptions(

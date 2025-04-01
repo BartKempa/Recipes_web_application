@@ -11,3 +11,5 @@ spring:
 app:
   storage:
     location: uploads
+
+
