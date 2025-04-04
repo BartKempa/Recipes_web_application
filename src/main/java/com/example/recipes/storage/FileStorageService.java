@@ -29,9 +29,10 @@ public class FileStorageService {
         try {
             if (Files.notExists(imageStoragePath)){
                 Files.createDirectories(imageStoragePath);
-                logger.info("Storage directory for images created %S".formatted(imageStoragePath.toAbsolutePath().toString()));
+                logger.info("Storage directory for images created: {}", imageStoragePath.toAbsolutePath());
             }
         } catch (IOException e){
+            logger.error("Failed to create storage directory: {}", imageStoragePath.toAbsolutePath(), e);
             throw new UncheckedIOException("Creation of image storage failed", e);
         }
     }

@@ -71,6 +71,6 @@ class DifficultyLevelServiceTest {
 
         //when & then
         RuntimeException exc = assertThrows(RuntimeException.class, () -> difficultyLevelService.findAllDifficultyLevelDto());
-        assertThat(exc.getMessage(), is(HttpStatus.NOT_FOUND));
+        assertThat(exc.getMessage(), is("Database error"));
     }
 }

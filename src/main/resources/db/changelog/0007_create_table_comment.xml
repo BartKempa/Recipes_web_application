@@ -24,7 +24,7 @@
                 />
             </column>
             <column name="creation_date" type="DATETIME"/>
-            <column name="approved" type="boolean"/>
+            <column name="approved" type="BOOLEAN"/>
             <column name="text" type="VARCHAR(2000)"/>
         </createTable>
 
