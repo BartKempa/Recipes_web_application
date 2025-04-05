@@ -1,102 +1,160 @@
-# Project *Kuchnia Bartosza* 🍔 
-
+# Project *Kuchnia Bartosza* 🍔
 
 **Kuchnia Bartosza** is a web application for managing cooking recipes. The application is built with the Spring Framework and MySQL Database. The main purpose of creating this application was to learn Spring, as well as unit and integration testing.
 
-## Used Tools
+---
 
-For the implementation of the web application, the following tools and technologies are used:
+## 🛠️ Technologies Used
 
-* Java 17
-* Spring Boot v3.2.5
-* Spring Data JPA
-* Spring Web MVC
-* Spring Security
-* Maven v4.0.0
-* MySQL
-* H2 Database
-* Hibernate
-* Liquibase
-* JUnit 5
-* Mockito 2
-* AssertJ v3.26.0
-* HTML
-* CSS
-* JavaScript
-* Thymeleaf
-* IntelliJ IDEA
+- Java 21
+- Spring Boot 3.4.4
+- Spring Data JPA
+- Spring Web MVC
+- Spring Security
+- OAuth2 Login with Google
+- Docker & Docker Compose
+- Maven 4.0.0
+- MySQL
+- H2 Database
+- Hibernate
+- Liquibase
+- JUnit 5
+- Mockito 2
+- AssertJ 3.26.0
+- HTML / CSS / JavaScript
+- Thymeleaf
+- IntelliJ IDEA
 
-## Functionalities
+---
 
-The application provides the following functionalities, allowing the user to easily manage their activity:
+## ✅ Features
 
-* Sort all recipes by date or name with pagination.
-* Search for cooking recipes by type of meal and sort results.
-* Search for cooking recipes by name, ingredients, description, preparation steps, or other keywords and sort results.
-* After choosing a recipe, the user can open the recipe page with all details about it: preparation time, cooking time, description, servings, difficulty level, ingredients, direction steps, image, average rating, rating count, and comments.
+### 🧾 Recipe Management
 
-### Authenticated users have additional functionalities on the recipe page:
+- Browse and sort recipes by date or name with pagination
+- Search for recipes by type, name, ingredients, description, or preparation steps
+- View recipe details including:
+   - Preparation & cooking time
+   - Ingredients & instructions
+   - Difficulty level
+   - Average rating & comments
+   - Image preview
 
-* Submit feedback under the recipe.
-* Rate the recipe and update the rating.
-* Add the recipe to user's favorites and remove the recipe from user's favorites.
-* Browse user's favorite recipes.
+### 🔐 Authentication & Authorization
 
-### Authenticated users also have access to a user panel with the following functionalities:
+- Register or log in via Google (OAuth2)
+- Access restricted based on user roles
 
-* Display user's favorite recipes.
-* Display user's rated recipes.
-* Display user's comments.
-* Update user data.
-* Update user credentials.
-* Delete user account.
+### 👤 User Panel (Authenticated Users)
 
-### Authenticated admins have access to an admin panel with the following functionalities:
+- Rate and comment on recipes
+- Add or remove recipes from favorites
+- View list of:
+   - Favorite recipes
+   - Rated recipes
+   - Comments
+- Update user data and password
+- Delete user account
 
-* Add a new recipe.
-* Update a recipe.
-* Delete a recipe.
-* Add a new type of meal.
-* Update a type of meal.
-* Delete a type of meal.
-* Display all comments, including information on whether they are approved.
-* Approve or delete comments.
-* Display a list of users with the option to view all details about a user, including a list of comments, rated recipes, and favorite recipes.
+### 🛠️ Admin Panel (Authenticated Admins)
 
-## Who can use it?
+- Add, update, and delete recipes
+- Add, update, and delete meal types
+- View and moderate comments (approve or delete)
+- View full user details:
+   - User’s comments
+   - Rated recipes
+   - Favorite recipes
 
-This web application can be used by anyone who wants to get ideas for cooking or help other users by sharing their own recipes.
+---
 
-## How it can be used?
+## 👥 Who is it for?
 
-The site has not been hosted or deployed yet. It is launched and run on localhost for now. To use it:
+Anyone who wants to browse or share cooking recipes. Great for foodies looking for new inspiration or cooks wanting to share their dishes.
 
-1. Install MySQL.
-2. Open Git Bash.
-3. Change the current working directory to the location where you want the cloned directory.
-4. Execute the command:
-git clone https://github.com/BartKempa/recipes.git
-5. Press Enter to create your local clone.
-6. To use the production profile, configure the datasource in `src/main/resources/application-prod.yml`:
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/recipes
-    username: root
-    password: password
-```
-7. The server is running on localhost:8080.
+---
 
-## Testing
+## 🚀 How to Run the App
 
-The application includes unit and integration tests using JUnit, Mockito, and AssertJ. Tests cover various functionalities such as user registration, recipe management, and feedback submission.
+### Option 1: Using Docker (production profile)
 
-## For future work/Improvements
+1. Install Docker
+2. Clone the project:
+   ```bash
+   git clone https://github.com/BartKempa/recipes.git
+   cd recipes
+   ```
+3. Create a `.env` file in the root of the project with the following content:
+   ```env
+   DB_PORT=3306
+   DB_NAME=recipes
+   DB_URL=jdbc:mysql://mysql:${DB_PORT}/${DB_NAME}
+   DB_USERNAME=root
+   DB_PASSWORD=pass
+   SPRING_PROFILES_ACTIVE=prod
+   GOOGLE_CLIENT_ID=yourGoogleClientId
+   GOOGLE_CLIENT_SECRET=yourGoogleClientSecret
+   ```
+4. Run the application:
+   ```bash
+   docker compose up
+   ```
+5. Visit the app at [http://localhost:8080](http://localhost:8080)
 
-The application includes unit and integration tests using JUnit, Mockito, and AssertJ. Tests cover various functionalities such as user registration, recipe management, and feedback submission.
-1. User account activation after registration via email.
-2. Register/Login via social networks.
-3. A section for "Products that I need."
-4. User blocking functionality.
+---
 
+### Option 2: Using IDE (developer profile)
 
+1. Open the project in your favorite IDE (e.g. IntelliJ)
+2. Make sure the `dev` profile is active (H2 in-memory DB)
+3. Run the application from your IDE
+4. Visit [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 🧪 Testing
+
+The application includes unit and integration tests using:
+
+- JUnit 5
+- Mockito
+- AssertJ
+
+Functionalities tested include:
+
+- User registration
+- Login
+- Recipe interactions (create, read, update, delete)
+- Feedback (comments and ratings)
+
+---
+
+## 🔮 Future Improvements
+
+1. Email confirmation after user registration
+2. “Products I need” section
+3. User blocking & moderation tools
+4. Hosting on AWS
+
+---
+
+## 📁 Project Structure
+
+- `src/main/java` – Application source code
+- `src/main/resources` – Static resources and configuration
+- `src/test/java` – Unit and integration tests
+- `Dockerfile` – Multi-stage Docker build
+- `docker-compose.yml` – Services: MySQL and App container
+- `.env` – Environment variables for production
+
+---
+
+## 🧷 Notes
+
+- Google OAuth2 login requires setting up credentials via Google Cloud Console
+- For development, the app uses an H2 in-memory database and local file storage
+- In production, MySQL is used along with mounted volume for uploads
+
+---
+
+Happy cooking! 🍽️

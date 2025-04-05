@@ -24,9 +24,9 @@
                 />
             </column>
             <column name="creation_date" type="DATETIME"/>
-            <column name="approved" type="BOOLEAN"/>
+            <column name="approved" type="TINYINT(1)"/>
             <column name="text" type="VARCHAR(2000)"/>
         </createTable>
-
     </changeSet>
+
 </databaseChangeLog>

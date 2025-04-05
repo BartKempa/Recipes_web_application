@@ -12,6 +12,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime creationDate;
+    @Column(columnDefinition = "TINYINT(1)")
     private boolean approved;
     private String text;
     @ManyToOne
