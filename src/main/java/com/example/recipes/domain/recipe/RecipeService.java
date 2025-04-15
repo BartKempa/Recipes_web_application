@@ -8,6 +8,7 @@ import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeSaveDto;
 import com.example.recipes.domain.type.TypeRepository;
 import com.example.recipes.storage.FileStorageService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,6 @@ public class RecipeService {
          return recipeRepository.findAll(pageable)
                  .map(RecipeDtoMapper::mapMainInfo);
      }
-
     private Pageable getPageable(int pageNumber, int pageSize, Sort sort) {
         return PageRequest.of(pageNumber - 1, pageSize, sort);
     }

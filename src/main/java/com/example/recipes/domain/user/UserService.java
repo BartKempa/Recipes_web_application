@@ -12,12 +12,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -28,15 +32,17 @@ public class UserService {
     private final RecipeRepository recipeRepository;
     private final CommentRepository commentRepository;
     private final RatingRepository ratingRepository;
+    private final JavaMailSender javaMailSender;
 
 
-    UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
+    UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RecipeRepository recipeRepository, CommentRepository commentRepository, RatingRepository ratingRepository, JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.recipeRepository = recipeRepository;
         this.commentRepository = commentRepository;
         this.ratingRepository = ratingRepository;
+        this.javaMailSender = javaMailSender;
     }
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
@@ -129,6 +135,30 @@ public class UserService {
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize, sort);
         return userRepository.findAll(pageable)
                 .map(UserRegistrationDtoMapper::map);
+    }
+
+    public boolean checkEmailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public void sendResetLink(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        String token = generateToken();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
+        String resetLink = "http://localhost:8080/reset-hasla?token=%s".formatted(token);
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Reset hasła");
+        mailMessage.setText("Możesz zresetować swoje hasło klikając poniższy link: \n " + resetLink);
+        mailMessage.setFrom("kuchniabartosza@gmail.com");
+
+        javaMailSender.send(mailMessage);
+    }
+
+    private String generateToken() {
+        return UUID.randomUUID().toString();
     }
 }
 

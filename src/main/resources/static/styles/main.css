@@ -424,9 +424,10 @@ li::marker {
    border: 2px solid black;
 }
 
-.registration-link {
+.registration-link,
+.retrieve-password {
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     margin-top: 20px;
 }

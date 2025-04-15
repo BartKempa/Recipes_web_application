@@ -8,8 +8,10 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,file:uploads/
+  config:
+    import: optional:classpath:secret.properties
+
 app:
   storage:
     location: uploads
-
 

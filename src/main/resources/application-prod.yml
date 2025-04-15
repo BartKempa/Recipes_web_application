@@ -8,7 +8,9 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/,file:C:/uploads/
-
+  mail:
+    password:
+      ${EMAIL_PASSWORD}
 app:
   storage:
     location: C:/uploads

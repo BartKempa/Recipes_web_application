@@ -1,4 +1,4 @@
-package com.example.recipes.domain.config.security;
+package com.example.recipes.domain.config;
 
 import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;

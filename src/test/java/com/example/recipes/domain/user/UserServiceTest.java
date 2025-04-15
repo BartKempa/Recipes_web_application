@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -41,11 +42,13 @@ class UserServiceTest {
     private CommentRepository commentRepositoryMock;
     @Mock
     private RatingRepository ratingRepositoryMock;
+    @Mock
+    private JavaMailSender javaMailSender;
     private UserService userService;
 
     @BeforeEach
     void init() {
-        userService = new UserService(userRepositoryMock, userRoleRepositoryMock, passwordEncoderMock, recipeRepositoryMock, commentRepositoryMock, ratingRepositoryMock);
+        userService = new UserService(userRepositoryMock, userRoleRepositoryMock, passwordEncoderMock, recipeRepositoryMock, commentRepositoryMock, ratingRepositoryMock, javaMailSender);
     }
 
     @Test

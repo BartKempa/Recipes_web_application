@@ -5,6 +5,7 @@ import com.example.recipes.domain.rating.Rating;
 import com.example.recipes.domain.recipe.Recipe;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,6 +41,8 @@ public class User {
     private Set<Comment> comments = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private Set<Rating> ratings = new HashSet<>();
+    private String passwordResetToken;
+    private LocalDateTime passwordResetTokenExpiry;
 
     public Long getId() {
         return id;
@@ -127,5 +130,21 @@ public class User {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public LocalDateTime getPasswordResetTokenExpiry() {
+        return passwordResetTokenExpiry;
+    }
+
+    public void setPasswordResetTokenExpiry(LocalDateTime passwordResetTokenExpiry) {
+        this.passwordResetTokenExpiry = passwordResetTokenExpiry;
     }
 }
