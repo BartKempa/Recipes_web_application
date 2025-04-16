@@ -9,6 +9,8 @@
 <body>
 <div class="container">
     <main class="main-content" layout:fragment="content">
+        <p class="notification-bar" th:if="${userNotification}" th:text="${userNotification}">
+            Belka z powiadomieniami</p>
         <h2 class="list-heading">Zaloguj się </h2>
         <form action="#" th:action="@{/login}" method="post" class="kb-form">
             <p th:if="${param.error}" class="kb-form-message">

@@ -9,7 +9,6 @@ public class UserRetrievePasswordDto {
     private Long id;
     @NotBlank
     @Email
-    @UniqueEmail
     private String email;
     @NotBlank
     @PasswordCriteria

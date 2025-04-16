@@ -1,5 +1,6 @@
 package com.example.recipes.domain.user;
 
+import com.example.recipes.domain.user.dto.UserRetrievePasswordDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
 
 class UserUpdateDtoMapper {

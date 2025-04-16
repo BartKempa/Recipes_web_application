@@ -6,6 +6,7 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserRetrievePasswordDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -141,6 +142,7 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    @Transactional
     public void sendResetLink(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         String token = generateToken();
@@ -159,6 +161,25 @@ public class UserService {
 
     private String generateToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public boolean checkTokenExists(String token) {
+        return true;
+    }
+
+    public boolean checkTokenNotExpired(String token) {
+        return true;
+    }
+
+    public Optional<UserRetrievePasswordDto> findUserToRetrievePasswordByToken(String token) {
+        return userRepository.findByPasswordResetToken(token)
+                .map(UserRetrievePasswordDtoMapper::map);
+    }
+
+    @Transactional
+    public void retrieveUserPassword(UserRetrievePasswordDto userRetrievePasswordDto) {
+        User user = userRepository.findById(userRetrievePasswordDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(userRetrievePasswordDto.getPassword()));
     }
 }
 
