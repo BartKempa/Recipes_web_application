@@ -44,6 +44,7 @@
 
 - Register or log in via Google (OAuth2)
 - Access restricted based on user roles
+- Password reset link send to user email
 
 ### 👤 User Panel (Authenticated Users)
 

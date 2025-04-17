@@ -147,7 +147,7 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         String token = generateToken();
         user.setPasswordResetToken(token);
-        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(5));
         String resetLink = "http://localhost:8080/reset-hasla?token=%s".formatted(token);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -164,11 +164,13 @@ public class UserService {
     }
 
     public boolean checkTokenExists(String token) {
-        return true;
+        return userRepository.findByPasswordResetToken(token).isPresent();
     }
 
     public boolean checkTokenNotExpired(String token) {
-        return true;
+        return userRepository.findByPasswordResetToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .getPasswordResetTokenExpiry().isAfter(LocalDateTime.now());
     }
 
     public Optional<UserRetrievePasswordDto> findUserToRetrievePasswordByToken(String token) {

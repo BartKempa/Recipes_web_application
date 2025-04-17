@@ -27,30 +27,30 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/odzyskiwanie-hasla")
-    String getLinkToRetrievePassword(
-            @RequestParam("email") String email,
-            RedirectAttributes redirectAttributes,
-            @RequestHeader String referer){
+    String getLinkToRetrievePassword(@RequestParam("email") String email,
+                                     RedirectAttributes redirectAttributes,
+                                     @RequestHeader String referer){
         boolean isEmailExists = userService.checkEmailExists(email);
         if (isEmailExists){
             userService.sendResetLink(email);
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
-                    "Link do zmiany hasła został wysłany na adres %s".formatted(email)
+                    "Link do zmiany hasła został wysłany na adres %s, link będzie ważny 5 minut".formatted(email)
             );
         } else {
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
-                    "Niestety konto z podanym mailem nie zostało znalezione. Upewnij się, że podałeś prawidłowy adres email."
+                    "Konto z podanym mailem nie zostało znalezione. Upewnij się, że podałeś prawidłowy adres email."
             );
         }
         return "redirect:" + referer;
     }
 
     @GetMapping("/reset-hasla")
-    String getRetrievePasswordForm(@RequestParam String token, RedirectAttributes redirectAttributes, Model model){
+    String getRetrievePasswordForm(@RequestParam String token,
+                                   RedirectAttributes redirectAttributes,
+                                   Model model){
         if (!userService.checkTokenExists(token)){
-
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
                     "Token do zmiany hasła jest nieważny. Wyśli ponownie link do zmiany hasła."
@@ -59,7 +59,7 @@ public class ForgotPasswordController {
         } else if (!userService.checkTokenNotExpired(token)) {
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
-                    "Token do zmiany hasła jest nieaktualny, upłynał termin jego ważności. Wyśli ponownie link do zmiany hasła."
+                    "Token do zmiany hasła jest nieaktualny, upłynał termin jego ważności."
             );
             return "redirect:/odzyskiwanie-hasla";
         } else {
@@ -82,9 +82,9 @@ public class ForgotPasswordController {
         } else if (!user.getPassword().equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
-                    "Hasła nie są jednakowe!"
+                    "Hasła nie są jednakowe! Spróbuj ponownie."
             );
-            return "redirect:/reset-hasla?token=";
+            return "redirect:/reset-hasla?token=" + user.getToken();
         } else {
             userService.retrieveUserPassword(user);
             redirectAttributes.addFlashAttribute(

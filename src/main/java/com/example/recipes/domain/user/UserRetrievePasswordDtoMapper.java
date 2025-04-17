@@ -7,8 +7,8 @@ public class UserRetrievePasswordDtoMapper {
     static UserRetrievePasswordDto map(User user){
         return new UserRetrievePasswordDto(
                 user.getId(),
-                user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getPasswordResetToken()
         );
     }
 }
