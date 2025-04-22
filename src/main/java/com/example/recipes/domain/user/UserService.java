@@ -27,6 +27,14 @@ import java.util.UUID;
 @Service
 public class UserService {
     private static final String DEFAULT_USER_ROLE = "USER";
+    private static final String RESET_PASSWORD_SUBJECT = "Reset hasła";
+    private static final String ACTIVATION_MAIL_SUBJECT = "Aktywacja nowego konta";
+    private static final String MAIL_ADDRESS = "kuchniabartosza@gmail.com";
+    private static final String RESET_PASSWORD_MAIL_TEXT = "Możesz zresetować swoje hasło klikając poniższy link: \n ";
+    private static final String ACTIVATION_ACCOUNT_MAIL_TEXT = "W celu zakończenia rejestracji kliknij poniższy link: \n ";
+    private static final String RESET_LINK = "http://localhost:8080/reset-hasla?token=%s";
+    private static final String ACTIVATION_LINK = "http://localhost:8080/aktywacja-konta?token=%s";
+
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -63,10 +71,22 @@ public class UserService {
         user.setLastName(userRegistrationDto.getLastName());
         user.setNickName(userRegistrationDto.getNickName());
         user.setAge(userRegistrationDto.getAge());
+        user.setEmailVerified(false);
+        String activationToken = generateToken();
+        user.setemailverificationtoken(activationToken);
+        user.setEmailVerificationTokenExpiry(LocalDateTime.now().plusHours(12));
+        sendActivationEmail(userRegistrationDto.getEmail(), activationToken);
         UserRole userRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
         user.getRoles().add(userRole);
         userRepository.save(user);
     }
+
+    private void sendActivationEmail(String email, String token) {
+        String activationLink = ACTIVATION_LINK.formatted(token);
+        String emailContent = ACTIVATION_ACCOUNT_MAIL_TEXT + activationLink;
+        sendEmail(email, ACTIVATION_MAIL_SUBJECT, emailContent);
+    }
+
 
     @Transactional
     public void addOrUpdateFavoriteRecipe(String userEmail, long recipeId) {
@@ -148,13 +168,26 @@ public class UserService {
         String token = generateToken();
         user.setPasswordResetToken(token);
         user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(5));
-        String resetLink = "http://localhost:8080/reset-hasla?token=%s".formatted(token);
+        String resetLink = RESET_LINK.formatted(token);
+        String emailContent = RESET_PASSWORD_MAIL_TEXT + resetLink;
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        sendEmail(email, RESET_PASSWORD_SUBJECT, emailContent);
+
+        /*SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
-        mailMessage.setSubject("Reset hasła");
-        mailMessage.setText("Możesz zresetować swoje hasło klikając poniższy link: \n " + resetLink);
-        mailMessage.setFrom("kuchniabartosza@gmail.com");
+        mailMessage.setSubject(RESET_PASSWORD_SUBJECT);
+        mailMessage.setText(RESET_PASSWORD_MAIL_TEXT + resetLink);
+        mailMessage.setFrom(MAIL_ADDRESS);
+
+        javaMailSender.send(mailMessage);*/
+    }
+
+    private void sendEmail(String to, String subject, String text){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(to);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(text);
+        mailMessage.setFrom(MAIL_ADDRESS);
 
         javaMailSender.send(mailMessage);
     }
@@ -182,6 +215,8 @@ public class UserService {
     public void retrieveUserPassword(UserRetrievePasswordDto userRetrievePasswordDto) {
         User user = userRepository.findById(userRetrievePasswordDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setPassword(passwordEncoder.encode(userRetrievePasswordDto.getPassword()));
+        user.setPasswordResetTokenExpiry(null);
+        user.setPasswordResetToken(null);
     }
 }
 

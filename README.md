@@ -95,6 +95,7 @@ Anyone who wants to browse or share cooking recipes. Great for foodies looking f
    SPRING_PROFILES_ACTIVE=prod
    GOOGLE_CLIENT_ID=yourGoogleClientId
    GOOGLE_CLIENT_SECRET=yourGoogleClientSecret
+   EMAIL_PASSWORD=password to your mailbox
    ```
 4. Run the application:
    ```bash
@@ -108,8 +109,15 @@ Anyone who wants to browse or share cooking recipes. Great for foodies looking f
 
 1. Open the project in your favorite IDE (e.g. IntelliJ)
 2. Make sure the `dev` profile is active (H2 in-memory DB)
-3. Run the application from your IDE
-4. Visit [http://localhost:8080](http://localhost:8080)
+3. Create a `secret.properties` file in the resources directory with the following content:
+```env
+spring.mail.password=password to your mailbox
+spring.security.oauth2.client.registration.google.client-id=yourGoogleClientId
+spring.security.oauth2.client.registration.google.client-secret=yourGoogleClientSecre
+
+```
+4. Run the application from your IDE
+5. Visit [http://localhost:8080](http://localhost:8080)
 
 ---
 
@@ -132,10 +140,9 @@ Functionalities tested include:
 
 ## 🔮 Future Improvements
 
-1. Email confirmation after user registration
-2. “Products I need” section
-3. User blocking & moderation tools
-4. Hosting on AWS
+1. “Products I need” section
+2. User blocking & moderation tools
+3. Hosting on AWS
 
 ---
 

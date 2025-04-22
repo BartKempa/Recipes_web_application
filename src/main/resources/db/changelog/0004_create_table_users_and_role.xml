@@ -22,6 +22,9 @@
             <column name="password" type="VARCHAR(200)"/>
             <column name="password_reset_token" type="VARCHAR(50)"/>
             <column name="password_reset_token_expiry" type="DATETIME"/>
+            <column name="email_verified" type="TINYINT(1)"/>
+            <column name="email_verification_token" type="VARCHAR(50)"/>
+            <column name="email_verification_token_expiry" type="DATETIME"/>
         </createTable>
         
         <createTable tableName="user_role">
