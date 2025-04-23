@@ -13,8 +13,10 @@
             Belka z powiadomieniami</p>
         <h2 class="list-heading">Zaloguj się </h2>
         <form action="#" th:action="@{/login}" method="post" class="kb-form">
-            <p th:if="${param.error}" class="kb-form-message">
-                Błędne dane logowania.
+            <p th:if="${param.error}"
+               th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"
+               class="kb-form-message">
+                Błąd logowania.
             </p>
             <p th:if="${param.logout}" class="kb-form-message">
                 Zostałeś wylogowany, możesz zalogować się ponownie.

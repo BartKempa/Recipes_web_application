@@ -50,13 +50,13 @@ public class ForgotPasswordController {
     String getRetrievePasswordForm(@RequestParam String token,
                                    RedirectAttributes redirectAttributes,
                                    Model model){
-        if (!userService.checkTokenExists(token)){
+        if (!userService.checkResetTokenExists(token)){
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
                     "Token do zmiany hasła jest nieważny. Wyśli ponownie link do zmiany hasła."
             );
             return "redirect:/odzyskiwanie-hasla";
-        } else if (!userService.checkTokenNotExpired(token)) {
+        } else if (!userService.checkResetTokenNotExpired(token)) {
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
                     "Token do zmiany hasła jest nieaktualny, upłynał termin jego ważności."

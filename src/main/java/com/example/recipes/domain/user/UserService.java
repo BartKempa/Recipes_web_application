@@ -196,11 +196,11 @@ public class UserService {
         return UUID.randomUUID().toString();
     }
 
-    public boolean checkTokenExists(String token) {
+    public boolean checkResetTokenExists(String token) {
         return userRepository.findByPasswordResetToken(token).isPresent();
     }
 
-    public boolean checkTokenNotExpired(String token) {
+    public boolean checkResetTokenNotExpired(String token) {
         return userRepository.findByPasswordResetToken(token)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
                 .getPasswordResetTokenExpiry().isAfter(LocalDateTime.now());
@@ -213,10 +213,30 @@ public class UserService {
 
     @Transactional
     public void retrieveUserPassword(UserRetrievePasswordDto userRetrievePasswordDto) {
-        User user = userRepository.findById(userRetrievePasswordDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userRepository.findById(userRetrievePasswordDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setPassword(passwordEncoder.encode(userRetrievePasswordDto.getPassword()));
         user.setPasswordResetTokenExpiry(null);
         user.setPasswordResetToken(null);
+    }
+
+    public boolean checkActivationTokenExists(String token) {
+        return userRepository.findByEmailVerificationToken(token).isPresent();
+    }
+
+    public boolean checkActivationTokenNotExpired(String token) {
+        return userRepository.findByEmailVerificationToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .getEmailVerificationTokenExpiry().isAfter(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void activateAccount(String token) {
+        User user = userRepository.findByEmailVerificationToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setEmailVerified(true);
+        user.setEmailVerificationTokenExpiry(null);
+        user.setemailverificationtoken(null);
     }
 }
 

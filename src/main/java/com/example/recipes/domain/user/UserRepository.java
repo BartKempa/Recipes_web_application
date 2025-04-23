@@ -13,4 +13,6 @@ public interface UserRepository extends CrudRepository<User, Long>, PagingAndSor
     int countUsersByFavouriteRecipe(long recipeId);
 
     Optional<User> findByPasswordResetToken(String passwordResetToken);
+
+    Optional<User> findByEmailVerificationToken(String verificationToken);
 }

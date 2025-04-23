@@ -10,11 +10,13 @@ public class UserCredentialsDto {
     @Email
     private String email;
     private String password;
+    private boolean emailVerified;
     private Set<String> roles;
 
-    public UserCredentialsDto(String email, String password, Set<String> roles) {
+    public UserCredentialsDto(String email, String password, boolean emailVerified, Set<String> roles) {
         this.email = email;
         this.password = password;
+        this.emailVerified = emailVerified;
         this.roles = roles;
     }
 
@@ -28,5 +30,9 @@ public class UserCredentialsDto {
 
     public Set<String> getRoles() {
         return roles;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
     }
 }

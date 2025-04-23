@@ -9,6 +9,7 @@ class UserCredentialsDtoMapper {
    return new UserCredentialsDto(
            user.getEmail(),
            user.getPassword(),
+           user.isEmailVerified(),
            user.getRoles()
                    .stream()
                    .map(UserRole::getName)

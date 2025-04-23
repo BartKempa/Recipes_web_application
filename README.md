@@ -140,9 +140,10 @@ Functionalities tested include:
 
 ## 🔮 Future Improvements
 
-1. “Products I need” section
-2. User blocking & moderation tools
-3. Hosting on AWS
+1. Email confirmation after user registration
+2. “Products I need” section
+3. User blocking & moderation tools
+4. Hosting on AWS
 
 ---
 
