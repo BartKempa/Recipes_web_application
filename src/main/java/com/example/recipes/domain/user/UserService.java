@@ -73,7 +73,7 @@ public class UserService {
         user.setAge(userRegistrationDto.getAge());
         user.setEmailVerified(false);
         String activationToken = generateToken();
-        user.setemailverificationtoken(activationToken);
+        user.setEmailverificationtoken(activationToken);
         user.setEmailVerificationTokenExpiry(LocalDateTime.now().plusHours(12));
         sendActivationEmail(userRegistrationDto.getEmail(), activationToken);
         UserRole userRole = userRoleRepository.findByName(DEFAULT_USER_ROLE).orElseThrow();
@@ -172,14 +172,6 @@ public class UserService {
         String emailContent = RESET_PASSWORD_MAIL_TEXT + resetLink;
 
         sendEmail(email, RESET_PASSWORD_SUBJECT, emailContent);
-
-        /*SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);
-        mailMessage.setSubject(RESET_PASSWORD_SUBJECT);
-        mailMessage.setText(RESET_PASSWORD_MAIL_TEXT + resetLink);
-        mailMessage.setFrom(MAIL_ADDRESS);
-
-        javaMailSender.send(mailMessage);*/
     }
 
     private void sendEmail(String to, String subject, String text){
@@ -236,7 +228,7 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setEmailVerified(true);
         user.setEmailVerificationTokenExpiry(null);
-        user.setemailverificationtoken(null);
+        user.setEmailverificationtoken(null);
     }
 }
 

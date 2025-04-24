@@ -164,7 +164,7 @@ public class User {
         return emailVerificationToken;
     }
 
-    public void setemailverificationtoken(String emailVerificationToken) {
+    public void setEmailverificationtoken(String emailVerificationToken) {
         this.emailVerificationToken = emailVerificationToken;
     }
 

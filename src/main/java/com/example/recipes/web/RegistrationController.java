@@ -31,13 +31,18 @@ class RegistrationController {
     @PostMapping("/rejestracja")
     String register(@Valid @ModelAttribute("user") UserRegistrationDto user,
                            BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes,
                            Model model){
         if (bindingResult.hasErrors()){
             model.addAttribute("user", user);
             return "registration-form";
         } else {
             userService.registerUserWithDefaultRole(user);
-            return "redirect:/";
+            redirectAttributes.addFlashAttribute(
+                    USER_NOTIFICATION_ATTRIBUTE,
+                    "Na Twoją skrzynkę mialową została wysłana wiadomość z linkiem aktywacyjnym, który będzie ważny przez 12 godzin."
+            );
+            return "redirect:/login";
         }
     }
 
@@ -60,7 +65,7 @@ class RegistrationController {
             userService.activateAccount(token);
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
-                    "Konto zostało pomyślnie aktywowane, ,mmożesz się zalogować!"
+                    "Konto zostało pomyślnie aktywowane, możesz się zalogować!"
             );
             return "redirect:/login";
         }
