@@ -184,7 +184,7 @@ public class UserService {
         javaMailSender.send(mailMessage);
     }
 
-    private String generateToken() {
+    String generateToken() {
         return UUID.randomUUID().toString();
     }
 

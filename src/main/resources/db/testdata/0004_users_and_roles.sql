@@ -3,7 +3,7 @@ insert into
 values
     ('admin@mail.com', 'Bartek', 'Kowalski', 'BigAdmin', 40, '{noop}adminpass', 1),
     ('user@mail.com',  'Janek', 'Janecki', 'BigJohn', 28, '{noop}Userpass123!@#', 1),
-    ('bartekkempa@gmail.com',  'Daga', 'Szczepankowa', 'Dagula', 35, '{noop}userpass', 0);
+    ('daga@mail.com',  'Daga', 'Szczepankowa', 'Dagula', 35, '{noop}userpass', 1);
 
 insert into
     user_role(name, description)

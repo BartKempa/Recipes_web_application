@@ -45,6 +45,7 @@
 - Register or log in via Google (OAuth2)
 - Access restricted based on user roles
 - Password reset link send to user email
+- Activate new account by link send to user email
 
 ### 👤 User Panel (Authenticated Users)
 
@@ -140,9 +141,9 @@ Functionalities tested include:
 
 ## 🔮 Future Improvements
 
-1. Email confirmation after user registration
+1. Email confirmation after user registration ✅
 2. “Products I need” section
-3. User blocking & moderation tools
+3. User blocking & moderation tools 
 4. Hosting on AWS
 
 ---

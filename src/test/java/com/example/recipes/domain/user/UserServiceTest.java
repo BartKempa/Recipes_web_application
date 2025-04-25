@@ -17,10 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -564,5 +567,153 @@ class UserServiceTest {
         //when
         //then
         assertThrows(ResponseStatusException.class, () -> userService.deleteUser(USER_EMAIL));
+    }
+
+    @Test
+    void shouldSendResetLink() {
+        //given
+        final String email = "example@mail.com";
+        final String token = "fixed-token";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmail(email);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("hardpass");
+
+
+        Mockito.when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(user));
+        UserService spyService = Mockito.spy(userService);
+        Mockito.doReturn(token).when(spyService).generateToken();
+
+        //when
+        spyService.sendResetLink(email);
+
+        //then
+        ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        Mockito.verify(javaMailSender).send(captor.capture());
+
+        SimpleMailMessage sentMessage = captor.getValue();
+        assertThat(sentMessage.getFrom()).isEqualTo("kuchniabartosza@gmail.com");
+        assertThat(sentMessage.getTo()).contains(email);
+        assertThat(sentMessage.getSubject()).isEqualTo("Reset hasła");
+        assertThat(sentMessage.getText()).contains(token);
+        assertThat(sentMessage.getText()).contains("http://localhost:8080/reset-hasla?token=fixed-token");
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailDoseNotExist(){
+        //given
+        Mockito.when(userRepositoryMock.findByEmail("doesNotExist@mail.com")).thenReturn(Optional.empty());
+
+        //when & then
+        assertThrows(ResponseStatusException.class, () -> userService.sendResetLink("doesNotExist@mail.com"));
+    }
+
+    @Test
+    void shouldSetTokenAndExpiryDateOnUser() {
+        //given
+        final String email = "example@mail.com";
+        final String fixedToken = "fixed-token";
+
+        User user = new User();
+        user.setEmail(email);
+        Mockito.when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(user));
+
+        UserService spyService = Mockito.spy(userService);
+        Mockito.doReturn(fixedToken).when(spyService).generateToken();
+
+        //when
+        spyService.sendResetLink(email);
+
+        //then
+        assertThat(user.getPasswordResetToken()).isEqualTo(fixedToken);
+        assertThat(user.getPasswordResetTokenExpiry()).isAfter(LocalDateTime.now());
+    }
+
+    @Test
+    void shouldReturnTrueWhenCheckResetTokenExists() {
+        //given
+        final String email = "example@mail.com";
+        final String token = "fixed-token";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setPasswordResetToken(token);
+        user.setEmail(email);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("hardpass");
+
+        Mockito.when(userRepositoryMock.findByPasswordResetToken("fixed-token")).thenReturn(Optional.of(user));
+
+        //when
+        boolean checkResetTokenExists = userService.checkResetTokenExists(token);
+
+        //then
+        assertTrue(checkResetTokenExists);
+    }
+
+    @Test
+    void shouldReturnFalseWhenCheckResetTokenExists() {
+        //given
+        final String token = "non-existing-token";
+        Mockito.when(userRepositoryMock.findByPasswordResetToken("non-existing-token")).thenReturn(Optional.empty());
+
+        //when
+        boolean checkResetTokenExists = userService.checkResetTokenExists(token);
+
+        //then
+        assertFalse(checkResetTokenExists);
+    }
+
+    @Test
+    void shouldReturnTrueWhenCheckResetTokenNotExpired() {
+        //given
+        String token = "valid-token";
+        User user = new User();
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(10));
+        Mockito.when(userRepositoryMock.findByPasswordResetToken(token)).thenReturn(Optional.of(user));
+
+        //when
+        boolean result = userService.checkResetTokenNotExpired(token);
+
+        //then
+        assertTrue(result);
+    }
+
+
+    @Test
+    void shouldReturnFalseWhenCheckResetTokenNotExpired() {
+        //given
+        final String token = "fixed-token";
+        User user = new User();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().minusMinutes(10));
+        user.setPassword("hardpass");
+
+        Mockito.when(userRepositoryMock.findByPasswordResetToken(token)).thenReturn(Optional.of(user));
+
+        //when
+        boolean isNotExpired = userService.checkResetTokenNotExpired(token);
+
+        //then
+        assertFalse(isNotExpired);
+    }
+
+    @Test
+    void shouldReturnFalseWhenCheckNotExistingResetTokenNotExpired() {
+        //given
+        final String token = "non-existing-token";
+        Mockito.when(userRepositoryMock.findByPasswordResetToken(token)).thenReturn(Optional.empty());
+
+        //when & then
+        assertThrows(ResponseStatusException.class, () -> userService.checkResetTokenNotExpired(token));
     }
 }
