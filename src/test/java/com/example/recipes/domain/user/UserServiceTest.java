@@ -6,6 +6,7 @@ import com.example.recipes.domain.recipe.Recipe;
 import com.example.recipes.domain.recipe.RecipeRepository;
 import com.example.recipes.domain.user.dto.UserCredentialsDto;
 import com.example.recipes.domain.user.dto.UserRegistrationDto;
+import com.example.recipes.domain.user.dto.UserRetrievePasswordDto;
 import com.example.recipes.domain.user.dto.UserUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -716,4 +718,35 @@ class UserServiceTest {
         //when & then
         assertThrows(ResponseStatusException.class, () -> userService.checkResetTokenNotExpired(token));
     }
+
+    @Test
+    void shouldRetrieveUserPassword() {
+        //given
+        final String email = "example@mail.com";
+        final String token = "fixed-token";
+        final String password = "Password123#";
+
+        UserRetrievePasswordDto userRetrievePasswordDto = new UserRetrievePasswordDto(1L, password, token);
+        UserRole userRole = new UserRole();
+        userRole.setId(1L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(10));
+        user.setEmail(email);
+        user.setRoles(Set.of(userRole));
+        user.setPassword("OldPass123#");
+
+        Mockito.when(userRepositoryMock.findById(userRetrievePasswordDto.getId())).thenReturn(Optional.of(user));
+        Mockito.when(passwordEncoderMock.encode(userRetrievePasswordDto.getPassword())).thenReturn("Password123#");
+        //when
+        userService.retrieveUserPassword(userRetrievePasswordDto);
+
+        //then
+        assertNull(user.getPasswordResetToken());
+        assertNull(user.getPasswordResetTokenExpiry());
+        assertTrue(user.getPassword().equals("Password123#"));
+    }
+
 }
