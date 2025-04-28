@@ -20,14 +20,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -104,6 +103,7 @@ class UserServiceTest {
     @Test
     void shouldRegisterNewUserWithDefaultRole() {
         //given
+        final String token = "fixed-token";
         final String USER_EMAIL = "example@mail.com";
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail(USER_EMAIL);
@@ -119,9 +119,11 @@ class UserServiceTest {
 
         Mockito.when(userRoleRepositoryMock.findByName("USER")).thenReturn(Optional.of(userRole));
         Mockito.when(passwordEncoderMock.encode(userRegistrationDto.getPassword())).thenReturn("encodedHardpass");
+        UserService spyService = Mockito.spy(userService);
+        Mockito.doReturn(token).when(spyService).generateToken();
 
         //when
-        userService.registerUserWithDefaultRole(userRegistrationDto);
+        spyService.registerUserWithDefaultRole(userRegistrationDto);
 
         //then
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -136,6 +138,17 @@ class UserServiceTest {
         assertThat(userCaptorValue.getAge(), is(40));
         assertThat(userCaptorValue.getRoles().size(), is(1));
         assertThat(userCaptorValue.getRoles().iterator().next().getName(), is("USER"));
+
+        ArgumentCaptor<SimpleMailMessage> messageArgumentCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        Mockito.verify(javaMailSender).send(messageArgumentCaptor.capture());
+
+        SimpleMailMessage mailMessage = messageArgumentCaptor.getValue();
+        assertThat(mailMessage.getFrom()).isEqualTo("kuchniabartosza@gmail.com");
+        assertThat(mailMessage.getTo()).contains(USER_EMAIL);
+        assertThat(mailMessage.getSubject()).isEqualTo("Aktywacja nowego konta");
+        assertThat(mailMessage.getText()).contains(token);
+        assertThat(mailMessage.getText()).contains("http://localhost:8080/aktywacja-konta?token=fixed-token");
+
     }
 
     @Test
@@ -690,7 +703,6 @@ class UserServiceTest {
         assertTrue(result);
     }
 
-
     @Test
     void shouldReturnFalseWhenCheckResetTokenNotExpired() {
         //given
@@ -746,7 +758,6 @@ class UserServiceTest {
         //then
         assertNull(user.getPasswordResetToken());
         assertNull(user.getPasswordResetTokenExpiry());
-        assertTrue(user.getPassword().equals("Password123#"));
+        assertEquals("Password123#", user.getPassword());
     }
-
 }
