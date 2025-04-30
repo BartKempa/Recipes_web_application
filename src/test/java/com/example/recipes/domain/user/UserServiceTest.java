@@ -103,7 +103,7 @@ class UserServiceTest {
     @Test
     void shouldRegisterNewUserWithDefaultRole() {
         //given
-        final String token = "fixed-token";
+        final String token = "activation-token";
         final String USER_EMAIL = "example@mail.com";
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail(USER_EMAIL);
@@ -759,5 +759,42 @@ class UserServiceTest {
         assertNull(user.getPasswordResetToken());
         assertNull(user.getPasswordResetTokenExpiry());
         assertEquals("Password123#", user.getPassword());
+    }
+
+    @Test
+    void shouldReturnTrueWhenCheckActiveTokenExists() {
+        //given
+        final String email = "example@mail.com";
+        final String token = "activation-token";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(11L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmailverificationtoken(token);
+        user.setEmail(email);
+        user.setRoles(Set.of(userRole));
+
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken("activation-token")).thenReturn(Optional.of(user));
+
+        //when
+        boolean checkActivationTokenExists = userService.checkActivationTokenExists(token);
+
+        //then
+        assertTrue(checkActivationTokenExists);
+    }
+
+    @Test
+    void shouldReturnFalseWhenActivationTokenExists() {
+        //given
+        final String token = "non-existing-token";
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken("non-existing-token")).thenReturn(Optional.empty());
+
+        //when
+        boolean checkActivationTokenExists = userService.checkActivationTokenExists(token);
+
+        //then
+        assertFalse(checkActivationTokenExists);
     }
 }
