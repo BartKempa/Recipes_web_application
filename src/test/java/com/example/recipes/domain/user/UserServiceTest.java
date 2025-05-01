@@ -147,8 +147,7 @@ class UserServiceTest {
         assertThat(mailMessage.getTo()).contains(USER_EMAIL);
         assertThat(mailMessage.getSubject()).isEqualTo("Aktywacja nowego konta");
         assertThat(mailMessage.getText()).contains(token);
-        assertThat(mailMessage.getText()).contains("http://localhost:8080/aktywacja-konta?token=fixed-token");
-
+        assertThat(mailMessage.getText()).contains("http://localhost:8080/aktywacja-konta?token=activation-token");
     }
 
     @Test
@@ -797,4 +796,47 @@ class UserServiceTest {
         //then
         assertFalse(checkActivationTokenExists);
     }
+
+    @Test
+    void shouldReturnTrueWhenActivationTokenNotExpired() {
+        //given
+        String token = "valid-token";
+        User user = new User();
+        user.setEmailVerificationTokenExpiry(LocalDateTime.now().plusMinutes(10));
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken(token)).thenReturn(Optional.of(user));
+
+        //when
+        boolean result = userService.checkActivationTokenNotExpired(token);
+
+        //then
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldReturnFalseWhenCheckActivationTokenNotExpired() {
+        //given
+        final String token = "fixed-token";
+        User user = new User();
+        user.setEmailverificationtoken(token);
+        user.setEmailVerificationTokenExpiry(LocalDateTime.now().minusMinutes(10));
+
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken(token)).thenReturn(Optional.of(user));
+
+        //when
+        boolean isNotExpired = userService.checkActivationTokenNotExpired(token);
+
+        //then
+        assertFalse(isNotExpired);
+    }
+
+    @Test
+    void shouldReturnFalseWhenCheckNotExistingActivationTokenNotExpired() {
+        //given
+        final String token = "non-existing-token";
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken(token)).thenReturn(Optional.empty());
+
+        //when & then
+        assertThrows(ResponseStatusException.class, () -> userService.checkActivationTokenNotExpired(token));
+    }
+
 }
