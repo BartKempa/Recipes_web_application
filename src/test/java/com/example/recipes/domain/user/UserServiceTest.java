@@ -839,4 +839,32 @@ class UserServiceTest {
         assertThrows(ResponseStatusException.class, () -> userService.checkActivationTokenNotExpired(token));
     }
 
+
+    @Test
+    void shouldActivateNewAccount() {
+        //given
+        final String email = "example@mail.com";
+        final String token = "activation-token";
+
+        UserRole userRole = new UserRole();
+        userRole.setId(1L);
+        userRole.setName("USER");
+
+        User user = new User();
+        user.setEmailverificationtoken(token);
+        user.setEmailVerificationTokenExpiry(LocalDateTime.now().plusMinutes(10));
+        user.setEmailVerified(false);
+        user.setEmail(email);
+        user.setRoles(Set.of(userRole));
+
+        Mockito.when(userRepositoryMock.findByEmailVerificationToken("activation-token")).thenReturn(Optional.of(user));
+
+        //when
+        userService.activateAccount("activation-token");
+
+        //then
+        assertNull(user.getEmailVerificationToken());
+        assertNull(user.getEmailVerificationTokenExpiry());
+        assertTrue(user.isEmailVerified());
+    }
 }
