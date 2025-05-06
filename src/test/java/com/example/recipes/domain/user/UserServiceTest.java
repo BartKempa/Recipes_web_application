@@ -839,7 +839,6 @@ class UserServiceTest {
         assertThrows(ResponseStatusException.class, () -> userService.checkActivationTokenNotExpired(token));
     }
 
-
     @Test
     void shouldActivateNewAccount() {
         //given

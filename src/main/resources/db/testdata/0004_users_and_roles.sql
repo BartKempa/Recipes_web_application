@@ -1,9 +1,10 @@
 insert into
-    users(email, first_name, last_name, nick_name, age, password, email_verified)
+    users(email, first_name, last_name, nick_name, age, password, email_verified, email_verification_token, email_verification_token_expiry)
 values
-    ('admin@mail.com', 'Bartek', 'Kowalski', 'BigAdmin', 40, '{noop}adminpass', 1),
-    ('user@mail.com',  'Janek', 'Janecki', 'BigJohn', 28, '{noop}Userpass123!@#', 1),
-    ('daga@mail.com',  'Daga', 'Szczepankowa', 'Dagula', 35, '{noop}userpass', 1);
+    ('admin@mail.com', 'Bartek', 'Kowalski', 'BigAdmin', 40, '{noop}adminpass', 1, null, null),
+    ('user@mail.com',  'Janek', 'Janecki', 'BigJohn', 28, '{noop}Userpass123!@#', 1, null, null),
+    ('daga@mail.com',  'Daga', 'Szczepankowa', 'Dagula', 35, '{noop}userpass', 1, null, null),
+    ('test@mail.com',  'Jan', 'Janecki', 'Jaenczek', 35, '{noop}janpass18$', 0, '28be22c6-c750-4e13-987a-f31963ae9f07', '2025-05-05 23:45:34.598405');
 
 insert into
     user_role(name, description)
@@ -16,4 +17,5 @@ insert into
 values
     (1, 1),
     (2, 2),
-    (3, 2);
+    (3, 2),
+    (4, 2);
