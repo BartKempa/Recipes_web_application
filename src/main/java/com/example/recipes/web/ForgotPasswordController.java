@@ -1,5 +1,6 @@
 package com.example.recipes.web;
 
+import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserService;
 import com.example.recipes.domain.user.dto.UserRetrievePasswordDto;
 import jakarta.validation.Valid;
@@ -10,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 public class ForgotPasswordController {
@@ -29,21 +32,31 @@ public class ForgotPasswordController {
     @PostMapping("/odzyskiwanie-hasla")
     String getLinkToRetrievePassword(@RequestParam("email") String email,
                                      RedirectAttributes redirectAttributes,
-                                     @RequestHeader String referer){
-        boolean isEmailExists = userService.checkEmailExists(email);
-        if (isEmailExists){
-            userService.sendResetLink(email);
-            redirectAttributes.addFlashAttribute(
-                    USER_NOTIFICATION_ATTRIBUTE,
-                    "Link do zmiany hasła został wysłany na adres %s, link będzie ważny 5 minut".formatted(email)
-            );
+                                     @RequestHeader(required = false) String referer) {
+        Optional<User> optionalUser = userService.findUserByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (!user.isEmailVerified()) {
+                redirectAttributes.addFlashAttribute(
+                        USER_NOTIFICATION_ATTRIBUTE,
+                        "Twoje konto nie zostało jeszcze aktywowane. Sprawdź skrzynkę e-mail i kliknij w link aktywacyjny."
+                );
+            } else {
+                userService.sendResetLink(email);
+                redirectAttributes.addFlashAttribute(
+                        USER_NOTIFICATION_ATTRIBUTE,
+                        "Link do zmiany hasła został wysłany na adres %s, link będzie ważny 5 minut".formatted(email)
+                );
+            }
         } else {
             redirectAttributes.addFlashAttribute(
                     USER_NOTIFICATION_ATTRIBUTE,
                     "Konto z podanym mailem nie zostało znalezione. Upewnij się, że podałeś prawidłowy adres email."
             );
         }
-        return "redirect:" + referer;
+
+        return "redirect:" + (referer != null ? referer : "/odzyskiwanie-hasla");
     }
 
     @GetMapping("/reset-hasla")

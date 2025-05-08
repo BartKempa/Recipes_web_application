@@ -230,6 +230,10 @@ public class UserService {
         user.setEmailVerificationTokenExpiry(null);
         user.setEmailverificationtoken(null);
     }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
 
 
