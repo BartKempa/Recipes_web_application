@@ -2,6 +2,8 @@ package com.example.recipes.web;
 
 import com.example.recipes.domain.user.User;
 import com.example.recipes.domain.user.UserRepository;
+import com.example.recipes.domain.user.dto.UserRetrievePasswordDto;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -113,7 +116,65 @@ class ForgotPasswordControllerTest {
 
 
     @Test
-    void getRetrievePasswordForm() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldFailWhenTryGetRetrievePasswordFormWhenTokenNotExist() throws Exception {
+        //given
+        final String token = "not-exists-token";
+        assertNull(userRepository.findByEmail("user@mail.com").orElseThrow().getPasswordResetToken());
+
+        //when
+        //then
+        mockMvc.perform(get("/reset-hasla")
+                .param("token", token)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/odzyskiwanie-hasla"))
+                .andExpect(flash().attribute("userNotification",
+                        "Token do zmiany hasła jest nieważny. Wyśli ponownie link do zmiany hasła."));
+    }
+
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldFailWhenTryGetRetrievePasswordFormWithExpiredToken() throws Exception {
+        //given
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        String token = UUID.randomUUID().toString();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().minusHours(1));
+        userRepository.save(user);
+
+        //when
+        //then
+        mockMvc.perform(get("/reset-hasla")
+                        .param("token", token)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/odzyskiwanie-hasla"))
+                .andExpect(flash().attribute("userNotification",
+                        "Token do zmiany hasła jest nieaktualny, upłynał termin jego ważności."));
+    }
+
+
+    @Test
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldGetRetrievePasswordFormWithValidToken() throws Exception {
+        //given
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        String token = UUID.randomUUID().toString();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        //when
+        //then
+        mockMvc.perform(get("/reset-hasla")
+                        .param("token", token)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("retrieve-password-form"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", Matchers.instanceOf(UserRetrievePasswordDto.class)));
     }
 
     @Test
