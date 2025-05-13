@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +34,9 @@ class ForgotPasswordControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Test
@@ -177,7 +181,101 @@ class ForgotPasswordControllerTest {
                 .andExpect(model().attribute("user", Matchers.instanceOf(UserRetrievePasswordDto.class)));
     }
 
+
     @Test
-    void retrievePassword() {
+    @WithMockUser(username = "user@mail.com", roles = "USER")
+    void shouldRetrievePassword() throws Exception {
+        //given
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        String token = UUID.randomUUID().toString();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        String newPassword = "Password123#";
+        String confirmPassword = "Password123#";
+        UserRetrievePasswordDto userRetrievePasswordDto = new UserRetrievePasswordDto(user.getId(), newPassword, token);
+
+        //when
+        mockMvc.perform(post("/reset-hasla")
+                .param("id", String.valueOf(userRetrievePasswordDto.getId()))
+                .param("password", userRetrievePasswordDto.getPassword())
+                .param("token", token)
+                .param("confirmPassword", confirmPassword)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attribute("userNotification",
+                        "Hasło zostało pomyślnie zmienione, zaloguj się wykorzystując nowe hasło!"));
+
+        //then
+        User updatedUser = userRepository.findById(user.getId()).orElseThrow();
+        assertNull(updatedUser.getPasswordResetToken());
+        assertNull(updatedUser.getPasswordResetTokenExpiry());
+        assertTrue(passwordEncoder.matches(newPassword, updatedUser.getPassword()));
+    }
+
+
+    @Test
+    void shouldFailWhenRetrievePasswordWithTwoDifferentPasswords() throws Exception {
+        //given
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        String token = UUID.randomUUID().toString();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        String newPassword = "Password123#";
+        String confirmPassword = "WrongPassword123##";
+        UserRetrievePasswordDto userRetrievePasswordDto = new UserRetrievePasswordDto(user.getId(), newPassword, token);
+
+        //when
+        mockMvc.perform(post("/reset-hasla")
+                .param("id", String.valueOf(userRetrievePasswordDto.getId()))
+                .param("password", userRetrievePasswordDto.getPassword())
+                .param("token", token)
+                .param("confirmPassword", confirmPassword)
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/reset-hasla?token=" + token))
+                .andExpect(flash().attribute("userNotification",
+                        "Hasła nie są jednakowe! Spróbuj ponownie."));
+    }
+
+
+    @Test
+    void shouldReturnToRetrievePasswordFormWhenValidationFails() throws Exception {
+        //given
+        User user = userRepository.findByEmail("user@mail.com").orElseThrow();
+        String token = UUID.randomUUID().toString();
+        user.setPasswordResetToken(token);
+        user.setPasswordResetTokenExpiry(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+
+        String newPassword = "pass";
+        String confirmPassword = "pass";
+        UserRetrievePasswordDto userRetrievePasswordDto = new UserRetrievePasswordDto(user.getId(), newPassword, token);
+
+        //when
+        mockMvc.perform(post("/reset-hasla")
+                        .param("id", String.valueOf(userRetrievePasswordDto.getId()))
+                        .param("password", userRetrievePasswordDto.getPassword())
+                        .param("token", token)
+                        .param("confirmPassword", confirmPassword)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(view().name("retrieve-password-form"));
+    }
+
+
+    @Test
+    void shouldFailWithoutCsrfToken() throws Exception {
+        mockMvc.perform(post("/reset-hasla")
+                        .param("id", "1")
+                        .param("password", "NewPass123!")
+                        .param("token", "some-token")
+                        .param("confirmPassword", "NewPass123!"))
+                .andExpect(status().isForbidden());
     }
 }
