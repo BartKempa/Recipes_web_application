@@ -167,4 +167,21 @@ Functionalities tested include:
 
 ---
 
+## 📄 License & Third-Party Libraries
+
+This project uses the [OpenPDF](https://github.com/LibrePDF/OpenPDF) library for generating PDF files (planned feature: `pdfCreator`).
+
+**OpenPDF** is licensed under a dual open source license: **LGPL** and **MPL**. This means you are free to use it in both open-source and proprietary applications, as long as you comply with the terms of one of the licenses.
+
+As required, this project includes attribution to OpenPDF and provides a link to the source code and license:
+
+- Library: OpenPDF
+- Repository: https://github.com/LibrePDF/OpenPDF
+- License: [LGPL 2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) / [MPL 1.1](https://www.mozilla.org/MPL/1.1/)
+
+The application does not modify the OpenPDF source code directly. If modifications are made in the future, they will be made available under the terms of the LGPL/MPL license.
+
+---
+
+
 Happy cooking! 🍽️

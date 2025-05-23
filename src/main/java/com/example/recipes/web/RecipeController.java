@@ -3,12 +3,13 @@ package com.example.recipes.web;
 import com.example.recipes.domain.comment.CommentService;
 import com.example.recipes.domain.comment.dto.CommentDto;
 import com.example.recipes.domain.rating.RatingService;
+import com.example.recipes.domain.recipe.PdfGenerator;
 import com.example.recipes.domain.recipe.RecipeService;
 import com.example.recipes.domain.recipe.dto.RecipeFullInfoDto;
 import com.example.recipes.domain.recipe.dto.RecipeMainInfoDto;
 import com.example.recipes.domain.user.UserService;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,11 +29,14 @@ class RecipeController {
     private final UserService  userService;
     private final CommentService commentService;
 
-    RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService, CommentService commentService) {
+    private final PdfGenerator pdfGenerator;
+
+    RecipeController(RecipeService recipeService, RatingService ratingService, UserService userService, CommentService commentService, PdfGenerator pdfGenerator) {
         this.recipeService = recipeService;
         this.ratingService = ratingService;
         this.userService = userService;
         this.commentService = commentService;
+        this.pdfGenerator = pdfGenerator;
     }
 
     static final Map<String, String> SORT_FIELD_MAP = new HashMap<>();
@@ -138,5 +142,24 @@ class RecipeController {
         model.addAttribute("baseUrl", "/uzytkownik/ocenione/strona");
         model.addAttribute("heading", "Twoje oceninone przepisy");
         return "recipe-listing";
+    }
+
+    @GetMapping(value = "/przepis/{id}/pdf")
+    public ResponseEntity<byte[]> downloadRecipePdf(@PathVariable long id) {
+        RecipeFullInfoDto recipe = recipeService.findRecipeById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        byte[] pdf = pdfGenerator.generatePdfRecipe(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.attachment().build());
+        headers.setContentDisposition(ContentDisposition.inline()
+                .filename("przepis_" + recipe.getName().toLowerCase().replace(" ", "_") + ".pdf")
+                .build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
     }
 }
