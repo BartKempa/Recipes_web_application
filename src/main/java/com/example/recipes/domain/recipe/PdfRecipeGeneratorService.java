@@ -8,8 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 @Service
 public class PdfRecipeGeneratorService implements PdfGenerator {
@@ -41,9 +39,7 @@ public class PdfRecipeGeneratorService implements PdfGenerator {
             Paragraph ingredientsTitileSectionParagraph = new Paragraph("Składniki", SECTION_FONT);
 
             List ingredientsList= new List(List.UNORDERED);
-
-            String[] ingredients = recipe.getIngredients().split("/n");
-
+            String[] ingredients = recipe.getIngredients().split("\\\\n");
             for (String ingredient : ingredients) {
                 ingredientsList.add(new ListItem(ingredient, REGULAR_FONT));
             }
