@@ -1,11 +1,15 @@
 package com.example.recipes.domain.recipe;
 
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.List;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -18,9 +22,10 @@ public class PdfRecipeGeneratorService implements PdfGenerator {
         this.recipeRepository = recipeRepository;
     }
 
+    private static final Font LOGO_FONT = new Font(Font.HELVETICA, 20, Font.BOLD, new Color(0, 100,0));
     private static final Font TITLE_FONT = new Font(Font.HELVETICA, 18, Font.BOLD);
-    private static final Font SECTION_FONT = new Font(Font.HELVETICA, 14, Font.BOLD);
-    private static final Font REGULAR_FONT = new Font(Font.HELVETICA, 12);
+    private static final Font SECTION_FONT = new Font(Font.HELVETICA, 16, Font.BOLD);
+    private static final Font REGULAR_FONT = new Font(Font.HELVETICA, 14);
 
     @Override
     public byte[] generatePdfRecipe(long recipeId){
@@ -33,25 +38,51 @@ public class PdfRecipeGeneratorService implements PdfGenerator {
             PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
 
+            Image photo = Image.getInstanceFromClasspath(recipe.getImage()!= null ? "static/img/%s".formatted(recipe.getImage()) : "static/img/photo-dish.jpg");
+            photo.scaleAbsolute(200, 140);
+            photo.setAbsolutePosition(350, 660);
+            document.add(photo);
+
+            Paragraph logoTitle = new Paragraph("Kuchnia Bartosza", LOGO_FONT);
+            logoTitle.setSpacingBefore(30);
+            logoTitle.setSpacingAfter(50);
+            document.add(logoTitle);
+
             Paragraph recipeTitleParagraph = new Paragraph(recipe.getName(), TITLE_FONT);
+            recipeTitleParagraph.setSpacingAfter(15);
             document.add(recipeTitleParagraph);
 
-            Paragraph ingredientsTitileSectionParagraph = new Paragraph("Składniki", SECTION_FONT);
+            Paragraph recipeDescription = new Paragraph(recipe.getDescription(), REGULAR_FONT);
+            recipeDescription.setSpacingAfter(15);
+            document.add(recipeDescription);
 
-            List ingredientsList= new List(List.UNORDERED);
+            Paragraph ingredientsTitleSectionParagraph  = new Paragraph("Przygotowanie", SECTION_FONT);
+            ingredientsTitleSectionParagraph .setSpacingBefore(20);
+            document.add(ingredientsTitleSectionParagraph );
+
+            List ingredientsList = new List(List.UNORDERED);
+            ingredientsList.setListSymbol(new Chunk("✔ ", REGULAR_FONT));
             String[] ingredients = recipe.getIngredients().split("\\\\n");
             for (String ingredient : ingredients) {
                 ingredientsList.add(new ListItem(ingredient, REGULAR_FONT));
             }
-
-            document.add(ingredientsTitileSectionParagraph);
             document.add(ingredientsList);
+
+            Paragraph descriptionStepsSectionParagraph = new Paragraph("Przygotowanie", SECTION_FONT);
+            descriptionStepsSectionParagraph.setSpacingBefore(20);
+            document.add(descriptionStepsSectionParagraph);
+            List descriptionStepsList= new List(List.UNORDERED);
+            descriptionStepsList.setListSymbol(new Chunk("✔ ", REGULAR_FONT));
+            String[] descriptionSteps = recipe.getDirections().split("\\\\n");
+            for (String descriptionStep : descriptionSteps) {
+                descriptionStepsList.add(new ListItem(descriptionStep, REGULAR_FONT));
+            }
+            document.add(descriptionStepsList);
+
             document.close();
             return byteArrayOutputStream.toByteArray();
         } catch (DocumentException | IOException e){
            throw new RuntimeException("Błąd podczas generowania PDF-a", e);
         }
     }
-
-
 }
