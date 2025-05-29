@@ -153,8 +153,7 @@ class RecipeController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.attachment().build());
-        headers.setContentDisposition(ContentDisposition.inline()
+        headers.setContentDisposition(ContentDisposition.attachment()
                 .filename("przepis_" + recipe.getName().toLowerCase().replace(" ", "_") + ".pdf")
                 .build());
 

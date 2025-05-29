@@ -22,6 +22,7 @@ public class PdfRecipeGeneratorService implements PdfGenerator {
         this.recipeRepository = recipeRepository;
     }
 
+
     private static final Font LOGO_FONT = new Font(Font.HELVETICA, 20, Font.BOLD, new Color(0, 100,0));
     private static final Font TITLE_FONT = new Font(Font.HELVETICA, 18, Font.BOLD);
     private static final Font SECTION_FONT = new Font(Font.HELVETICA, 16, Font.BOLD);

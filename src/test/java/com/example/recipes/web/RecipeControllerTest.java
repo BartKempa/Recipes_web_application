@@ -16,6 +16,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +29,8 @@ import java.util.List;
 
 import static com.example.recipes.web.RecipeController.PAGE_SIZE;
 import static com.example.recipes.web.RecipeController.SORT_FIELD_MAP;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -331,5 +336,31 @@ class RecipeControllerTest {
 
         //then
         assertFalse(recipes.isEmpty());
+    }
+
+    @Test
+    void shouldReturnPdfWithCorrectHeadersAndBody() throws Exception {
+        //given
+        final long recipeId = 1L;
+
+        //when
+        //then
+        mockMvc.perform(get("/przepis/{id}/pdf", recipeId))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PDF))
+                .andExpect(result -> {
+                    byte[] content = result.getResponse().getContentAsByteArray();
+                    assertThat(content).isNotNull();
+                    assertThat(content.length).isGreaterThan(100);
+                });
+    }
+
+    @Test
+    void shouldReturn404ForNonExistingRecipe() throws Exception {
+        long nonExistingId = 99999L;
+        mockMvc.perform(get("/przepis/{id}/pdf", nonExistingId))
+                .andExpect(status().isNotFound());
     }
 }
