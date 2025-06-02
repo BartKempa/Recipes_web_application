@@ -39,6 +39,7 @@
    - Difficulty level
    - Average rating & comments
    - Image preview
+- Download a recipe as a PDF file
 
 ### 🔐 Authentication & Authorization
 
