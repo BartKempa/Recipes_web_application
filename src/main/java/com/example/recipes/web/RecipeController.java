@@ -161,4 +161,17 @@ class RecipeController {
                 .headers(headers)
                 .body(pdf);
     }
+
+    @GetMapping(value = "/przepis/{id}/pdf/wydruk")
+    public ResponseEntity<byte[]> printRecipePdf(@PathVariable long id) {
+        byte[] pdf = pdfGenerator.generatePdfRecipe(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.inline().build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
+    }
 }

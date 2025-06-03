@@ -59,6 +59,14 @@
                     </a>
                     </button>
                 </div>
+                <div class="recipe-container-pdf-printer">
+                    <button class="recipe-pdf-printer-button">
+                        <a href="#" th:href="@{|/przepis/${recipe.id}/pdf/wydruk|}" target="_blank">
+                            <i class="fa-solid fa-print"></i>
+                            <span class="tooltip-text">Drukuj</span>
+                        </a>
+                    </button>
+                </div>
             </div>
             <div class="recipe-base-description-container">
                 <p class="recipe-base-description" th:text="${recipe.description}">Burger drwala to jesienno-zimowy przebój największej sieci fast foodów w Polsce.

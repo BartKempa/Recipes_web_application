@@ -212,13 +212,15 @@ a {
 
 .recipe-container-comments-number,
 .recipe-rating-container,
-.recipe-container-favourites-number {
-    padding-right: 28px;
+.recipe-container-favourites-number,
+.recipe-container-pdf-creator {
+    padding-right: 35px;
 }
 
 .recipe-rating-button,
 .recipe-favorites-button,
-.recipe-pdf-creator-button {
+.recipe-pdf-creator-button,
+.recipe-pdf-printer-button {
     background-color: white;
     border: 0;
     padding: 1px;
@@ -257,6 +259,23 @@ a {
 }
 
 .recipe-container-pdf-creator .tooltip-text {
+    visibility: hidden;
+    max-width: 240px;
+    background-color: #006400;;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 3px 3px;
+    position: absolute;
+    z-index: 1;
+}
+
+.recipe-container-pdf-printer:hover .tooltip-text {
+    visibility: visible;
+}
+
+.recipe-container-pdf-printer .tooltip-text {
     visibility: hidden;
     max-width: 240px;
     background-color: #006400;;
