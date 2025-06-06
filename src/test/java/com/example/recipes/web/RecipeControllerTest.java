@@ -363,4 +363,32 @@ class RecipeControllerTest {
         mockMvc.perform(get("/przepis/{id}/pdf", nonExistingId))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    void shouldPrintPdf() throws Exception {
+        //given
+        final long recipeId = 1L;
+
+        //when
+        //then
+        mockMvc.perform(get("/przepis/{id}/pdf/wydruk", recipeId))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("inline")))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PDF))
+                .andExpect(result -> {
+                    byte[] content = result.getResponse().getContentAsByteArray();
+                    assertThat(content).isNotNull();
+                    assertThat(content.length).isGreaterThan(100);
+                });
+    }
+
+    @Test
+    void shouldReturn404WhenPrintNonExistingRecipe() throws Exception {
+        long nonExistingId = 99999L;
+        mockMvc.perform(get("/przepis/{id}/pdf/wydruk", nonExistingId))
+                .andExpect(status().isNotFound());
+    }
+
 }
